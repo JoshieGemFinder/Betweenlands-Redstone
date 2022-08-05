@@ -1,0 +1,6 @@
+{
+    "parent": "block/rail_curved",
+    "textures": {
+        "rail": "betweenlandsredstone:blocks/rail/rail_normal_turned"
+    }
+}

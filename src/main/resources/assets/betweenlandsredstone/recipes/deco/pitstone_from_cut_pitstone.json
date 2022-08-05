@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "pp",
+        "pp"
+    ],
+	"key":
+    {
+        "p":
+        {
+            "item": "betweenlandsredstone:cut_pitstone"
+        }
+    },
+    "result":
+    {
+        "item": "thebetweenlands:pitstone",
+        "count": 4
+    }
+}

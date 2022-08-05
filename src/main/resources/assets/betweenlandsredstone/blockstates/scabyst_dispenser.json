@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "facing=down":  { "model": "betweenlandsredstone:custom/dispenser_vertical", "x": 180 },
+        "facing=up":    { "model": "betweenlandsredstone:custom/dispenser_vertical" },
+        "facing=north": { "model": "betweenlandsredstone:custom/dispenser" },
+        "facing=south": { "model": "betweenlandsredstone:custom/dispenser", "y": 180 },
+        "facing=west":  { "model": "betweenlandsredstone:custom/dispenser", "y": 270 },
+        "facing=east":  { "model": "betweenlandsredstone:custom/dispenser", "y": 90 }
+    }
+}

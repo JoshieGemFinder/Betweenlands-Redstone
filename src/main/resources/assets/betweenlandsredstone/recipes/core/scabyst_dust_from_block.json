@@ -1,0 +1,14 @@
+{
+    "type": "minecraft:crafting_shapeless",
+	"ingredients":
+    [
+        {
+            "item": "betweenlandsredstone:scabyst_block"
+        }
+    ],
+    "result":
+    {
+        "item": "betweenlandsredstone:scabyst_dust",
+        "count": 9
+    }
+}

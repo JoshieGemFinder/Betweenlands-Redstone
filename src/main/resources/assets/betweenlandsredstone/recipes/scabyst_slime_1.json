@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "SSS",
+        "SSS",
+        "SSS"
+    ],
+	"key":
+    {
+        "S":
+        {
+            "item": "thebetweenlands:sludge_ball"
+        }
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:scabyst_slime_1",
+        "count": 1
+    }
+}

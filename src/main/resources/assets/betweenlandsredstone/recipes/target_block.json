@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        " S ",
+        "SWS",
+        " S "
+    ],
+	"key":
+    {
+        "S":
+        {
+            "item": "betweenlandsredstone:scabyst_dust"
+        },
+        "W": 
+        {
+            "item": "thebetweenlands:weedwood_planks"
+        }
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:target_block",
+        "count": 1
+    }
+}

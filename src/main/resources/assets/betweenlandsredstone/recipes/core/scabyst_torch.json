@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "#",
+        "I"
+    ],
+	"key":
+    {
+        "#":
+        {
+            "item": "betweenlandsredstone:scabyst_dust"
+        },
+        "I":
+        {
+            "item": "thebetweenlands:items_misc",
+            "data": 20
+        }
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:scabyst_torch",
+        "count": 1
+    }
+}

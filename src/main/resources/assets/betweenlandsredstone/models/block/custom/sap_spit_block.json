@@ -1,0 +1,36 @@
+{
+	"parent": "block/block",
+    "ambientocclusion": false,
+    "culling": false,
+	"textures": {
+        "particle": "betweenlandsredstone:blocks/spit_block_outside",
+		"outside": "betweenlandsredstone:blocks/spit_block_outside",
+		"inside": "betweenlandsredstone:blocks/spit_block_inside"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#outside", "cullface": "north"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#outside", "cullface": "east"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#outside", "cullface": "south"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#outside", "cullface": "west"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#outside", "cullface": "up"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#outside", "cullface": "down"}
+			}
+		},
+		{
+			"from": [1, 1, 1],
+			"to": [15, 15, 15],
+			"faces": {
+				"north": {"uv": [1, 1, 15, 15], "texture": "#inside"},
+				"east": {"uv": [1, 1, 15, 15], "texture": "#inside"},
+				"south": {"uv": [1, 1, 15, 15], "texture": "#inside"},
+				"west": {"uv": [1, 1, 15, 15], "texture": "#inside"},
+				"up": {"uv": [1, 1, 15, 15], "texture": "#inside"},
+				"down": {"uv": [1, 1, 15, 15], "texture": "#inside"}
+			}
+		}
+	]
+}

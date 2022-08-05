@@ -1,0 +1,24 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "#",
+        "M"
+    ],
+	"key":
+    {
+        "#":
+        {
+            "item": "thebetweenlands:sulfur_furnace_dual"
+        },
+        "M":
+        {
+            "item": "betweenlandsredstone:scabyst_minecart"
+        }
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:scabyst_furnace_minecart_dual",
+        "count": 1
+    }
+}

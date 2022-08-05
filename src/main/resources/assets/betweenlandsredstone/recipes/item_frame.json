@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "SRS",
+        "RRR",
+        "SRS"
+    ],
+	"key":
+    {
+        "S":
+        {
+            "item": "thebetweenlands:items_misc",
+            "data": 20
+        },
+        "R":
+        {
+            "item": "thebetweenlands:swamp_reed_item"
+        }
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:scabyst_item_frame",
+        "count": 1
+    }
+}

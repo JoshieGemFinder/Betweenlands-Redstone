@@ -1,0 +1,36 @@
+{
+	"parent": "block/block",
+    "ambientocclusion": false,
+    "culling": false,
+	"textures": {
+        "particle": "betweenlandsredstone:blocks/sludge_block_outside",
+		"outside": "betweenlandsredstone:blocks/sludge_block_outside",
+		"inside": "betweenlandsredstone:blocks/sludge_block_inside"
+	},
+	"elements": [
+		{
+			"from": [4, 4, 4],
+			"to": [12, 12, 12],
+			"faces": {
+				"north": {"uv": [0, 0, 8, 8], "texture": "#inside"},
+				"east": {"uv": [16, 0, 8, 8], "texture": "#inside"},
+				"south": {"uv": [8, 8, 16, 16], "texture": "#inside"},
+				"west": {"uv": [8, 0, 16, 8], "texture": "#inside"},
+				"up": {"uv": [8, 8, 16, 16], "texture": "#inside"},
+				"down": {"uv": [0, 16, 8, 8], "texture": "#inside"}
+			}
+		},
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#outside", "cullface": "north"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#outside", "cullface": "east"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#outside", "cullface": "south"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#outside", "cullface": "west"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#outside", "cullface": "up"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#outside", "cullface": "down"}
+			}
+		}
+	]
+}

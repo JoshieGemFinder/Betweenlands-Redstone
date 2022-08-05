@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "BBB",
+        "B B",
+        "BDB"
+    ],
+	"key":
+    {
+        "B":
+        {
+            "item": "thebetweenlands:betweenstone"
+        },
+        "D":
+        {
+            "item": "betweenlandsredstone:scabyst_dust"
+        }
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:scabyst_dropper",
+        "count": 1
+    }
+}

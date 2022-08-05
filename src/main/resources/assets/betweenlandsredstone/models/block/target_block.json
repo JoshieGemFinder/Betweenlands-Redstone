@@ -1,0 +1,12 @@
+{
+    "parent": "minecraft:block/cube",
+    "textures": {
+        "particle": "betweenlandsredstone:blocks/target/target_block",
+        "up": "betweenlandsredstone:blocks/target/target_block",
+        "down": "betweenlandsredstone:blocks/target/target_block",
+        "north": "betweenlandsredstone:blocks/target/target_block_side",
+        "south": "betweenlandsredstone:blocks/target/target_block_side",
+        "east": "betweenlandsredstone:blocks/target/target_block_side",
+        "west": "betweenlandsredstone:blocks/target/target_block_side"
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "# #",
+        "#S#",
+        "#D#"
+    ],
+	"key":
+    {
+        "#":
+        {
+            "item": "thebetweenlands:octine_ingot"
+        },
+        "S":
+        {
+            "item": "thebetweenlands:items_misc",
+            "data": 20
+        },
+        "D":
+        {
+            "item": "betweenlandsredstone:scabyst_dust"
+        }
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:scabyst_golden_rail",
+        "count": 6
+    }
+}

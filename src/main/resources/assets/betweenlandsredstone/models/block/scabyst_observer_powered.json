@@ -1,0 +1,10 @@
+{
+    "parent": "betweenlandsredstone:block/scabyst_observer",
+    "textures": {
+        "bottom": "betweenlandsredstone:blocks/scabyst_observer_back_lit",
+        "side": "betweenlandsredstone:blocks/scabyst_observer_side_lit",
+        "top": "betweenlandsredstone:blocks/scabyst_observer_top_lit",
+        "front": "betweenlandsredstone:blocks/scabyst_observer_front_lit",
+        "particle": "betweenlandsredstone:blocks/scabyst_observer_front_lit"
+    }
+}

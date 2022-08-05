@@ -1,0 +1,30 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "# #",
+        "#S#",
+        "#D#"
+    ],
+	"key":
+    {
+        "#":
+        {
+            "item": "thebetweenlands:items_misc",
+            "data": 11
+        },
+        "S":
+        {
+            "item": "thebetweenlands:betweenstone_pressure_plate"
+        },
+        "D":
+        {
+            "item": "betweenlandsredstone:scabyst_dust"
+        }
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:scabyst_detector_rail",
+        "count": 6
+    }
+}

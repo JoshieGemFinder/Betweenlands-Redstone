@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "normal": [
+            { "model": "betweenlandsredstone:custom/sludge_block", "y": 0},
+            { "model": "betweenlandsredstone:custom/sludge_block", "y": 90 },
+            { "model": "betweenlandsredstone:custom/sludge_block", "y": 180 },
+            { "model": "betweenlandsredstone:custom/sludge_block", "y": 270 }
+        ]
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "parent": "betweenlandsredstone:block/scabyst_piston",
+    "textures": {
+        "bottom": "betweenlandsredstone:blocks/scabyst_piston_bottom",
+        "side": "betweenlandsredstone:blocks/scabyst_piston_side",
+        "platform": "betweenlandsredstone:blocks/scabyst_piston_top_normal"
+    }
+}

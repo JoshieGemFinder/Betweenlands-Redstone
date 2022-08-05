@@ -1,0 +1,31 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "#S#",
+        "#T#",
+        "#S#"
+    ],
+	"key":
+    {
+        "#":
+        {
+            "item": "thebetweenlands:items_misc",
+            "data": 11
+        },
+        "S":
+        {
+            "item": "thebetweenlands:items_misc",
+            "data": 20
+        },
+        "T":
+        {
+            "item": "betweenlandsredstone:scabyst_torch"
+        }
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:scabyst_activator_rail",
+        "count": 6
+    }
+}

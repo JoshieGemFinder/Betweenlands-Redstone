@@ -1,0 +1,12 @@
+{
+    "parent": "minecraft:block/cube",
+    "textures": {
+        "particle": "betweenlandsredstone:blocks/deco/white_pear_block_side",
+        "up": "betweenlandsredstone:blocks/deco/white_pear_block_top",
+        "north": "betweenlandsredstone:blocks/deco/white_pear_block_side",
+        "south": "betweenlandsredstone:blocks/deco/white_pear_block_side",
+        "east": "betweenlandsredstone:blocks/deco/white_pear_block_side",
+        "west": "betweenlandsredstone:blocks/deco/white_pear_block_side",
+        "down": "betweenlandsredstone:blocks/deco/white_pear_block_bottom"
+    }
+}

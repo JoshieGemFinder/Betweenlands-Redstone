@@ -1,0 +1,31 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        " SR",
+        "SDR",
+        " SR"
+    ],
+	"key":
+    {
+        "R":
+        {
+            "item": "thebetweenlands:items_misc",
+            "data": 7
+        },
+        "D":
+        {
+            "item": "betweenlandsredstone:scabyst_dropper"
+        },
+        "S":
+        {
+            "item": "thebetweenlands:items_misc",
+            "data": 20
+        }
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:scabyst_dispenser",
+        "count": 1
+    }
+}

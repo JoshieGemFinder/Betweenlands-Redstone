@@ -1,0 +1,39 @@
+{
+    "type": "minecraft:crafting_shapeless",
+	"ingredients":
+    [
+        {
+            "item": "betweenlandsredstone:scabyst_tripwire"
+        },
+        {
+            "item": "betweenlandsredstone:scabyst_tripwire"
+        },
+        {
+            "item": "betweenlandsredstone:scabyst_tripwire"
+        },
+        {
+            "item": "betweenlandsredstone:scabyst_tripwire"
+        },
+        {
+            "item": "betweenlandsredstone:scabyst_tripwire"
+        },
+        {
+            "item": "betweenlandsredstone:scabyst_tripwire"
+        },
+        {
+            "item": "betweenlandsredstone:scabyst_tripwire"
+        },
+        {
+            "item": "betweenlandsredstone:scabyst_tripwire"
+        },
+        {
+            "item": "betweenlandsredstone:scabyst_tripwire"
+        }
+    ],
+    "result":
+    {
+        "item": "thebetweenlands:items_misc",
+        "data": 7,
+        "count": 3
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "parent": "betweenlandsredstone:block/rift_detector",
+    "textures": {
+        "particle": "betweenlandsredstone:blocks/detector/rift_detector_top_inverted",
+        "top": "betweenlandsredstone:blocks/detector/rift_detector_top_inverted"
+    }
+}

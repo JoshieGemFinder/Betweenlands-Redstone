@@ -1,0 +1,35 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "WWW",
+        "MSM",
+        "M#M"
+    ],
+	"key":
+    {
+        "#":
+        {
+            "item": "betweenlandsredstone:scabyst_dust"
+        },
+        "M":
+        {
+            "item": "thebetweenlands:mud_bricks"
+        },
+        "W":
+        {
+            "item": "thebetweenlands:items_misc",
+            "data": 10
+        },
+        "S":
+        {
+            "item": "thebetweenlands:items_misc",
+            "data": 11
+        }
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:scabyst_piston",
+        "count": 1
+    }
+}

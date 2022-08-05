@@ -1,0 +1,29 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "BBB",
+        "BbB",
+        "BDB"
+    ],
+	"key":
+    {
+        "B":
+        {
+            "item": "thebetweenlands:betweenstone"
+        },
+        "D":
+        {
+            "item": "betweenlandsredstone:scabyst_dust"
+        },
+        "b":
+        {
+            "item": "thebetweenlands:weedwood_bow"
+        }
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:scabyst_dispenser",
+        "count": 1
+    }
+}

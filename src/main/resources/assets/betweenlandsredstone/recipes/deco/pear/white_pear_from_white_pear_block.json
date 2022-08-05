@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "p"
+    ],
+	"key":
+    {
+        "p":
+        {
+            "item": "betweenlandsredstone:white_pear_block"
+        }
+    },
+    "result":
+    {
+        "item": "thebetweenlands:middle_fruit",
+        "count": 9
+    }
+}

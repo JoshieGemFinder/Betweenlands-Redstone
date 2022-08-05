@@ -1,0 +1,9 @@
+{
+    "parent": "betweenlandsredstone:block/scabyst_piston_head",
+    "textures": {
+        "unsticky": "betweenlandsredstone:blocks/scabyst_piston_top_normal",
+        "side": "betweenlandsredstone:blocks/scabyst_piston_side_sticky",
+        "bar": "betweenlandsredstone:blocks/scabyst_piston_bar_sticky",
+        "platform": "betweenlandsredstone:blocks/scabyst_piston_top_sticky"
+    }
+}

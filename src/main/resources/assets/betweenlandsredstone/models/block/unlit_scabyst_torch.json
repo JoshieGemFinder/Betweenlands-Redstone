@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:block/torch",
+    "textures": {
+        "torch": "betweenlandsredstone:blocks/scabyst_torch_off"
+    }
+}

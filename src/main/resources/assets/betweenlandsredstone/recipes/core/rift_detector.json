@@ -1,0 +1,41 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "GGG",
+        "DDD",
+        "SSS"
+    ],
+	"key":
+    {
+        "D": [
+            {
+                "item": "thebetweenlands:dentrothyst_shard_green"
+            },
+            {
+                "item": "thebetweenlands:dentrothyst_shard_orange"
+            }
+        ],
+        "G": [
+            {
+                "item": "thebetweenlands:silt_glass"
+            },
+            {
+                "item": "thebetweenlands:filtered_silt_glass"
+            }
+        ],
+        "S": [
+            {
+                "item": "thebetweenlands:betweenstone_tiles"
+            },
+            {
+                "item": "thebetweenlands:smooth_betweenstone"
+            }
+        ]
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:rift_detector",
+        "count": 1
+    }
+}

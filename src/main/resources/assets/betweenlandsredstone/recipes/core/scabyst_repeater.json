@@ -1,0 +1,28 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "tdt",
+        "sss"
+    ],
+	"key":
+    {
+        "d":
+        {
+            "item": "betweenlandsredstone:scabyst_dust"
+        },
+        "t":
+        {
+            "item": "betweenlandsredstone:scabyst_torch"
+        },
+        "s":
+        {
+            "item": "thebetweenlands:mud_bricks"
+        }
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:scabyst_repeater",
+        "count": 1
+    }
+}

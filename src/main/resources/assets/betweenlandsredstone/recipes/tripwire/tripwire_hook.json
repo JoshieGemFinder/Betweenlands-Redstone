@@ -1,0 +1,31 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "#",
+        "S",
+        "W"
+    ],
+	"key":
+    {
+        "#":
+        {
+            "item": "thebetweenlands:items_misc",
+            "data": 11
+        },
+        "S":
+        {
+            "item": "thebetweenlands:items_misc",
+            "data": 20
+        },
+        "W":
+        {
+            "item": "thebetweenlands:weedwood_planks"
+        }
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:scabyst_tripwire_hook",
+        "count": 2
+    }
+}

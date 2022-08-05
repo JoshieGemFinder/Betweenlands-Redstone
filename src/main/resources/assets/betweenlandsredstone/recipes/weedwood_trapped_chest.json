@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients":
+    [
+        {
+            "item": "thebetweenlands:weedwood_chest"
+        },
+        {
+            "item": "betweenlandsredstone:scabyst_tripwire_hook"
+        }
+    ],
+    "result":
+    {
+        "item": "betweenlandsredstone:weedwood_chest_trapped",
+        "count": 1
+    }
+}

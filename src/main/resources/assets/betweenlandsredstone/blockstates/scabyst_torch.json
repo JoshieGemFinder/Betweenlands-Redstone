@@ -1,0 +1,9 @@
+{
+    "variants": {
+        "facing=up":  { "model": "betweenlandsredstone:lit_scabyst_torch" },
+        "facing=east":  { "model": "betweenlandsredstone:lit_scabyst_torch_wall" },
+        "facing=south":  { "model": "betweenlandsredstone:lit_scabyst_torch_wall", "y": 90 },
+        "facing=west":  { "model": "betweenlandsredstone:lit_scabyst_torch_wall", "y": 180 },
+        "facing=north":  { "model": "betweenlandsredstone:lit_scabyst_torch_wall", "y": 270 }
+    }
+}

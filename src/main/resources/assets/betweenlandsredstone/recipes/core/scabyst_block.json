@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "ddd",
+        "ddd",
+		"ddd"
+    ],
+	"key":
+    {
+        "d":
+        {
+            "item": "betweenlandsredstone:scabyst_dust"
+        }
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:scabyst_block",
+        "count": 1
+    }
+}

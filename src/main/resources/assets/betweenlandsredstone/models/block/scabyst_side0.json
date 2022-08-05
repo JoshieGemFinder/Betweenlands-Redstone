@@ -1,0 +1,6 @@
+{
+    "parent": "betweenlandsredstone:block/scabyst_side",
+    "textures": {
+        "line": "betweenlandsredstone:blocks/scabyst_dust_line0"
+    }
+}

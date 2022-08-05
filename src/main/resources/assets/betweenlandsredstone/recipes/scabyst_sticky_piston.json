@@ -1,0 +1,24 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "S",
+        "P"
+    ],
+	"key":
+    {
+        "P":
+        {
+            "item": "betweenlandsredstone:scabyst_piston"
+        },
+        "S":
+        {
+            "item": "thebetweenlands:sludge_ball"
+        }
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:scabyst_sticky_piston",
+        "count": 1
+    }
+}

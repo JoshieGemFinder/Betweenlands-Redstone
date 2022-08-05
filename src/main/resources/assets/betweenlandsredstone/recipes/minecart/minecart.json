@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "W W",
+        "SWS"
+    ],
+	"key":
+    {
+        "W":
+        {
+            "item": "thebetweenlands:weedwood_planks"
+        },
+        "S":
+        {
+            "item": "thebetweenlands:items_misc",
+            "data": 11
+        }
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:scabyst_minecart",
+        "count": 1
+    }
+}
