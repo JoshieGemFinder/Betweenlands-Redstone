@@ -9,6 +9,7 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -79,18 +80,20 @@ public class BlockScabystSlime_2 extends BlockStickyBase implements IScabystBloc
 
     @Override
 	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-		this.honeyBehaviour(pos, entity);
+    	this.honeyBehaviour(pos, entity);
     	super.onEntityCollidedWithBlock(world, pos, state, entity);
 	}
     
     public void honeyBehaviour(BlockPos pos, Entity entity) {
     	if(this.shouldSlide(pos, entity)) {
+    		entity.fallDistance = 0.0F;
     		this.slide(entity);
     	}
     }
     
     public boolean shouldSlide(BlockPos pos, Entity entity) {
-    	if(entity.onGround || !entity.isAirBorne) {
+    	//entity.onGround (and entity.isAirBorne, most of the time) aren't set properly for non-players
+    	if(entity instanceof EntityPlayer && (entity.onGround || !entity.isAirBorne)) {
     		return false;
     	}
     	else if(entity.posY > (double)pos.getY() + 0.9375D - 1.0E-7D) {

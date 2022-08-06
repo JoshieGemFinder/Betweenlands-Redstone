@@ -88,7 +88,8 @@ public class BlockChestBetweenlandsTrapped extends BlockChest implements IScabys
 		return IScabystBlock.super.getStrongPower(blockState, blockAccess, pos, side);
 	}
 	
-    public int getWeakScabystPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
+	@Override
+    public int getScabystWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
     {
         if (!blockState.canProvidePower())
         {
@@ -108,8 +109,9 @@ public class BlockChestBetweenlandsTrapped extends BlockChest implements IScabys
         }
     }
 
-    public int getStrongScabystPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
-    {
+	@Override
+    public int getScabystStrongPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
+	{
         return side == EnumFacing.UP ? getScabystWeakPower(blockState, blockAccess, pos, side) : 0;
     }
 }

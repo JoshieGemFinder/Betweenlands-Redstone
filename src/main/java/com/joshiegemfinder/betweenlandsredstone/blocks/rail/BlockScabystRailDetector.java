@@ -32,7 +32,7 @@ public class BlockScabystRailDetector extends BlockRailDetector implements IScab
 	
 	@Override
 	public int getScabystWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-		return super.getWeakPower(blockState, blockAccess, pos, side);
+		return ((Boolean)blockState.getValue(POWERED)).booleanValue() ? 15 : 0;
 	}
 	
 	@Override
