@@ -92,8 +92,8 @@ public class BlockScabystSlime_2 extends BlockStickyBase implements IScabystBloc
     }
     
     public boolean shouldSlide(BlockPos pos, Entity entity) {
-    	//entity.onGround (and entity.isAirBorne, most of the time) aren't set properly for non-players
-    	if(entity instanceof EntityPlayer && (entity.onGround || !entity.isAirBorne)) {
+    	//entity.onGround (and entity.isAirBorne, most of the time) aren't set properly for non-players (or on the server at all)
+    	if(entity instanceof EntityPlayer && entity.world.isRemote && (entity.onGround || !entity.isAirBorne)) {
     		return false;
     	}
     	else if(entity.posY > (double)pos.getY() + 0.9375D - 1.0E-7D) {

@@ -5,7 +5,7 @@
         "slab": "betweenlandsredstone:blocks/diode_side",
         "top": "betweenlandsredstone:blocks/scabyst_repeater_on",
         "lit": "betweenlandsredstone:blocks/scabyst_torch_on",
-        "lock": "minecraft:blocks/bedrock"
+        "lock": "thebetweenlands:blocks/bedrock"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],

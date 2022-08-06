@@ -4,7 +4,7 @@
         "particle": "betweenlandsredstone:blocks/scabyst_repeater_off",
         "slab": "betweenlandsredstone:blocks/diode_side",
         "top": "betweenlandsredstone:blocks/scabyst_repeater_off",
-        "lock": "minecraft:blocks/bedrock",
+        "lock": "thebetweenlands:blocks/bedrock",
         "unlit": "betweenlandsredstone:blocks/scabyst_torch_off"
     },
     "elements": [
