@@ -290,6 +290,7 @@ public class BlockScabystPistonBase extends BlockDirectional implements IScabyst
         Block block = blockStateIn.getBlock();
 
         if(!worldIn.isRemote) {
+        	//it might not even need the player, just can't find the right bit in the source so can't be sure
 	        if(LocationHandler.isProtected(worldIn, Main.getFakePlayer((WorldServer) worldIn), pos)) {
 	        	return false;
 	        }
