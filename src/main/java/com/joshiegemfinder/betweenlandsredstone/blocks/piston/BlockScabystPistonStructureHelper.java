@@ -236,7 +236,7 @@ public class BlockScabystPistonStructureHelper {
         {
         	BlockPos pos = fromPos.offset(enumfacing);
         	IBlockState state = this.world.getBlockState(pos);
-        	if(!BlockStickyBase.shouldBlocksStick(branchBlockState, state)) {
+        	if((branchBlockState.getBlock() instanceof BlockStickyBase || state.getBlock() instanceof BlockStickyBase) && !BlockStickyBase.shouldBlocksStick(branchBlockState, state)) {
         		continue;
         	}
             if (enumfacing.getAxis() != this.moveDirection.getAxis() && !this.addBlockLine(pos, enumfacing))
