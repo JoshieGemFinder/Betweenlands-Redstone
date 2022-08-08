@@ -7,32 +7,32 @@ assignees: ''
 
 ---
 
-**Describe the bug**
+**Describe the bug**  
 <!--A clear and concise description of what the bug is.-->
 
-**Mod List**
+**Mod List**  
 <!--A list of all mods that you were using, (if you were using a modpack, link the modpack instead)-->
 
-**Forge Version**
+**Forge Version**  
 <!--Forge version you were using when you encountered the bug-->
 
-**To Reproduce**
+**To Reproduce**  
 Steps to reproduce the behavior:
 1. Go to '...'
 2. Click on '....'
 3. Etc.
 
-**Expected behavior**
+**Expected behavior**  
 <!--A clear and concise description of what you expected to happen.-->
 
-**Screenshots**
+**Screenshots**  
 <!--If applicable, add screenshots to help explain your problem.-->
 
-**Crash Log (If Crash-Causing)**
+**Crash Log (If Crash-Causing)**  
 <!--If a crash occurs, add a crash log here-->
 
-**Additional context**
+**Additional context**  
 <!--Add any other context about the problem here.-->
 
-**Singleplayer/Server**
+**Singleplayer/Server**  
 <!--Did this happen in Singleplayer or on a server?-->
