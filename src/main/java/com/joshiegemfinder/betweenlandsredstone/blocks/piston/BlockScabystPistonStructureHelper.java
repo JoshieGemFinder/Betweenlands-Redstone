@@ -3,11 +3,13 @@ package com.joshiegemfinder.betweenlandsredstone.blocks.piston;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import com.joshiegemfinder.betweenlandsredstone.BLRedstoneConfig;
 import com.joshiegemfinder.betweenlandsredstone.blocks.piston.stickyblocks.BlockStickyBase;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -236,7 +238,11 @@ public class BlockScabystPistonStructureHelper {
         {
         	BlockPos pos = fromPos.offset(enumfacing);
         	IBlockState state = this.world.getBlockState(pos);
-        	if((branchBlockState.getBlock() instanceof BlockStickyBase || state.getBlock() instanceof BlockStickyBase) && !BlockStickyBase.shouldBlocksStick(branchBlockState, state)) {
+        	//we want it so if something attaches to slime blocks, it'll still attach if the config option is off
+        	boolean slimeBlock = !BLRedstoneConfig.slimeBlocksWorkOnScabystPistons && (state.getBlock() == Blocks.SLIME_BLOCK || branchBlockState.getBlock() == Blocks.SLIME_BLOCK);
+        	//sticky block check moment
+        	boolean stickyBlock = branchBlockState.getBlock() instanceof BlockStickyBase || state.getBlock() instanceof BlockStickyBase;
+        	if((slimeBlock || stickyBlock) && !BlockStickyBase.shouldBlocksStick(branchBlockState, state)) {
         		continue;
         	}
             if (enumfacing.getAxis() != this.moveDirection.getAxis() && !this.addBlockLine(pos, enumfacing))
