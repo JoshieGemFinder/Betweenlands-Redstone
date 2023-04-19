@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import thebetweenlands.client.tab.BLCreativeTabs;
 
 public class BlockWhitePear extends Block {
 
