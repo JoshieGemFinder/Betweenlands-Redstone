@@ -70,6 +70,8 @@ public class RegistryHandlerClient {
     	}
     }
 
+    //old item frame stuff
+    /*
     private static Method registerModel;
 
     private static Method getRegisterModel(ModelLoader loader) {
@@ -141,7 +143,7 @@ public class RegistryHandlerClient {
 	public static void onTextureStitch(TextureStitchEvent.Pre event) {
 		stitchLocation(event, Reference.ITEM_FRAME_MODEL_NORMAL);
 		stitchLocation(event, Reference.ITEM_FRAME_MODEL_MAP);
-	}
+	}*/
 
 	@SubscribeEvent
 	public static void onTooltip(ItemTooltipEvent event) {

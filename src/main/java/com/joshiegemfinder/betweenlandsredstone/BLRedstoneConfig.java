@@ -12,7 +12,7 @@ public class BLRedstoneConfig {
 	@Comment({
 		"Whether or not scabyst and vanilla redstone components interact.",
 		"(true = no vanilla interaction, false = vanilla interaction)",
-		"(If on, this may cause some bugs when interacting with other mods)"
+		"(This causes multiple bugs when on and is not recommended as of now)"
 	})
 	@LangKey("config.scabystExclusivity.name")
 	public static boolean scabystExclusivity = false;

@@ -1,6 +1,0 @@
-{
-    "variants": {
-        "normal": { "model": "betweenlandsredstone:custom/scabyst_item_frame" },
-        "map":    { "model": "betweenlandsredstone:custom/scabyst_item_frame_map" }
-    }
-}

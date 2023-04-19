@@ -7,12 +7,10 @@ import com.joshiegemfinder.betweenlandsredstone.ModItems;
 import com.joshiegemfinder.betweenlandsredstone.RegistryHandlerClient;
 import com.joshiegemfinder.betweenlandsredstone.blocks.TileEntityChestBetweenlandsTrapped;
 import com.joshiegemfinder.betweenlandsredstone.blocks.piston.TileEntityScabystPiston;
-import com.joshiegemfinder.betweenlandsredstone.entity.EntityScabystItemFrame;
 import com.joshiegemfinder.betweenlandsredstone.entity.minecart.EntityScabystMinecart;
 import com.joshiegemfinder.betweenlandsredstone.network.MinecartFacingMessage;
 import com.joshiegemfinder.betweenlandsredstone.network.PlantTonicMessage;
 import com.joshiegemfinder.betweenlandsredstone.renderer.RenderChestBetweenlandsTrapped;
-import com.joshiegemfinder.betweenlandsredstone.renderer.RenderScabystItemFrame;
 import com.joshiegemfinder.betweenlandsredstone.renderer.RenderScabystMinecart;
 import com.joshiegemfinder.betweenlandsredstone.renderer.TileEntityScabystPistonRenderer;
 import com.joshiegemfinder.betweenlandsredstone.util.ModelRegisterer;
@@ -43,7 +41,7 @@ public class ClientProxy implements IProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityScabystPiston.class, new TileEntityScabystPistonRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChestBetweenlandsTrapped.class, new RenderChestBetweenlandsTrapped());
 		
-		RenderingRegistry.registerEntityRenderingHandler(EntityScabystItemFrame.class, RenderScabystItemFrame.FACTORY);
+//		RenderingRegistry.registerEntityRenderingHandler(EntityScabystItemFrame.class, RenderScabystItemFrame.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityScabystMinecart.class, RenderScabystMinecart.FACTORY);		
 		
 	}

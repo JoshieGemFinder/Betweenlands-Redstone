@@ -24,17 +24,14 @@ import net.minecraft.dispenser.IPosition;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -43,6 +40,7 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config.Type;
 import net.minecraftforge.common.config.ConfigManager;
+import net.minecraftforge.common.util.CompoundDataFixer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -65,7 +63,6 @@ import thebetweenlands.common.block.farming.BlockGenericCrop;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.block.farming.BlockMiddleFruitBush;
 import thebetweenlands.common.entity.projectiles.EntityAngryPebble;
-import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
 import thebetweenlands.common.handler.OverworldItemHandler;
 import thebetweenlands.common.item.herblore.ItemDentrothystVial;
@@ -74,8 +71,6 @@ import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.tools.ItemBLBucket;
 import thebetweenlands.common.item.tools.ItemBucketInfusion;
 import thebetweenlands.common.item.tools.ItemPestle;
-import thebetweenlands.common.item.tools.bow.EnumArrowType;
-import thebetweenlands.common.item.tools.bow.ItemBLArrow;
 import thebetweenlands.common.recipe.mortar.PestleAndMortarRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -89,24 +84,24 @@ public class Main
 {
 	public static final String MODID = "betweenlandsredstone";
 	public static final String NAME = "Betweenlands Redstone";
-	public static final String VERSION = "1.0.6";
+	public static final String VERSION = "1.1.0";
 
-	public static final BehaviorProjectileDispense BLArrowBehaviour = new BehaviorProjectileDispense()
-	{
-		protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn)
-		{
-			EntityBLArrow entity = new EntityBLArrow(worldIn);
-			Item item = stackIn.getItem();
-			if(item instanceof ItemBLArrow) {
-				entity.setType(((ItemBLArrow)item).getType());
-			} else {
-				entity.setType(EnumArrowType.DEFAULT);
-			}
-			entity.setPosition(position.getX(), position.getY(), position.getZ());
-			entity.pickupStatus = EntityArrow.PickupStatus.ALLOWED;
-			return entity;
-		}
-	};
+//	public static final BehaviorProjectileDispense BLArrowBehaviour = new BehaviorProjectileDispense()
+//	{
+//		protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn)
+//		{
+//			EntityBLArrow entity = new EntityBLArrow(worldIn);
+//			Item item = stackIn.getItem();
+//			if(item instanceof ItemBLArrow) {
+//				entity.setType(((ItemBLArrow)item).getType());
+//			} else {
+//				entity.setType(EnumArrowType.DEFAULT);
+//			}
+//			entity.setPosition(position.getX(), position.getY(), position.getZ());
+//			entity.pickupStatus = EntityArrow.PickupStatus.ALLOWED;
+//			return entity;
+//		}
+//	};
 	
 	public static Logger logger;
 
@@ -135,8 +130,9 @@ public class Main
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		logger = event.getModLog();
-		
+
 		MinecraftForge.EVENT_BUS.register(this);
+		MinecraftForge.EVENT_BUS.register(BLRedstoneDataFixers.class);
 		
 		ModBlocks.init();
 		ModItems.init();
@@ -154,6 +150,12 @@ public class Main
 	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{
+		CompoundDataFixer fixer = FMLCommonHandler.instance().getDataFixer();
+		TileEntityScabystDispenser.registerFixesScabyst(fixer);
+		TileEntityScabystDropper.registerFixesDropperScabyst(fixer);
+		
+		BLRedstoneDataFixers.registerDataFixers(fixer);
+		
         ConfigManager.sync(MODID, Type.INSTANCE);
         
 		BetweenlandsAPI.getInstance().registerPestleAndMortarRecipe(
@@ -166,9 +168,6 @@ public class Main
 		
 		OverworldItemHandler.ROTTING_WHITELIST.put(new ResourceLocation(MODID, "white_pear_block_whitelist"), stack -> stack.getItem() == ModItems.WHITE_PEAR_BLOCK);
 		
-		DataFixer fixer = FMLCommonHandler.instance().getDataFixer();
-		TileEntityScabystDispenser.registerFixesScabyst(fixer);
-		TileEntityScabystDropper.registerFixesDropperScabyst(fixer);
 		
 		registerDispenserBehaviours();
 		
@@ -177,14 +176,15 @@ public class Main
 	
 	private static void registerDispenserBehaviours() {
 
-		// I cannot believe this is something that isn't already a part of the betweenlands
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.ANGLER_TOOTH_ARROW, BLArrowBehaviour);
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.POISONED_ANGLER_TOOTH_ARROW, BLArrowBehaviour);
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.OCTINE_ARROW, BLArrowBehaviour);
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.BASILISK_ARROW, BLArrowBehaviour);
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.SLUDGE_WORM_ARROW, BLArrowBehaviour);
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.SHOCK_ARROW, BLArrowBehaviour);
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.CHIROMAW_BARB, BLArrowBehaviour);
+		// I got it included in the betweenlands
+//		// I cannot believe this is something that isn't already a part of the betweenlands
+//		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.ANGLER_TOOTH_ARROW, BLArrowBehaviour);
+//		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.POISONED_ANGLER_TOOTH_ARROW, BLArrowBehaviour);
+//		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.OCTINE_ARROW, BLArrowBehaviour);
+//		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.BASILISK_ARROW, BLArrowBehaviour);
+//		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.SLUDGE_WORM_ARROW, BLArrowBehaviour);
+//		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.SHOCK_ARROW, BLArrowBehaviour);
+//		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.CHIROMAW_BARB, BLArrowBehaviour);
 		
 		final BehaviorDefaultDispenseItem behaviourDefaultDispenseItem = new BehaviorDefaultDispenseItem();
 		

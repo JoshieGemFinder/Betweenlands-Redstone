@@ -17,16 +17,23 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.RegistryEvent.MissingMappings;
+import net.minecraftforge.event.RegistryEvent.MissingMappings.Mapping;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import thebetweenlands.common.entity.EntityBLItemFrame;
+import thebetweenlands.common.registries.ItemRegistry;
 
 @EventBusSubscriber
 @SuppressWarnings("deprecation")
@@ -42,6 +49,12 @@ public class RegistryHandler {
         	//logger.info("Registering recipe \"{}\", with result \"{}\"!", holder.getName(), holder.getResult());
     		event.getRegistry().register(holder.parse());
     	}
+    }
+
+    @SubscribeEvent
+    public static void onSoundRegister(RegistryEvent.Register<SoundEvent> event) {
+    	Main.logger.info("Registering Sounds!");
+    	event.getRegistry().registerAll(ModSounds.SOUNDS.toArray(new SoundEvent[0]));
     }
     
     @SubscribeEvent
@@ -110,6 +123,7 @@ public class RegistryHandler {
 			}
 		}
 	}
+
 	/*
     @SubscribeEvent
     public static void onWorldLoad(WorldEvent.Load event) {

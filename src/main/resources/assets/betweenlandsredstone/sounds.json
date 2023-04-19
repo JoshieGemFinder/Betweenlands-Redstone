@@ -1,0 +1,67 @@
+{
+	"block.sap_block.break": {
+		"category": "block",
+		"subtitle": "subtitles.block.generic.break",
+		"sounds": [ 
+			"betweenlandsredstone:break1",
+			"betweenlandsredstone:break2",
+			"betweenlandsredstone:break3",
+			"betweenlandsredstone:break4",
+			"betweenlandsredstone:break5"
+		]
+	},
+	"block.sap_block.fall": {
+		"category": "block",
+		"subtitle": "",
+		"sounds": [ 
+			"betweenlandsredstone:step1",
+			"betweenlandsredstone:step2",
+			"betweenlandsredstone:step3",
+			"betweenlandsredstone:step4",
+			"betweenlandsredstone:step5"
+		]
+	},
+	"block.sap_block.hit": {
+		"category": "block",
+		"subtitle": "subtitles.block.generic.hit",
+		"sounds": [ 
+			"betweenlandsredstone:step1",
+			"betweenlandsredstone:step2",
+			"betweenlandsredstone:step3",
+			"betweenlandsredstone:step4",
+			"betweenlandsredstone:step5"
+		]
+	},
+	"block.sap_block.place": {
+		"category": "block",
+		"subtitle": "subtitles.block.generic.place",
+		"sounds": [ 
+			"betweenlandsredstone:break1",
+			"betweenlandsredstone:break2",
+			"betweenlandsredstone:break3",
+			"betweenlandsredstone:break4",
+			"betweenlandsredstone:break5"
+		]
+	},
+	"block.sap_block.step": {
+		"category": "block",
+		"subtitle": "subtitles.block.generic.footsteps",
+		"sounds": [ 
+			"betweenlandsredstone:step1",
+			"betweenlandsredstone:step2",
+			"betweenlandsredstone:step3",
+			"betweenlandsredstone:step4",
+			"betweenlandsredstone:step5"
+		]
+	},
+	"block.sap_block.slide": {
+		"category": "block",
+		"subtitle": "betweenlandsredstone.subtitle.sap_block.slide",
+		"sounds": [ 
+			"betweenlandsredstone:slide1",
+			"betweenlandsredstone:slide2",
+			"betweenlandsredstone:slide3",
+			"betweenlandsredstone:slide4"
+		]
+	}
+}

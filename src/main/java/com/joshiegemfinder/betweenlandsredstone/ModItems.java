@@ -5,12 +5,10 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.joshiegemfinder.betweenlandsredstone.entity.EntityScabystItemFrame;
 import com.joshiegemfinder.betweenlandsredstone.entity.minecart.EntityScabystMinecart;
 import com.joshiegemfinder.betweenlandsredstone.items.ItemBlockBase;
 import com.joshiegemfinder.betweenlandsredstone.items.ItemFoodBlock;
 import com.joshiegemfinder.betweenlandsredstone.items.ItemScabystDust;
-import com.joshiegemfinder.betweenlandsredstone.items.ItemScabystHangingEntity;
 import com.joshiegemfinder.betweenlandsredstone.items.ItemScabystMinecart;
 import com.joshiegemfinder.betweenlandsredstone.util.ModelRegisterer;
 
@@ -36,8 +34,6 @@ public class ModItems {
     public static Item SCABYST_SLIME_2;
 
     public static Item SCABYST_OBSERVER;
-
-    public static Item SCABYST_ITEM_FRAME;
 
     public static Item SCABYST_RAIL;
     public static Item SCABYST_POWERED_RAIL;
@@ -86,8 +82,6 @@ public class ModItems {
     	SCABYST_SLIME_1 = new ItemBlockBase(ModBlocks.SCABYST_SLIME_1, "scabyst_slime_1");
     	SCABYST_SLIME_2 = new ItemBlockBase(ModBlocks.SCABYST_SLIME_2, "scabyst_slime_2");
     	SCABYST_OBSERVER = new ItemBlockBase(ModBlocks.SCABYST_OBSERVER, "scabyst_observer");
-    	
-    	SCABYST_ITEM_FRAME = new ItemScabystHangingEntity("scabyst_item_frame", EntityScabystItemFrame.class).setCreativeTab(CreativeTabs.REDSTONE);
 
     	SCABYST_RAIL = new ItemBlockBase(ModBlocks.SCABYST_RAIL, "scabyst_rail");
     	SCABYST_POWERED_RAIL = new ItemBlockBase(ModBlocks.SCABYST_POWERED_RAIL, "scabyst_golden_rail");

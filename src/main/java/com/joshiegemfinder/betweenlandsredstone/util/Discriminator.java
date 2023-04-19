@@ -34,7 +34,11 @@ public class Discriminator {
 			Discriminator.context = DiscriminatorContext.BOTH;
 			return;
 		}
-		Discriminator.context = contextStack.remove(contextStack.size() - 1);
+		try {
+			Discriminator.context = contextStack.remove(contextStack.size() - 1);
+		} catch(Exception e) {
+			Discriminator.context = DiscriminatorContext.BOTH;
+		}
 	}
 	
 	public static boolean on() {

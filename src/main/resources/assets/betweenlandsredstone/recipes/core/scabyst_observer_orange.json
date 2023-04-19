@@ -1,0 +1,29 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "MMM",
+        "##D",
+        "MMM"
+    ],
+	"key":
+    {
+        "D":
+        {
+            "item": "thebetweenlands:dentrothyst_shard_orange"
+        },
+        "#":
+        {
+            "item": "betweenlandsredstone:scabyst_dust"
+        },
+        "M":
+        {
+            "item": "thebetweenlands:mud_bricks"
+        }
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:scabyst_observer",
+        "count": 2
+    }
+}

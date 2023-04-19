@@ -68,3 +68,6 @@ container.scabyst_dropper=Pitstone Dropper
 #Config Names
 config.scabystExclusivity.name=Scabyst Exclusivity
 config.slimeBlocksOnPistons.name=Slime Blocks stick on Mud Pistons
+
+#Subtitles
+betweenlandsredstone.subtitle.sap_block.slide=Sliding down a sap block
