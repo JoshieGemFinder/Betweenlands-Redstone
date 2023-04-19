@@ -22,7 +22,6 @@ public class BlockWhitePear extends Block {
 	public BlockWhitePear(String name) {
 		super(Material.CAKE);
 		
-		setCreativeTab(BLCreativeTabs.PLANTS);
 		setSoundType(SoundType.PLANT);
 		setHardness(1F);
 		setResistance(1F);
