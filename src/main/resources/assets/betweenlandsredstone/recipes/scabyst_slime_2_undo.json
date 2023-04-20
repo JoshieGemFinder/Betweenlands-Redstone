@@ -1,0 +1,14 @@
+{
+    "type": "minecraft:crafting_shapeless",
+	"ingredients":
+    [
+        {
+            "item": "betweenlandsredstone:scabyst_slime_2"
+        }
+    ],
+    "result":
+    {
+        "item": "thebetweenlands:sap_spit",
+        "count": 4
+    }
+}

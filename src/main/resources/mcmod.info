@@ -11,8 +11,8 @@
   "credits": "JoshieGemFinder, for going through the pain of getting this to work, \nSTARRYSOCK#7660 for making almost all of the textures, \nSeriousCreeper, for coming up with the original idea in his modpack, \"Into the Betweenlands\".",
   "logoFile": "ModIcon.png",
   "screenshots": [],
-  "dependencies": ["thebetweenlands"],
-  "requiredMods": ["thebetweenlands"],
+  "dependencies": ["thebetweenlands@[3.9.0,)"],
+  "requiredMods": ["thebetweenlands@[3.9.0,)"],
   "useDependencyInformation": "true"
  }
 ]

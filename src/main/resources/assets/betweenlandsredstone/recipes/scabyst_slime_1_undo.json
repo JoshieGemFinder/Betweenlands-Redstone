@@ -1,0 +1,14 @@
+{
+    "type": "minecraft:crafting_shapeless",
+	"ingredients":
+    [
+        {
+            "item": "betweenlandsredstone:scabyst_slime_1"
+        }
+    ],
+    "result":
+    {
+        "item": "thebetweenlands:sludge_ball",
+        "count": 9
+    }
+}

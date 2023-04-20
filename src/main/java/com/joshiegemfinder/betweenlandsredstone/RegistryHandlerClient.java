@@ -1,6 +1,5 @@
 package com.joshiegemfinder.betweenlandsredstone;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,28 +8,15 @@ import com.joshiegemfinder.betweenlandsredstone.util.ModelRegisterer;
 import com.joshiegemfinder.betweenlandsredstone.util.ScabystWireBlockColor;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ModelBlockDefinition;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.IRegistry;
 import net.minecraftforge.client.event.ColorHandlerEvent;
-import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
@@ -42,7 +28,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 
 @SideOnly(Side.CLIENT)
 @EventBusSubscriber(Side.CLIENT)
-@SuppressWarnings("deprecation")
+//@SuppressWarnings("deprecation")
 public class RegistryHandlerClient {
 
     public static final List<ModelRegisterer> modelRegisters = new ArrayList<ModelRegisterer>();
