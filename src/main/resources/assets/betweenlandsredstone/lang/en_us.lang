@@ -71,3 +71,4 @@ config.slimeBlocksOnPistons.name=Slime Blocks stick on Mud Pistons
 
 #Subtitles
 betweenlandsredstone.subtitle.sap_block.slide=Sliding down a sap block
+betweenlandsredstone.subtitle.sap_block.step=Footsteps on sap
