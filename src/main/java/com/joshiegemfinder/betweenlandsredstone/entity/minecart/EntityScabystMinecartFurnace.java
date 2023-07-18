@@ -8,6 +8,7 @@ import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityMinecartFurnace;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,6 +21,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
@@ -38,7 +40,7 @@ public class EntityScabystMinecartFurnace extends EntityScabystMinecart implemen
     private boolean active = true;
     public double pushX = 0;
     public double pushZ = 0;
-    private static final int fuelCount = 720;
+    private static final int fuelCount = 3600;
 
     public EntityScabystMinecartFurnace(World worldIn)
     {
@@ -80,9 +82,16 @@ public class EntityScabystMinecartFurnace extends EntityScabystMinecart implemen
 
     @Override
     public String getName() {
-    	if(isDual()) {
+
+        if (this.hasCustomName())
+        {
+            return this.getCustomNameTag();
+        }
+        
+        if(isDual()) {
     		return I18n.translateToLocal("entity.scabyst_furnace_minecart_dual.name");
     	}
+        
     	return super.getName();
     }
     
@@ -94,7 +103,7 @@ public class EntityScabystMinecartFurnace extends EntityScabystMinecart implemen
     	
         super.onUpdate();
         
-    	if(facing != null && facing != prevFacing && !world.isRemote) {
+    	if(isDual() && facing != null && facing != prevFacing && !world.isRemote) {
     		//Main.logger.info("sending update facing message");
     		Main.NETWORK_CHANNEL.sendToAllTracking(new MinecartFacingMessage(facing, this.getUniqueID()), this);
     	}
@@ -110,13 +119,9 @@ public class EntityScabystMinecartFurnace extends EntityScabystMinecart implemen
         {
             this.pushX = 0.0D;
             this.pushZ = 0.0D;
-        } else {
-        	double mult = 0.5D;
-        	if(this.isDual()) {
-        		mult = 1;
-        	}
-            this.pushX = Math.signum(facing.getFrontOffsetX()) * mult;
-            this.pushZ = Math.signum(facing.getFrontOffsetZ()) * mult;
+        } else if(this.isDual()) {
+            this.pushX = Math.signum(facing.getFrontOffsetX());
+            this.pushZ = Math.signum(facing.getFrontOffsetZ());
             this.setRotation(facing.getHorizontalAngle(), this.rotationPitch);
         }
 
@@ -133,7 +138,7 @@ public class EntityScabystMinecartFurnace extends EntityScabystMinecart implemen
     public void onActivatorRailPass(int x, int y, int z, boolean receivingPower) {
     	super.onActivatorRailPass(x, y, z, receivingPower);
     	
-    	this.active = receivingPower;
+    	this.active = !receivingPower;
     	
     	if(!this.active) {
     		this.motionX = 0;
@@ -148,40 +153,50 @@ public class EntityScabystMinecartFurnace extends EntityScabystMinecart implemen
         return 0.2D;
     }
     
-    @Override
-    protected double getMaxSpeed() {
-        if (!canUseRail()) return getMaximumSpeed();
-        BlockPos pos = this.getCurrentRailPosition();
-        IBlockState state = this.world.getBlockState(pos);
-        if (!BlockRailBase.isRailBlock(state)) return getMaximumSpeed();
-
-        float railMaxSpeed = ((BlockRailBase)state.getBlock()).getRailMaxSpeed(world, this, pos);
-        double speed = Math.min(railMaxSpeed, getCurrentCartSpeedCapOnRail());
-        if(!isDual()) {
-        	return speed * 0.5d;
-        }
-        return speed;
-    }
-    
     private EnumRailDirection prevRailDir = null;
     
     @Override
     protected void moveAlongTrack(BlockPos pos, IBlockState state) {
     	super.moveAlongTrack(pos, state);
 
-    	EnumRailDirection railDir = state.getBlock() instanceof BlockRailBase ? ((BlockRailBase)state.getBlock()).getRailDirection(world, pos, state, null) : BlockRailBase.EnumRailDirection.NORTH_SOUTH;
-    
-    	if(prevRailDir == null) {
+    	if(this.isDual()) {
+        	EnumRailDirection railDir = state.getBlock() instanceof BlockRailBase ? ((BlockRailBase)state.getBlock()).getRailDirection(world, pos, state, null) : BlockRailBase.EnumRailDirection.NORTH_SOUTH;
+            
+        	if(prevRailDir == null) {
+        		prevRailDir = railDir;
+        	}
+        	
+        	if(RailDirectionHelper.isCurved(railDir)) {
+        		this.facing = RailDirectionHelper.followCurve(railDir, this.facing);
+        	} else if(railDir != prevRailDir) {
+        		this.facing = RailDirectionHelper.matchToRail(railDir, this.facing);
+        	}
+        	
     		prevRailDir = railDir;
     	}
-    	
-    	if(RailDirectionHelper.isCurved(railDir)) {
-    		this.facing = RailDirectionHelper.followCurve(railDir, this.facing);
-    	} else if(railDir != prevRailDir) {
-    		this.facing = RailDirectionHelper.matchToRail(railDir, this.facing);
-    	}
-    	
-		prevRailDir = railDir;
+		else {
+
+	        double d0 = this.pushX * this.pushX + this.pushZ * this.pushZ;
+
+	        if (d0 > 1.0E-4D && this.motionX * this.motionX + this.motionZ * this.motionZ > 0.001D)
+	        {
+	            d0 = (double)MathHelper.sqrt(d0);
+	            this.pushX /= d0;
+	            this.pushZ /= d0;
+
+	            if (this.pushX * this.motionX + this.pushZ * this.motionZ < 0.0D)
+	            {
+	                this.pushX = 0.0D;
+	                this.pushZ = 0.0D;
+	            }
+	            else
+	            {
+	                double d1 = d0 / this.getMaximumSpeed();
+	                this.pushX *= d1;
+	                this.pushZ *= d1;
+	            }
+	        }
+		}
     }
 
     public void killMinecart(DamageSource source)
@@ -205,26 +220,19 @@ public class EntityScabystMinecartFurnace extends EntityScabystMinecart implemen
     @Override
     protected void applyDrag()
     {
-    	if(this.fuel > 0 && this.active) {
-        	double mult = 0.5D;
-        	if(this.isDual()) {
-        		mult = 1;
-        	}
-            this.pushX = Math.signum(facing.getFrontOffsetX()) * mult;
-            this.pushZ = Math.signum(facing.getFrontOffsetZ()) * mult;
-    	}
-
         double d0 = this.pushX * this.pushX + this.pushZ * this.pushZ;
         
         if (d0 > 1.0E-4D && this.active)
         {
-            @SuppressWarnings("unused")
+            d0 = (double)MathHelper.sqrt(d0);
+            this.pushX /= d0;
+            this.pushZ /= d0;
 			double d1 = 1.0D;
             this.motionX *= 0.800000011920929D;
             this.motionY *= 0.0D;
             this.motionZ *= 0.800000011920929D;
-            this.motionX += this.pushX;
-            this.motionZ += this.pushZ;
+            this.motionX += this.pushX * d1;
+            this.motionZ += this.pushZ * d1;
         }
         else
         {
@@ -252,8 +260,10 @@ public class EntityScabystMinecartFurnace extends EntityScabystMinecart implemen
             this.fuel += fuelCount;
         }
 
-//        this.pushX = this.posX - player.posX;
-//        this.pushZ = this.posZ - player.posZ;
+        if(!isDual()) {
+          this.pushX = this.posX - player.posX;
+          this.pushZ = this.posZ - player.posZ;
+        }
         return true;
     }
 
@@ -320,13 +330,15 @@ public class EntityScabystMinecartFurnace extends EntityScabystMinecart implemen
 	public void writeSpawnData(ByteBuf buffer) {
 		buffer.writeBoolean(this.dual);
 		buffer.writeByte(this.facing.getHorizontalIndex());
-//		buffer.writeBoolean(this.active);
+		buffer.writeBoolean(this.active);
+		buffer.writeInt(this.fuel);
 	}
 
 	@Override
 	public void readSpawnData(ByteBuf additionalData) {
 		this.dual = additionalData.readBoolean();
 		this.facing = EnumFacing.getHorizontal(additionalData.readByte());
-//		this.active = additionalData.readBoolean();
+		this.active = additionalData.readBoolean();
+		this.fuel = additionalData.readInt();
 	}
 }

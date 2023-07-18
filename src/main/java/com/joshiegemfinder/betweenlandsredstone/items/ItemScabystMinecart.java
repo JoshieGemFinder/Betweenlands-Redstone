@@ -167,14 +167,14 @@ public class ItemScabystMinecart extends Item implements IModelInterface {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if(stack.getItem() == this) {
-			if(this.minecartType.getType() == EntityMinecart.Type.FURNACE) {
+			if(this.minecartType == EntityScabystMinecart.Type.DUAL_FURNACE) {
 				tooltip.add("Will automatically face towards you.");
 				tooltip.add("Sneak while placing to place facing away from you.");
 			}
-			if(this.minecartType == Type.FURNACE) {
-				tooltip.add("WARNING: Buggy, don't complain to me about issues when colliding with other minecarts.");
-				tooltip.add("Especially with vanilla minecarts.");
-			}
+//			if(this.minecartType == Type.FURNACE) {
+			//	tooltip.add("WARNING: Buggy, don't complain to me about issues when colliding with other minecarts.");
+			//	tooltip.add("Especially with vanilla minecarts.");
+			//}
 		}
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 	}

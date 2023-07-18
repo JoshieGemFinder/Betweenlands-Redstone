@@ -927,35 +927,19 @@ public abstract class EntityScabystMinecart extends EntityMinecart {
 
                             if (((EntityMinecart)entityIn).isPoweredCart() && !isPoweredCart())
                             {
-                            	if(entityIn instanceof EntityScabystMinecartFurnace && !((EntityScabystMinecartFurnace) entityIn).isDual() && ((EntityScabystMinecartFurnace) entityIn).isMinecartPowered()) {
-	                                this.motionX *= 0.20000000298023224D * 0.5D;
-	                                this.motionZ *= 0.20000000298023224D * 0.5D;
-	                                this.addVelocity((entityIn.motionX - d0) * 0.125D, 0.0D, (entityIn.motionZ - d1) * 0.125D);
-	                                entityIn.motionX *= 949999988079071D;
-	                                entityIn.motionZ *= 949999988079071D;
-                            	} else {
-	                                this.motionX *= 0.20000000298023224D;
-	                                this.motionZ *= 0.20000000298023224D;
-	                                this.addVelocity(entityIn.motionX - d0, 0.0D, entityIn.motionZ - d1);
-	                                entityIn.motionX *= 0.949999988079071D;
-	                                entityIn.motionZ *= 0.949999988079071D;
-                            	}
+                                this.motionX *= 0.20000000298023224D;
+                                this.motionZ *= 0.20000000298023224D;
+                                this.addVelocity(entityIn.motionX - d0, 0.0D, entityIn.motionZ - d1);
+                                entityIn.motionX *= 0.949999988079071D;
+                                entityIn.motionZ *= 0.949999988079071D;
                             }
                             else if (!((EntityMinecart)entityIn).isPoweredCart() && isPoweredCart())
                             {
-                            	if(this instanceof EntityScabystMinecartFurnace && !((EntityScabystMinecartFurnace) this).isDual() && ((EntityScabystMinecartFurnace) this).isMinecartPowered()) {
-                            		entityIn.motionX *= 0.20000000298023224D * 0.5D;
-                            		entityIn.motionZ *= 0.20000000298023224D * 0.5D;
-                            		entityIn.addVelocity((this.motionX + d0) * 0.125D, 0.0D, (this.motionZ + d1) * 0.125D);
-	                                this.motionX *= 949999988079071D;
-	                                this.motionZ *= 949999988079071D;
-                            	} else {
-                                    entityIn.motionX *= 0.20000000298023224D;
-                                    entityIn.motionZ *= 0.20000000298023224D;
-                                    entityIn.addVelocity(this.motionX + d0, 0.0D, this.motionZ + d1);
-                                    this.motionX *= 0.949999988079071D;
-                                    this.motionZ *= 0.949999988079071D;
-                            	}
+                                entityIn.motionX *= 0.20000000298023224D;
+                                entityIn.motionZ *= 0.20000000298023224D;
+                                entityIn.addVelocity(this.motionX + d0, 0.0D, this.motionZ + d1);
+                                this.motionX *= 0.949999988079071D;
+                                this.motionZ *= 0.949999988079071D;
                             }
                             else
                             {
