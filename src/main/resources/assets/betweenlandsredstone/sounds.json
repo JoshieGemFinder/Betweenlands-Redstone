@@ -12,7 +12,6 @@
 	},
 	"block.sap_block.fall": {
 		"category": "block",
-		"subtitle": "",
 		"sounds": [ 
 			"betweenlandsredstone:step1",
 			"betweenlandsredstone:step2",

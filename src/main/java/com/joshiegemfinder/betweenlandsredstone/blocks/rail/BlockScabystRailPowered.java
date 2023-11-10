@@ -10,9 +10,11 @@ import net.minecraft.block.BlockRailPowered;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import thebetweenlands.common.entity.mobs.EntityStalker;
 
 @SuppressWarnings("deprecation")
 public class BlockScabystRailPowered extends BlockRailPowered implements IScabystBlock {
@@ -54,6 +56,14 @@ public class BlockScabystRailPowered extends BlockRailPowered implements IScabys
 			return 4;
 		}
 		return super.getLightValue(state, world, pos);
+	}
+	
+	@Override
+	public boolean canEntityDestroy(IBlockState state, IBlockAccess world, BlockPos pos, Entity entity) {
+		if(entity instanceof EntityStalker) {
+			return false;
+		}
+		return super.canEntityDestroy(state, world, pos, entity);
 	}
 	
 	@Override

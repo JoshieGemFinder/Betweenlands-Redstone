@@ -85,7 +85,7 @@ public class RegistryHandler {
 	
 	@SubscribeEvent
 	public static void onJump(LivingJumpEvent event) {
-		if(event.getEntityLiving() != null && event.getEntityLiving().world != null && event.getEntityLiving().world.isRemote) {
+		if(event.getEntityLiving() != null && event.getEntityLiving().world != null/* && event.getEntityLiving().world.isRemote*/) {
 			EntityLivingBase entity = event.getEntityLiving();
 			World world = entity.world;
 			BlockPos pos = new BlockPos(entity);
@@ -95,16 +95,14 @@ public class RegistryHandler {
 					||
 					(world.isBlockLoaded(posDown) && world.getBlockState(posDown).getBlock() == ModBlocks.SCABYST_SLIME_2)
 			) {
-				//we do this the most accurate way we can
+				//this the most accurate way we can get (and modify) this
 				double f = 0.42F;
 				try {
 					Method getJumpHeight = ReflectionHelper.findMethod(EntityLivingBase.class, "getJumpUpwardsMotion", "func_175134_bD");
-					float height = (float)getJumpHeight.invoke(entity);
-					//do this to prevent errors in invoke possibly corrupting `f`
-					f = height;
+					f = (float)getJumpHeight.invoke(entity);
 				} catch(Exception e) {
 					e.printStackTrace();
-					Main.logger.info("Error getting jump height for entity {}", EntityList.getEntityString(entity));
+					Main.logger.info("Error getting default jump height for entity {}. This shouldn't happen in normal gameplay.", EntityList.getEntityString(entity));
 				}
 				f = f * 0.5F;
 
