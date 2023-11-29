@@ -1,10 +1,7 @@
 package com.joshiegemfinder.betweenlandsredstone.blocks.rail;
 
 import com.joshiegemfinder.betweenlandsredstone.ModBlocks;
-import com.joshiegemfinder.betweenlandsredstone.util.IScabystBlock;
-import com.joshiegemfinder.betweenlandsredstone.util.ScabystWorldWrapper;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.BlockRailPowered;
 import net.minecraft.block.SoundType;
@@ -17,7 +14,7 @@ import net.minecraft.world.World;
 import thebetweenlands.common.entity.mobs.EntityStalker;
 
 @SuppressWarnings("deprecation")
-public class BlockScabystRailPowered extends BlockRailPowered implements IScabystBlock {
+public class BlockScabystRailPowered extends BlockRailPowered {
 
 	protected final boolean isActivator;
 	
@@ -49,15 +46,8 @@ public class BlockScabystRailPowered extends BlockRailPowered implements IScabys
 		}
 		return super.getLightValue(state);
 	}
-	
-	@Override
-	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
-		if(state.getValue(POWERED) && !this.isActivator) {
-			return 4;
-		}
-		return super.getLightValue(state, world, pos);
-	}
-	
+
+	//stop stalkers munching on blocks
 	@Override
 	public boolean canEntityDestroy(IBlockState state, IBlockAccess world, BlockPos pos, Entity entity) {
 		if(entity instanceof EntityStalker) {
@@ -65,24 +55,6 @@ public class BlockScabystRailPowered extends BlockRailPowered implements IScabys
 		}
 		return super.canEntityDestroy(state, world, pos, entity);
 	}
-	
-	@Override
-    protected void updateState(IBlockState state, World worldIn, BlockPos pos, Block blockIn)
-    {
-        boolean flag = ((Boolean)state.getValue(POWERED)).booleanValue();
-        boolean flag1 = ScabystWorldWrapper.isBlockScabystPowered(worldIn, pos) || this.findPoweredRailSignal(worldIn, pos, state, true, 0) || this.findPoweredRailSignal(worldIn, pos, state, false, 0);
-
-        if (flag1 != flag)
-        {
-            worldIn.setBlockState(pos, state.withProperty(POWERED, Boolean.valueOf(flag1)), 3);
-            worldIn.notifyNeighborsOfStateChange(pos.down(), this, false);
-
-            if (((BlockRailBase.EnumRailDirection)state.getValue(SHAPE)).isAscending())
-            {
-                worldIn.notifyNeighborsOfStateChange(pos.up(), this, false);
-            }
-        }
-    }
 	
     protected boolean isSameRailWithPower(World worldIn, BlockPos pos, boolean p_176567_3_, int distance, BlockRailBase.EnumRailDirection p_176567_5_)
     {
@@ -102,7 +74,7 @@ public class BlockScabystRailPowered extends BlockRailPowered implements IScabys
                 {
                     if (((Boolean)iblockstate.getValue(POWERED)).booleanValue())
                     {
-                        return ScabystWorldWrapper.isBlockScabystPowered(worldIn, pos) ? true : this.findPoweredRailSignal(worldIn, pos, iblockstate, p_176567_3_, distance + 1);
+                        return worldIn.isBlockPowered(pos) ? true : this.findPoweredRailSignal(worldIn, pos, iblockstate, p_176567_3_, distance + 1);
                     }
                     else
                     {

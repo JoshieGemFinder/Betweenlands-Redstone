@@ -1,7 +1,6 @@
 package com.joshiegemfinder.betweenlandsredstone.blocks.piston.stickyblocks;
 
 import com.joshiegemfinder.betweenlandsredstone.ModBlocks;
-import com.joshiegemfinder.betweenlandsredstone.util.IScabystBlock;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -19,7 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SuppressWarnings("deprecation")
-public class BlockScabystSlime_1 extends BlockStickyBase implements IScabystBlock {
+public class BlockScabystSlime_1 extends BlockStickyBase {
 	
 	public BlockScabystSlime_1(String name)
     {

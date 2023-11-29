@@ -66,7 +66,6 @@ container.scabyst_dispenser=Pitstone Dispenser
 container.scabyst_dropper=Pitstone Dropper
 
 #Config Names
-config.scabystExclusivity.name=Scabyst Exclusivity
 config.slimeBlocksOnPistons.name=Slime Blocks stick on Mud Pistons
 
 #Subtitles

@@ -5,8 +5,6 @@ import java.util.Random;
 import com.joshiegemfinder.betweenlandsredstone.ModBlocks;
 import com.joshiegemfinder.betweenlandsredstone.ModItems;
 import com.joshiegemfinder.betweenlandsredstone.blocks.shared.IModelInterface;
-import com.joshiegemfinder.betweenlandsredstone.util.Discriminator;
-import com.joshiegemfinder.betweenlandsredstone.util.IScabystBlock;
 
 import net.minecraft.block.BlockDaylightDetector;
 import net.minecraft.block.SoundType;
@@ -29,7 +27,7 @@ import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.world.event.EventRift;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
-public class BlockRiftDetector extends BlockDaylightDetector implements IModelInterface, IScabystBlock {
+public class BlockRiftDetector extends BlockDaylightDetector implements IModelInterface {
 
 	private final boolean inverted;
 	
@@ -125,17 +123,7 @@ public class BlockRiftDetector extends BlockDaylightDetector implements IModelIn
 	}
 	
 	@Override
-	public int getScabystWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-		return super.getWeakPower(blockState, blockAccess, pos, side);
-	}
-	
-	@Override
 	public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-		return IScabystBlock.super.getWeakPower(blockState, blockAccess, pos, side);
-	}
-
-	@Override
-	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-		return super.canConnectRedstone(state, world, pos, side) && Discriminator.canScabystConnect(world, pos, side);
+		return super.getWeakPower(blockState, blockAccess, pos, side);
 	}
 }

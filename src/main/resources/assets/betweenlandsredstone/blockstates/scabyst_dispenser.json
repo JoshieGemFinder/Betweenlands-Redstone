@@ -1,10 +1,38 @@
 {
+    "forge_marker": 1,
+    "defaults": {
+        "textures": {
+            "front": "betweenlandsredstone:blocks/shooter/dispenser",
+            "side": "betweenlandsredstone:blocks/shooter/side",
+            "back": "betweenlandsredstone:blocks/shooter/back"
+        },
+        "model": "betweenlandsredstone:custom/orientable"
+    },
     "variants": {
-        "facing=down":  { "model": "betweenlandsredstone:custom/dispenser_vertical", "x": 180 },
-        "facing=up":    { "model": "betweenlandsredstone:custom/dispenser_vertical" },
-        "facing=north": { "model": "betweenlandsredstone:custom/dispenser" },
-        "facing=south": { "model": "betweenlandsredstone:custom/dispenser", "y": 180 },
-        "facing=west":  { "model": "betweenlandsredstone:custom/dispenser", "y": 270 },
-        "facing=east":  { "model": "betweenlandsredstone:custom/dispenser", "y": 90 }
+        "facing": {
+            "north": {},
+            "south": { "y": 180 },
+            "east":  { "y": 90 },
+            "west":  { "y": 270 },
+            "up": {
+                "textures": {
+                    "front": "betweenlandsredstone:blocks/shooter/dispenser"
+                }
+            },
+            "down": {
+                "textures": {
+                    "front": "betweenlandsredstone:blocks/shooter/dispenser"
+                },
+                "x": 180
+            }
+        },
+        "hidden": {
+            "true": {
+                "textures": {
+                    "front": "betweenlandsredstone:blocks/deco/cut_pitstone"
+                }
+            },
+            "false": { }
+        }
     }
 }

@@ -1,13 +1,11 @@
 package com.joshiegemfinder.betweenlandsredstone.blocks.piston.stickyblocks;
 
-import com.joshiegemfinder.betweenlandsredstone.util.IScabystBlock;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 
-public abstract class BlockStickyBase extends Block implements IScabystBlock {
+public abstract class BlockStickyBase extends Block {
 	
 	protected BlockStickyProperties stickyProperties = new BlockStickyProperties();
 	

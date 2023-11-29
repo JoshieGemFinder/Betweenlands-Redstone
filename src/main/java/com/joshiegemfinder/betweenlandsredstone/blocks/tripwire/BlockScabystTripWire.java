@@ -6,7 +6,6 @@ import java.util.Random;
 import com.joshiegemfinder.betweenlandsredstone.ModBlocks;
 import com.joshiegemfinder.betweenlandsredstone.ModItems;
 import com.joshiegemfinder.betweenlandsredstone.blocks.shared.IModelInterface;
-import com.joshiegemfinder.betweenlandsredstone.util.IScabystBlock;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTripWire;
@@ -25,7 +24,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockScabystTripWire extends BlockTripWire implements IModelInterface, IScabystBlock {
+public class BlockScabystTripWire extends BlockTripWire implements IModelInterface {
 
     public BlockScabystTripWire() {
     	super();

@@ -1,4 +1,4 @@
-package com.joshiegemfinder.betweenlandsredstone.blocks;
+package com.joshiegemfinder.betweenlandsredstone.blocks.diode;
 
 import java.util.Random;
 
@@ -7,31 +7,25 @@ import com.joshiegemfinder.betweenlandsredstone.ModBlocks;
 import com.joshiegemfinder.betweenlandsredstone.ModItems;
 import com.joshiegemfinder.betweenlandsredstone.util.ScabystColor;
 
+import net.minecraft.block.BlockRedstoneRepeater;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SuppressWarnings("deprecation")
-public class BlockScabystRepeater extends BlockScabystDiode {
+public class BlockScabystRepeater extends BlockRedstoneRepeater {
 	
 	public static final PropertyBool LOCKED = PropertyBool.create("locked");
     public static final PropertyInteger DELAY = PropertyInteger.create("delay", 1, 4);
@@ -46,45 +40,16 @@ public class BlockScabystRepeater extends BlockScabystDiode {
 		ModBlocks.BLOCKS.add(this);
 	}
 
-	public String getLocalizedName()
-    {
-        return I18n.translateToLocal("item.diode.name");
-    }
+	@Override
+	protected int calculateInputStrength(World worldIn, BlockPos pos, IBlockState state) {
+		return BlockScabystDiode.calculateInputStrength(worldIn, pos, state);
+	}
+	
+	@Override
+	protected int getPowerOnSide(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+		return BlockScabystDiode.getPowerOnSide(this, worldIn, pos, side);
+	}
     
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
-    {
-        return state.withProperty(LOCKED, Boolean.valueOf(this.isLocked(worldIn, pos, state)));
-    }
-
-    public IBlockState withRotation(IBlockState state, Rotation rot)
-    {
-        return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
-    }
-
-    public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
-    {
-        return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
-    }
-
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
-    {
-        if (!playerIn.capabilities.allowEdit)
-        {
-            return false;
-        }
-        else
-        {
-            worldIn.setBlockState(pos, state.cycleProperty(DELAY), 3);
-            return true;
-        }
-    }
-
-    protected int getDelay(IBlockState state)
-    {
-        return ((Integer)state.getValue(DELAY)).intValue() * 2;
-    }
-    
-    //TODO change if making a new class
   	protected IBlockState getPoweredState(IBlockState unpoweredState)
 	{
 	    Integer integer = (Integer)unpoweredState.getValue(DELAY);
@@ -93,7 +58,6 @@ public class BlockScabystRepeater extends BlockScabystDiode {
 	    return ModBlocks.POWERED_SCABYST_REPEATER.getDefaultState().withProperty(FACING, enumfacing).withProperty(DELAY, integer).withProperty(LOCKED, obool);
 	}
 
-  	//TODO change if making a new class
   	protected IBlockState getUnpoweredState(IBlockState poweredState)
     {
         Integer integer = (Integer)poweredState.getValue(DELAY);
@@ -102,29 +66,22 @@ public class BlockScabystRepeater extends BlockScabystDiode {
         return ModBlocks.UNPOWERED_SCABYST_REPEATER.getDefaultState().withProperty(FACING, enumfacing).withProperty(DELAY, integer).withProperty(LOCKED, obool);
     }
 
-  	//TODO change if making a new class
   	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
   		return ModItems.SCABYST_REPEATER;
   	}
   	
-	//TODO change if making a new class
 	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
 		 return new ItemStack(this);
 	}
 	
-	//TODO change if making a new class
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		 return new ItemStack(this);
 	}
 	
-	public boolean isLocked(IBlockAccess worldIn, BlockPos pos, IBlockState state)
+	@Override
+    public boolean isAlternateInput(IBlockState state)
     {
-        return this.getPowerOnSides(worldIn, pos, state) > 0;
-    }
-
-    protected boolean isAlternateInput(IBlockState state)
-    {
-        return isDiode(state);
+        return BlockScabystDiode.isDiode(state);
     }
 	
     @SideOnly(Side.CLIENT)
@@ -155,28 +112,9 @@ public class BlockScabystRepeater extends BlockScabystDiode {
             worldIn.spawnParticle(EnumParticleTypes.REDSTONE, d0 + d3, d1, d2 + d4, red, green, blue);
         }
     }
-    
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
-    {
-        super.breakBlock(worldIn, pos, state);
-        this.notifyNeighbors(worldIn, pos, state);
-    }
 
-    public IBlockState getStateFromMeta(int meta)
-    {
-        return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta)).withProperty(LOCKED, Boolean.valueOf(false)).withProperty(DELAY, Integer.valueOf(1 + (meta >> 2)));
-    }
-
-    public int getMetaFromState(IBlockState state)
-    {
-        int i = 0;
-        i = i | ((EnumFacing)state.getValue(FACING)).getHorizontalIndex();
-        i = i | ((Integer)state.getValue(DELAY)).intValue() - 1 << 2;
-        return i;
-    }
-
-    protected BlockStateContainer createBlockState()
-    {
-        return new BlockStateContainer(this, new IProperty[] {FACING, DELAY, LOCKED});
-    }
+	@Override
+	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return side.getAxis() == state.getValue(FACING).getAxis() && super.canConnectRedstone(state, world, pos, side);
+	}
 }

@@ -5,32 +5,25 @@ import java.util.Random;
 import com.joshiegemfinder.betweenlandsredstone.Main;
 import com.joshiegemfinder.betweenlandsredstone.ModBlocks;
 import com.joshiegemfinder.betweenlandsredstone.ModItems;
-import com.joshiegemfinder.betweenlandsredstone.util.IScabystBlock;
-import com.joshiegemfinder.betweenlandsredstone.util.ScabystWorldWrapper;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRedstoneLight;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import thebetweenlands.common.entity.mobs.EntityStalker;
 
-public class BlockScabystLight extends Block implements IScabystBlock {
-
-    private final boolean isOn;
+public class BlockScabystLight extends BlockRedstoneLight {
     
 	public BlockScabystLight(String name, boolean isOn) {
-		super(Material.REDSTONE_LIGHT);
-        this.isOn = isOn;
-
-        if (isOn)
-        {
-            this.setLightLevel(1.0F);
-        }
-
+		super(isOn);
+		
 		this.setHardness(0.3F);
 		this.setSoundType(SoundType.GLASS);
 		this.setUnlocalizedName(name);
@@ -43,7 +36,7 @@ public class BlockScabystLight extends Block implements IScabystBlock {
     {
         if (!worldIn.isRemote)
         {
-        	boolean powered = ScabystWorldWrapper.isBlockScabystPowered(worldIn, pos);
+        	boolean powered = worldIn.isBlockPowered(pos);
             if (this.isOn && !powered)
             {
                 worldIn.setBlockState(pos, ModBlocks.SCABYST_LAMP.getDefaultState(), 2);
@@ -59,7 +52,7 @@ public class BlockScabystLight extends Block implements IScabystBlock {
     {
         if (!worldIn.isRemote)
         {
-        	boolean powered = ScabystWorldWrapper.isBlockScabystPowered(worldIn, pos);
+        	boolean powered = worldIn.isBlockPowered(pos);
             if (this.isOn && !powered)
             {
                 worldIn.scheduleUpdate(pos, this, 4);
@@ -75,7 +68,7 @@ public class BlockScabystLight extends Block implements IScabystBlock {
     {
         if (!worldIn.isRemote)
         {
-            if (this.isOn && !ScabystWorldWrapper.isBlockScabystPowered(worldIn, pos))
+            if (this.isOn && !worldIn.isBlockPowered(pos))
             {
                 worldIn.setBlockState(pos, ModBlocks.SCABYST_LAMP.getDefaultState(), 2);
             }
@@ -96,5 +89,13 @@ public class BlockScabystLight extends Block implements IScabystBlock {
     {
         return new ItemStack(ModItems.SCABYST_LAMP);
     }
-	
+    
+    //stop stalkers munching on blocks
+    @Override
+	public boolean canEntityDestroy(IBlockState state, IBlockAccess world, BlockPos pos, Entity entity) {
+		if(entity instanceof EntityStalker) {
+			return false;
+		}
+		return super.canEntityDestroy(state, world, pos, entity);
+	}
 }

@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.joshiegemfinder.betweenlandsredstone.ModBlocks;
 import com.joshiegemfinder.betweenlandsredstone.ModItems;
+import com.joshiegemfinder.betweenlandsredstone.blocks.dispenser.IDispenserHider;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -14,10 +15,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 
-public class BlockCutPitstone extends Block {
+public class BlockCutPitstone extends Block implements IDispenserHider {
 
 	public BlockCutPitstone(String name) {
 		super(Material.ROCK);
@@ -40,5 +42,11 @@ public class BlockCutPitstone extends Block {
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		return ModItems.CUT_PITSONE;
+	}
+
+	@Override
+	public boolean canHideDispenser(IBlockState state, IBlockAccess blockAccess, BlockPos pos,
+			IBlockState dispenserState) {
+		return true;
 	}
 }

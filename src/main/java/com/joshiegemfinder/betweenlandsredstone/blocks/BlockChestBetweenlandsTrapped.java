@@ -1,8 +1,5 @@
 package com.joshiegemfinder.betweenlandsredstone.blocks;
 
-import com.joshiegemfinder.betweenlandsredstone.util.Discriminator;
-import com.joshiegemfinder.betweenlandsredstone.util.IScabystBlock;
-
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -22,7 +19,7 @@ import net.minecraftforge.common.util.EnumHelper;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.container.BlockChestBetweenlands;
 
-public class BlockChestBetweenlandsTrapped extends BlockChest implements IScabystBlock {
+public class BlockChestBetweenlandsTrapped extends BlockChest {
 	public static BlockChest.Type TRAPPED_WEEDWOOD_CHEST = EnumHelper.addEnum(BlockChest.Type.class, "TRAPPED_WEEDWOOD_CHEST", new Class[0], new Object[0]);
 
 	public BlockChestBetweenlandsTrapped(Type chestTypeIn) {
@@ -38,11 +35,6 @@ public class BlockChestBetweenlandsTrapped extends BlockChest implements IScabys
     {
         return this.chestType == BlockChest.Type.TRAP || this.chestType == TRAPPED_WEEDWOOD_CHEST;
     }
-
-	@Override
-	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-		return super.canConnectRedstone(state, world, pos, side) && Discriminator.canScabystConnect(world, pos, side);
-	}
 
 	@Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
@@ -79,17 +71,7 @@ public class BlockChestBetweenlandsTrapped extends BlockChest implements IScabys
 	}
 	
 	@Override
-	public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-		return IScabystBlock.super.getWeakPower(blockState, blockAccess, pos, side);
-	}
-	
-	@Override
-	public int getStrongPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-		return IScabystBlock.super.getStrongPower(blockState, blockAccess, pos, side);
-	}
-	
-	@Override
-    public int getScabystWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
+    public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
     {
         if (!blockState.canProvidePower())
         {
@@ -110,8 +92,8 @@ public class BlockChestBetweenlandsTrapped extends BlockChest implements IScabys
     }
 
 	@Override
-    public int getScabystStrongPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
+    public int getStrongPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
 	{
-        return side == EnumFacing.UP ? getScabystWeakPower(blockState, blockAccess, pos, side) : 0;
+        return side == EnumFacing.UP ? getWeakPower(blockState, blockAccess, pos, side) : 0;
     }
 }

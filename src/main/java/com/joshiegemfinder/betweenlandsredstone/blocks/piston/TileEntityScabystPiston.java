@@ -9,37 +9,18 @@ import com.joshiegemfinder.betweenlandsredstone.ModBlocks;
 import com.joshiegemfinder.betweenlandsredstone.blocks.piston.stickyblocks.BlockStickyBase;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockPistonExtension;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityPiston;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
-import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityScabystPiston extends TileEntity implements ITickable {
-
-    private IBlockState pistonState;
-    private EnumFacing pistonFacing;
-    private boolean extending;
-    private boolean shouldHeadBeRendered;
-    private static final ThreadLocal<EnumFacing> MOVING_ENTITY = new ThreadLocal<EnumFacing>()
-    {
-        protected EnumFacing initialValue()
-        {
-            return null;
-        }
-    };
-    private float progress;
-    private float lastProgress;
+public class TileEntityScabystPiston extends TileEntityPiston {
 
     public TileEntityScabystPiston()
     {
@@ -47,94 +28,18 @@ public class TileEntityScabystPiston extends TileEntity implements ITickable {
 
     public TileEntityScabystPiston(IBlockState pistonStateIn, EnumFacing pistonFacingIn, boolean extendingIn, boolean shouldHeadBeRenderedIn)
     {
-        this.pistonState = pistonStateIn;
-        this.pistonFacing = pistonFacingIn;
-        this.extending = extendingIn;
-        this.shouldHeadBeRendered = shouldHeadBeRenderedIn;
+    	super(pistonStateIn, pistonFacingIn, extendingIn, shouldHeadBeRenderedIn);
     }
 
-    public IBlockState getPistonState()
+    //necessary
+    @Override
+    protected IBlockState getCollisionRelatedBlockState()
     {
-        return this.pistonState;
+        return (!this.isExtending() && this.shouldPistonHeadBeRendered()) ? ModBlocks.SCABYST_PISTON_HEAD.getDefaultState().withProperty(BlockScabystPistonExtension.TYPE, this.pistonState.getBlock() == ModBlocks.SCABYST_STICKY_PISTON ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT).withProperty(BlockScabystPistonExtension.FACING, this.pistonState.getValue(BlockScabystPistonBase.FACING)) : this.pistonState;
     }
 
-    public NBTTagCompound getUpdateTag()
-    {
-        return this.writeToNBT(new NBTTagCompound());
-    }
-
-    public int getBlockMetadata()
-    {
-        return 0;
-    }
-
-    public boolean isExtending()
-    {
-        return this.extending;
-    }
-
-    public EnumFacing getFacing()
-    {
-        return this.pistonFacing;
-    }
-
-    public boolean shouldPistonHeadBeRendered()
-    {
-        return this.shouldHeadBeRendered;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public float getProgress(float ticks)
-    {
-        if (ticks > 1.0F)
-        {
-            ticks = 1.0F;
-        }
-
-        return this.lastProgress + (this.progress - this.lastProgress) * ticks;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public float getOffsetX(float ticks)
-    {
-        return (float)this.pistonFacing.getFrontOffsetX() * this.getExtendedProgress(this.getProgress(ticks));
-    }
-
-    @SideOnly(Side.CLIENT)
-    public float getOffsetY(float ticks)
-    {
-        return (float)this.pistonFacing.getFrontOffsetY() * this.getExtendedProgress(this.getProgress(ticks));
-    }
-
-    @SideOnly(Side.CLIENT)
-    public float getOffsetZ(float ticks)
-    {
-        return (float)this.pistonFacing.getFrontOffsetZ() * this.getExtendedProgress(this.getProgress(ticks));
-    }
-
-    private float getExtendedProgress(float p_184320_1_)
-    {
-        return this.extending ? p_184320_1_ - 1.0F : 1.0F - p_184320_1_;
-    }
-
-    public AxisAlignedBB getAABB(IBlockAccess p_184321_1_, BlockPos p_184321_2_)
-    {
-        return this.getAABB(p_184321_1_, p_184321_2_, this.progress).union(this.getAABB(p_184321_1_, p_184321_2_, this.lastProgress));
-    }
-
-    public AxisAlignedBB getAABB(IBlockAccess p_184319_1_, BlockPos p_184319_2_, float p_184319_3_)
-    {
-        p_184319_3_ = this.getExtendedProgress(p_184319_3_);
-        IBlockState iblockstate = this.getCollisionRelatedBlockState();
-        return iblockstate.getBoundingBox(p_184319_1_, p_184319_2_).offset((double)(p_184319_3_ * (float)this.pistonFacing.getFrontOffsetX()), (double)(p_184319_3_ * (float)this.pistonFacing.getFrontOffsetY()), (double)(p_184319_3_ * (float)this.pistonFacing.getFrontOffsetZ()));
-    }
-
-    private IBlockState getCollisionRelatedBlockState()
-    {
-        return !this.isExtending() && this.shouldPistonHeadBeRendered() ? ModBlocks.SCABYST_PISTON_HEAD.getDefaultState().withProperty(BlockScabystPistonExtension.TYPE, this.pistonState.getBlock() == ModBlocks.SCABYST_STICKY_PISTON ? BlockScabystPistonExtension.EnumPistonType.STICKY : BlockScabystPistonExtension.EnumPistonType.DEFAULT).withProperty(BlockScabystPistonExtension.FACING, this.pistonState.getValue(BlockScabystPistonBase.FACING)) : this.pistonState;
-    }
-
-    private void moveCollidedEntities(float p_184322_1_)
+    @Override
+    protected void moveCollidedEntities(float p_184322_1_)
     {
         EnumFacing enumfacing = this.extending ? this.pistonFacing : this.pistonFacing.getOpposite();
         double d0 = (double)(p_184322_1_ - this.progress);
@@ -207,73 +112,8 @@ public class TileEntityScabystPiston extends TileEntity implements ITickable {
         }
     }
 
-    private AxisAlignedBB getMinMaxPiecesAABB(List<AxisAlignedBB> p_191515_1_)
-    {
-        double d0 = 0.0D;
-        double d1 = 0.0D;
-        double d2 = 0.0D;
-        double d3 = 1.0D;
-        double d4 = 1.0D;
-        double d5 = 1.0D;
-
-        for (AxisAlignedBB axisalignedbb : p_191515_1_)
-        {
-            d0 = Math.min(axisalignedbb.minX, d0);
-            d1 = Math.min(axisalignedbb.minY, d1);
-            d2 = Math.min(axisalignedbb.minZ, d2);
-            d3 = Math.max(axisalignedbb.maxX, d3);
-            d4 = Math.max(axisalignedbb.maxY, d4);
-            d5 = Math.max(axisalignedbb.maxZ, d5);
-        }
-
-        return new AxisAlignedBB(d0, d1, d2, d3, d4, d5);
-    }
-
-    private double getMovement(AxisAlignedBB p_190612_1_, EnumFacing facing, AxisAlignedBB p_190612_3_)
-    {
-        switch (facing.getAxis())
-        {
-            case X:
-                return getDeltaX(p_190612_1_, facing, p_190612_3_);
-            case Y:
-            default:
-                return getDeltaY(p_190612_1_, facing, p_190612_3_);
-            case Z:
-                return getDeltaZ(p_190612_1_, facing, p_190612_3_);
-        }
-    }
-
-    private AxisAlignedBB moveByPositionAndProgress(AxisAlignedBB p_190607_1_)
-    {
-        double d0 = (double)this.getExtendedProgress(this.progress);
-        return p_190607_1_.offset((double)this.pos.getX() + d0 * (double)this.pistonFacing.getFrontOffsetX(), (double)this.pos.getY() + d0 * (double)this.pistonFacing.getFrontOffsetY(), (double)this.pos.getZ() + d0 * (double)this.pistonFacing.getFrontOffsetZ());
-    }
-
-    private AxisAlignedBB getMovementArea(AxisAlignedBB p_190610_1_, EnumFacing p_190610_2_, double p_190610_3_)
-    {
-        double d0 = p_190610_3_ * (double)p_190610_2_.getAxisDirection().getOffset();
-        double d1 = Math.min(d0, 0.0D);
-        double d2 = Math.max(d0, 0.0D);
-
-        switch (p_190610_2_)
-        {
-            case WEST:
-                return new AxisAlignedBB(p_190610_1_.minX + d1, p_190610_1_.minY, p_190610_1_.minZ, p_190610_1_.minX + d2, p_190610_1_.maxY, p_190610_1_.maxZ);
-            case EAST:
-                return new AxisAlignedBB(p_190610_1_.maxX + d1, p_190610_1_.minY, p_190610_1_.minZ, p_190610_1_.maxX + d2, p_190610_1_.maxY, p_190610_1_.maxZ);
-            case DOWN:
-                return new AxisAlignedBB(p_190610_1_.minX, p_190610_1_.minY + d1, p_190610_1_.minZ, p_190610_1_.maxX, p_190610_1_.minY + d2, p_190610_1_.maxZ);
-            case UP:
-            default:
-                return new AxisAlignedBB(p_190610_1_.minX, p_190610_1_.maxY + d1, p_190610_1_.minZ, p_190610_1_.maxX, p_190610_1_.maxY + d2, p_190610_1_.maxZ);
-            case NORTH:
-                return new AxisAlignedBB(p_190610_1_.minX, p_190610_1_.minY, p_190610_1_.minZ + d1, p_190610_1_.maxX, p_190610_1_.maxY, p_190610_1_.minZ + d2);
-            case SOUTH:
-                return new AxisAlignedBB(p_190610_1_.minX, p_190610_1_.minY, p_190610_1_.maxZ + d1, p_190610_1_.maxX, p_190610_1_.maxY, p_190610_1_.maxZ + d2);
-        }
-    }
-
-    private void fixEntityWithinPistonBase(Entity p_190605_1_, EnumFacing p_190605_2_, double p_190605_3_)
+    @Override
+    protected void fixEntityWithinPistonBase(Entity p_190605_1_, EnumFacing p_190605_2_, double p_190605_3_)
     {
         AxisAlignedBB axisalignedbb = p_190605_1_.getEntityBoundingBox();
         AxisAlignedBB axisalignedbb1 = Block.FULL_BLOCK_AABB.offset(this.pos);
@@ -291,22 +131,8 @@ public class TileEntityScabystPiston extends TileEntity implements ITickable {
             }
         }
     }
-
-    private static double getDeltaX(AxisAlignedBB p_190611_0_, EnumFacing facing, AxisAlignedBB p_190611_2_)
-    {
-        return facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? p_190611_0_.maxX - p_190611_2_.minX : p_190611_2_.maxX - p_190611_0_.minX;
-    }
-
-    private static double getDeltaY(AxisAlignedBB p_190608_0_, EnumFacing facing, AxisAlignedBB p_190608_2_)
-    {
-        return facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? p_190608_0_.maxY - p_190608_2_.minY : p_190608_2_.maxY - p_190608_0_.minY;
-    }
-
-    private static double getDeltaZ(AxisAlignedBB p_190604_0_, EnumFacing facing, AxisAlignedBB p_190604_2_)
-    {
-        return facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? p_190604_0_.maxZ - p_190604_2_.minZ : p_190604_2_.maxZ - p_190604_0_.minZ;
-    }
-
+    
+    @Override
     public void clearPistonTileEntity()
     {
         if (this.lastProgress < 1.0F && this.world != null)
@@ -324,6 +150,7 @@ public class TileEntityScabystPiston extends TileEntity implements ITickable {
         }
     }
 
+    @Override
     public void update()
     {
         this.lastProgress = this.progress;
@@ -353,34 +180,7 @@ public class TileEntityScabystPiston extends TileEntity implements ITickable {
         }
     }
 
-    public static void registerFixesPiston(DataFixer fixer)
-    {
-    }
-
-    @SuppressWarnings("deprecation")
-	public void readFromNBT(NBTTagCompound compound)
-    {
-        super.readFromNBT(compound);
-        this.pistonState = Block.getBlockById(compound.getInteger("blockId")).getStateFromMeta(compound.getInteger("blockData"));
-        this.pistonFacing = EnumFacing.getFront(compound.getInteger("facing"));
-        this.progress = compound.getFloat("progress");
-        this.lastProgress = this.progress;
-        this.extending = compound.getBoolean("extending");
-        this.shouldHeadBeRendered = compound.getBoolean("source");
-    }
-
-    public NBTTagCompound writeToNBT(NBTTagCompound compound)
-    {
-        super.writeToNBT(compound);
-        compound.setInteger("blockId", Block.getIdFromBlock(this.pistonState.getBlock()));
-        compound.setInteger("blockData", this.pistonState.getBlock().getMetaFromState(this.pistonState));
-        compound.setInteger("facing", this.pistonFacing.getIndex());
-        compound.setFloat("progress", this.lastProgress);
-        compound.setBoolean("extending", this.extending);
-        compound.setBoolean("source", this.shouldHeadBeRendered);
-        return compound;
-    }
-
+    @Override
     public void addCollissionAABBs(World p_190609_1_, BlockPos p_190609_2_, AxisAlignedBB p_190609_3_, List<AxisAlignedBB> p_190609_4_, @Nullable Entity p_190609_5_)
     {
         if (!this.extending && this.shouldHeadBeRendered)
@@ -418,10 +218,10 @@ public class TileEntityScabystPiston extends TileEntity implements ITickable {
     }
     
     protected static void pushEntity(EnumFacing direction1, Entity entity, double distance, EnumFacing direction2) {
-        MOVING_ENTITY.set(direction1);
-        entity.move(MoverType.PISTON, distance * (double)direction2.getFrontOffsetX(), distance * (double)direction2.getFrontOffsetY(), distance * (double)direction2.getFrontOffsetZ());
-        MOVING_ENTITY.set((EnumFacing)null);
-     }
+    	MOVING_ENTITY.set(direction1);
+    	entity.move(MoverType.PISTON, distance * (double)direction2.getFrontOffsetX(), distance * (double)direction2.getFrontOffsetY(), distance * (double)direction2.getFrontOffsetZ());
+    	MOVING_ENTITY.set((EnumFacing)null);
+    }
     
     protected void tryHoneyPush(float partialTicks) {
     	if(isPushingHoney()) {

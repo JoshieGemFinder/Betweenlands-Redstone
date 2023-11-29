@@ -1,22 +1,18 @@
 package com.joshiegemfinder.betweenlandsredstone.blocks;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
-import com.google.common.collect.Lists;
 import com.joshiegemfinder.betweenlandsredstone.Main;
 import com.joshiegemfinder.betweenlandsredstone.ModBlocks;
 import com.joshiegemfinder.betweenlandsredstone.ModItems;
-import com.joshiegemfinder.betweenlandsredstone.util.Discriminator;
-import com.joshiegemfinder.betweenlandsredstone.util.IScabystBlock;
+import com.joshiegemfinder.betweenlandsredstone.util.Connector;
 import com.joshiegemfinder.betweenlandsredstone.util.ScabystColor;
-import com.joshiegemfinder.betweenlandsredstone.util.ScabystWorldWrapper;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockTorch;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.BlockRedstoneTorch;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -26,21 +22,22 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.entity.mobs.EntityStalker;
 
-public class BlockScabystTorch extends BlockTorch implements IScabystBlock {
-
+public class BlockScabystTorch extends BlockRedstoneTorch {
+	
+	private final boolean isOn;
 	
 	public BlockScabystTorch(String name, boolean isOn) {
 		//BlockTorch
-	    super();
-	    this.setCreativeTab(null);
-	    this.setSoundType(SoundType.WOOD);
-	    //BlockRedstoneTorch
+	    super(isOn);
+//	    this.setCreativeTab(null);
+//	    this.setSoundType(SoundType.WOOD);
+//	    //BlockRedstoneTorch
 	    this.isOn = isOn;
 	    
 	    //BlockScabystTorch
@@ -54,11 +51,6 @@ public class BlockScabystTorch extends BlockTorch implements IScabystBlock {
 	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
 	{
 	    return new ItemStack(ModItems.SCABYST_TORCH);
-	}
-	
-	//TODO change this if making a new class
-	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-		 return new ItemStack(this);
 	}
 	
 	//TODO change this if making a new class
@@ -100,94 +92,12 @@ public class BlockScabystTorch extends BlockTorch implements IScabystBlock {
 	        worldIn.spawnParticle(EnumParticleTypes.REDSTONE, d0, d1, d2, red, green, blue);
 	    }
 	}
-	
-	//RedstoneTorch implementation
-	
-	private static final Map<World, List<BlockScabystTorch.Toggle>> toggles = new java.util.WeakHashMap<World, List<Toggle>>(); // FORGE - fix vanilla MC-101233
-    private final boolean isOn;
-
-    private boolean isBurnedOut(World worldIn, BlockPos pos, boolean turnOff)
-    {
-        if (!toggles.containsKey(worldIn))
-        {
-            toggles.put(worldIn, Lists.newArrayList());
-        }
-
-        @SuppressWarnings({ "rawtypes", "unchecked" })
-		List<BlockScabystTorch.Toggle> list = (List)toggles.get(worldIn);
-
-        if (turnOff)
-        {
-            list.add(new BlockScabystTorch.Toggle(pos, worldIn.getTotalWorldTime()));
-        }
-
-        int i = 0;
-
-        for (int j = 0; j < list.size(); ++j)
-        {
-        	BlockScabystTorch.Toggle blockredstonetorch$toggle = list.get(j);
-
-            if (blockredstonetorch$toggle.pos.equals(pos))
-            {
-                ++i;
-
-                if (i >= 8)
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-    
-    public int tickRate(World worldIn)
-    {
-        return 2;
-    }
-
-    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
-    {
-        if (this.isOn)
-        {
-            for (EnumFacing enumfacing : EnumFacing.values())
-            {
-                worldIn.notifyNeighborsOfStateChange(pos.offset(enumfacing), this, false);
-            }
-        }
-    }
-
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
-    {
-        if (this.isOn)
-        {
-            for (EnumFacing enumfacing : EnumFacing.values())
-            {
-                worldIn.notifyNeighborsOfStateChange(pos.offset(enumfacing), this, false);
-            }
-        }
-    }
-
-    public int getScabystWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
-    {
-        return this.isOn && blockState.getValue(FACING) != side ? 15 : 0;
-    }
-
-    private boolean shouldBeOff(World worldIn, BlockPos pos, IBlockState state)
-    {
-        EnumFacing enumfacing = ((EnumFacing)state.getValue(FACING)).getOpposite();
-        return ScabystWorldWrapper.isSideScabystPowered(worldIn, pos.offset(enumfacing), enumfacing);
-    }
-
-    public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random random)
-    {
-    }
 
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
         boolean flag = this.shouldBeOff(worldIn, pos, state);
         @SuppressWarnings({ "rawtypes", "unchecked" })
-		List<BlockScabystTorch.Toggle> list = (List)toggles.get(worldIn);
+		List<BlockRedstoneTorch.Toggle> list = (List)BlockRedstoneTorch.toggles.get(worldIn);
 
         while (list != null && !list.isEmpty() && worldIn.getTotalWorldTime() - (list.get(0)).time > 60L)
         {
@@ -222,53 +132,18 @@ public class BlockScabystTorch extends BlockTorch implements IScabystBlock {
             worldIn.setBlockState(pos, ModBlocks.SCABYST_TORCH.getDefaultState().withProperty(FACING, state.getValue(FACING)), 3);
         }
     }
-
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
-    {
-        if (!this.onNeighborChangeInternal(worldIn, pos, state))
-        {
-            if (this.isOn == this.shouldBeOff(worldIn, pos, state))
-            {
-                worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
-            }
-        }
-    }
-    
-    public int getScabystStrongPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
-    {
-        return side == EnumFacing.DOWN ? getScabystWeakPower(blockState, blockAccess, pos, side) : 0;
-    }
-    
-    @Override
-    public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-        return IScabystBlock.super.getWeakPower(blockState, blockAccess, pos, side);
-    }
-    
-    @Override
-    public int getStrongPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-        return IScabystBlock.super.getStrongPower(blockState, blockAccess, pos, side);
-    }
-
-    public boolean canProvidePower(IBlockState state)
-    {
-        return true;
-    }
     
 	@Override
 	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-		return super.canConnectRedstone(state, world, pos, side) && Discriminator.canScabystConnect(world, pos, side);
+		return super.canConnectRedstone(state, world, pos, side) && Connector.canScabystConnect(world, pos, side); // don't connect to vanilla redstone dust bc yes
 	}
-    
-    static class Toggle
-    {
-        BlockPos pos;
-        long time;
-
-        public Toggle(BlockPos pos, long time)
-        {
-            this.pos = pos;
-            this.time = time;
-        }
-    }
 	
+	//stop stalkers munching on blocks
+    @Override
+	public boolean canEntityDestroy(IBlockState state, IBlockAccess world, BlockPos pos, Entity entity) {
+		if(entity instanceof EntityStalker) {
+			return false;
+		}
+		return super.canEntityDestroy(state, world, pos, entity);
+	}
 }

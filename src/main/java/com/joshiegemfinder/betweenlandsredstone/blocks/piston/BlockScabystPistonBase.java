@@ -2,61 +2,34 @@ package com.joshiegemfinder.betweenlandsredstone.blocks.piston;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import com.google.common.collect.Lists;
-import com.joshiegemfinder.betweenlandsredstone.Main;
 import com.joshiegemfinder.betweenlandsredstone.ModBlocks;
-import com.joshiegemfinder.betweenlandsredstone.util.IScabystBlock;
-import com.joshiegemfinder.betweenlandsredstone.util.ScabystWorldWrapper;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockPistonBase;
+import net.minecraft.block.BlockPistonExtension;
 import net.minecraft.block.BlockSnow;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.EnumPushReaction;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import thebetweenlands.common.handler.LocationHandler;
 
 
-public class BlockScabystPistonBase extends BlockDirectional implements IScabystBlock {
+public class BlockScabystPistonBase extends BlockPistonBase {
 
-    public static final PropertyBool EXTENDED = PropertyBool.create("extended");
-    protected static final AxisAlignedBB PISTON_BASE_EAST_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.75D, 1.0D, 1.0D);
-    protected static final AxisAlignedBB PISTON_BASE_WEST_AABB = new AxisAlignedBB(0.25D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
-    protected static final AxisAlignedBB PISTON_BASE_SOUTH_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.75D);
-    protected static final AxisAlignedBB PISTON_BASE_NORTH_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.25D, 1.0D, 1.0D, 1.0D);
-    protected static final AxisAlignedBB PISTON_BASE_UP_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D);
-    protected static final AxisAlignedBB PISTON_BASE_DOWN_AABB = new AxisAlignedBB(0.0D, 0.25D, 0.0D, 1.0D, 1.0D, 1.0D);
-    private final boolean isSticky;
-
-    public BlockScabystPistonBase(String name, boolean isSticky)
-    {
-    	super(Material.PISTON);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(EXTENDED, Boolean.valueOf(false)));
-        this.isSticky = isSticky;
+	protected final boolean isSticky;
+	
+    public BlockScabystPistonBase(String name, boolean isSticky) {
+    	super(isSticky);
+    	this.isSticky = isSticky;
         
         this.setSoundType(SoundType.STONE);
         this.setHardness(0.5F);
@@ -64,92 +37,17 @@ public class BlockScabystPistonBase extends BlockDirectional implements IScabyst
 		this.setRegistryName(name);
 		ModBlocks.BLOCKS.add(this);
     }
-
-    public boolean causesSuffocation(IBlockState state)
-    {
-        return !((Boolean)state.getValue(EXTENDED)).booleanValue();
-    }
-
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-    {
-        if (((Boolean)state.getValue(EXTENDED)).booleanValue())
-        {
-            switch ((EnumFacing)state.getValue(FACING))
-            {
-                case DOWN:
-                    return PISTON_BASE_DOWN_AABB;
-                case UP:
-                default:
-                    return PISTON_BASE_UP_AABB;
-                case NORTH:
-                    return PISTON_BASE_NORTH_AABB;
-                case SOUTH:
-                    return PISTON_BASE_SOUTH_AABB;
-                case WEST:
-                    return PISTON_BASE_WEST_AABB;
-                case EAST:
-                    return PISTON_BASE_EAST_AABB;
-            }
-        }
-        else
-        {
-            return FULL_BLOCK_AABB;
-        }
-    }
-
-    public boolean isTopSolid(IBlockState state)
-    {
-        return !((Boolean)state.getValue(EXTENDED)).booleanValue() || state.getValue(FACING) == EnumFacing.DOWN;
-    }
-
-    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean isActualState)
-    {
-        addCollisionBoxToList(pos, entityBox, collidingBoxes, state.getBoundingBox(worldIn, pos));
-    }
-
-    public boolean isOpaqueCube(IBlockState state)
-    {
-        return false;
-    }
-
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
-    {
-        worldIn.setBlockState(pos, state.withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer)), 2);
-
-        if (!worldIn.isRemote)
-        {
-            this.checkForMove(worldIn, pos, state);
-        }
-    }
-
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
-    {
-        if (!worldIn.isRemote)
-        {
-            this.checkForMove(worldIn, pos, state);
-        }
-    }
-
-    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
-    {
-        if (!worldIn.isRemote && worldIn.getTileEntity(pos) == null)
-        {
-            this.checkForMove(worldIn, pos, state);
-        }
-    }
-
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-    {
-        return this.getDefaultState().withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer)).withProperty(EXTENDED, Boolean.valueOf(false));
-    }
-
-    private void checkForMove(World worldIn, BlockPos pos, IBlockState state)
+    
+    //necessary
+    @Override
+    protected void checkForMove(World worldIn, BlockPos pos, IBlockState state)
     {
         EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
         boolean flag = this.shouldBeExtended(worldIn, pos, enumfacing);
 
         if (flag && !((Boolean)state.getValue(EXTENDED)).booleanValue())
         {
+        	//this line
             if ((new BlockScabystPistonStructureHelper(worldIn, pos, enumfacing, true)).canMove())
             {
                 worldIn.addBlockEvent(pos, this, 0, enumfacing.getIndex());
@@ -161,36 +59,8 @@ public class BlockScabystPistonBase extends BlockDirectional implements IScabyst
         }
     }
 
-    private boolean shouldBeExtended(World worldIn, BlockPos pos, EnumFacing facing)
-    {
-        for (EnumFacing enumfacing : EnumFacing.values())
-        {
-            if (enumfacing != facing && ScabystWorldWrapper.isSideScabystPowered(worldIn, pos.offset(enumfacing), enumfacing))
-            {
-                return true;
-            }
-        }
-
-        if (ScabystWorldWrapper.isSideScabystPowered(worldIn, pos, EnumFacing.DOWN))
-        {
-            return true;
-        }
-        else
-        {
-            BlockPos blockpos = pos.up();
-
-            for (EnumFacing enumfacing1 : EnumFacing.values())
-            {
-                if (enumfacing1 != EnumFacing.DOWN && ScabystWorldWrapper.isSideScabystPowered(worldIn, blockpos.offset(enumfacing1), enumfacing1))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-    }
-
+    //necessary, also yucky
+    @Override
     public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int id, int param)
     {
         EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
@@ -230,7 +100,8 @@ public class BlockScabystPistonBase extends BlockDirectional implements IScabyst
                 ((TileEntityScabystPiston)tileentity1).clearPistonTileEntity();
             }
 
-            worldIn.setBlockState(pos, ModBlocks.SCABYST_PISTON_EXTENSION.getDefaultState().withProperty(BlockScabystPistonMoving.FACING, enumfacing).withProperty(BlockScabystPistonMoving.TYPE, this.isSticky ? BlockScabystPistonExtension.EnumPistonType.STICKY : BlockScabystPistonExtension.EnumPistonType.DEFAULT), 3);
+        	//this line
+            worldIn.setBlockState(pos, ModBlocks.SCABYST_PISTON_EXTENSION.getDefaultState().withProperty(BlockScabystPistonMoving.FACING, enumfacing).withProperty(BlockScabystPistonMoving.TYPE, this.isSticky ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT), 3);
             worldIn.setTileEntity(pos, BlockScabystPistonMoving.createTilePiston(this.getStateFromMeta(param), enumfacing, false, true));
 
             if (this.isSticky)
@@ -240,6 +111,7 @@ public class BlockScabystPistonBase extends BlockDirectional implements IScabyst
                 Block block = iblockstate.getBlock();
                 boolean flag1 = false;
 
+            	//this line
                 if (block == ModBlocks.SCABYST_PISTON_EXTENSION)
                 {
                     TileEntity tileentity = worldIn.getTileEntity(blockpos);
@@ -272,26 +144,14 @@ public class BlockScabystPistonBase extends BlockDirectional implements IScabyst
         return true;
     }
 
-    public boolean isFullCube(IBlockState state)
-    {
-        return false;
-    }
-
-    @Nullable
-    public static EnumFacing getFacing(int meta)
-    {
-        int i = meta & 7;
-        return i > 5 ? null : EnumFacing.getFront(i);
-    }
-
-
+    //necessary, static
     public static boolean canPush(IBlockState blockStateIn, World worldIn, BlockPos pos, EnumFacing pushDir, boolean destroyBlocks, EnumFacing blockFace)
     {
         Block block = blockStateIn.getBlock();
 
         if(!worldIn.isRemote) {
-        	//it might not even need the player, just can't find the right bit in the source so can't be sure
-	        if(LocationHandler.isProtected(worldIn, Main.getFakePlayer((WorldServer) worldIn), pos)) {
+        	//can't push/pull guarded blocks
+	        if(LocationHandler.isProtected(worldIn, null, pos)) {
 	        	return false;
 	        }
         }
@@ -353,7 +213,9 @@ public class BlockScabystPistonBase extends BlockDirectional implements IScabyst
         }
     }
 
-    private boolean doMove(World worldIn, BlockPos pos, EnumFacing direction, boolean extending)
+    //necessary
+    @Override
+    protected boolean doMove(World worldIn, BlockPos pos, EnumFacing direction, boolean extending)
     {
         if (!extending)
         {
@@ -410,9 +272,9 @@ public class BlockScabystPistonBase extends BlockDirectional implements IScabyst
 
             if (extending)
             {
-                BlockScabystPistonExtension.EnumPistonType blockpistonextension$enumpistontype = this.isSticky ? BlockScabystPistonExtension.EnumPistonType.STICKY : BlockScabystPistonExtension.EnumPistonType.DEFAULT;
+                BlockPistonExtension.EnumPistonType blockpistonextension$enumpistontype = this.isSticky ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT;
                 IBlockState iblockstate3 = ModBlocks.SCABYST_PISTON_HEAD.getDefaultState().withProperty(BlockScabystPistonExtension.FACING, direction).withProperty(BlockScabystPistonExtension.TYPE, blockpistonextension$enumpistontype);
-                IBlockState iblockstate1 = ModBlocks.SCABYST_PISTON_EXTENSION.getDefaultState().withProperty(BlockScabystPistonMoving.FACING, direction).withProperty(BlockScabystPistonMoving.TYPE, this.isSticky ? BlockScabystPistonExtension.EnumPistonType.STICKY : BlockScabystPistonExtension.EnumPistonType.DEFAULT);
+                IBlockState iblockstate1 = ModBlocks.SCABYST_PISTON_EXTENSION.getDefaultState().withProperty(BlockScabystPistonMoving.FACING, direction).withProperty(BlockScabystPistonMoving.TYPE, this.isSticky ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT);
                 worldIn.setBlockState(blockpos2, iblockstate1, 4);
                 worldIn.setTileEntity(blockpos2, BlockScabystPistonMoving.createTilePiston(iblockstate3, direction, true, true));
             }
@@ -435,55 +297,5 @@ public class BlockScabystPistonBase extends BlockDirectional implements IScabyst
             return true;
         }
     }
-
-    public IBlockState getStateFromMeta(int meta)
-    {
-        return this.getDefaultState().withProperty(FACING, getFacing(meta)).withProperty(EXTENDED, Boolean.valueOf((meta & 8) > 0));
-    }
-
-    public int getMetaFromState(IBlockState state)
-    {
-        int i = 0;
-        i = i | ((EnumFacing)state.getValue(FACING)).getIndex();
-
-        if (((Boolean)state.getValue(EXTENDED)).booleanValue())
-        {
-            i |= 8;
-        }
-
-        return i;
-    }
-
-    public IBlockState withRotation(IBlockState state, Rotation rot)
-    {
-        return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
-    }
-
-    public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
-    {
-        return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
-    }
-
-    protected BlockStateContainer createBlockState()
-    {
-        return new BlockStateContainer(this, new IProperty[] {FACING, EXTENDED});
-    }
-
-    public EnumPushReaction getMobilityFlag() {
-    	return EnumPushReaction.NORMAL;
-    }
     
-    /* ======================================== FORGE START =====================================*/
-    public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis)
-    {
-        IBlockState state = world.getBlockState(pos);
-        return !state.getValue(EXTENDED) && super.rotateBlock(world, pos, axis);
-    }
-
-    @SuppressWarnings("deprecation")
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
-    {
-        state = this.getActualState(state, worldIn, pos);
-        return state.getValue(FACING) != face.getOpposite() && ((Boolean)state.getValue(EXTENDED)).booleanValue() ? BlockFaceShape.UNDEFINED : BlockFaceShape.SOLID;
-    }
 }

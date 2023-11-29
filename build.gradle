@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.1.3'
+version = '1.2.0'
 group = 'com.joshiegemfinder.betweenlandsredstone' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'betweenlandsredstone'
 
@@ -29,7 +29,7 @@ minecraft {
     mappings channel: 'snapshot', version: '20171003-1.12'
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
@@ -92,7 +92,10 @@ jar {
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
             "Implementation-Vendor" :"examplemodsareus",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            "FMLAT": "accesstransformer.cfg"//,
+            //"FMLCorePlugin": "${mod_group}.core.BetweenlandsRedstoneCoreMod".replace('${mod_group}', mod_group),
+            //"FMLCorePluginContainsFMLMod": true
         ])
     }
 }

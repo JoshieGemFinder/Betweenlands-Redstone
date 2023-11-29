@@ -2,7 +2,6 @@ package com.joshiegemfinder.betweenlandsredstone.blocks.piston.stickyblocks;
 
 import com.joshiegemfinder.betweenlandsredstone.ModBlocks;
 import com.joshiegemfinder.betweenlandsredstone.ModSounds;
-import com.joshiegemfinder.betweenlandsredstone.util.IScabystBlock;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
@@ -27,7 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.EntityFishBait;
 
 @SuppressWarnings("deprecation")
-public class BlockScabystSlime_2 extends BlockStickyBase implements IScabystBlock {
+public class BlockScabystSlime_2 extends BlockStickyBase {
 
 	private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.0625F, 0.0625F, 0.0625F, 1 - 0.0625F, 1 - 0.0625F, 1 - 0.0625F);
 	

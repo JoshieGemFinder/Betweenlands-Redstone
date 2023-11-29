@@ -1,13 +1,12 @@
 package com.joshiegemfinder.betweenlandsredstone.blocks.rail;
 
 import com.joshiegemfinder.betweenlandsredstone.ModBlocks;
-import com.joshiegemfinder.betweenlandsredstone.util.IScabystBlock;
 
 import net.minecraft.block.BlockRail;
 import net.minecraft.block.SoundType;
 import net.minecraft.creativetab.CreativeTabs;
 
-public class BlockScabystRail extends BlockRail implements IScabystBlock {
+public class BlockScabystRail extends BlockRail {
 
 	public BlockScabystRail(String name) {
 		super();

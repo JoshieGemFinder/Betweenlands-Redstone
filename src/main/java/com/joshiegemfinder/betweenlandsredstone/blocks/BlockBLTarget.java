@@ -4,9 +4,9 @@ import java.util.Random;
 
 import com.joshiegemfinder.betweenlandsredstone.ModItems;
 import com.joshiegemfinder.betweenlandsredstone.blocks.shared.IModelInterface;
-import com.joshiegemfinder.betweenlandsredstone.util.IScabystBlock;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -32,9 +32,9 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockBLTarget extends Block implements IModelInterface, IScabystBlock {
+public class BlockBLTarget extends Block implements IModelInterface {
 
-	public static final PropertyInteger POWER = PropertyInteger.create("power", 0, 15);
+	public static final PropertyInteger POWER = BlockRedstoneWire.POWER;
 	
 	public final boolean isCircular;
 	
@@ -109,11 +109,6 @@ public class BlockBLTarget extends Block implements IModelInterface, IScabystBlo
 	
 	@Override
 	public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-		return IScabystBlock.super.getWeakPower(blockState, blockAccess, pos, side);
-	}
-	
-	@Override
-	public int getScabystWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		return blockState.getValue(POWER);
 	}
 	

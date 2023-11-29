@@ -6,6 +6,7 @@ import com.joshiegemfinder.betweenlandsredstone.blocks.piston.BlockScabystPiston
 import com.joshiegemfinder.betweenlandsredstone.blocks.piston.TileEntityScabystPiston;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockPistonExtension;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -64,7 +65,7 @@ public class TileEntityScabystPistonRenderer extends TileEntitySpecialRenderer<T
             }
             else if (te.shouldPistonHeadBeRendered() && !te.isExtending())
             {
-            	BlockScabystPistonExtension.EnumPistonType blockpistonextension$enumpistontype = block == ModBlocks.SCABYST_STICKY_PISTON ? BlockScabystPistonExtension.EnumPistonType.STICKY : BlockScabystPistonExtension.EnumPistonType.DEFAULT;
+            	BlockPistonExtension.EnumPistonType blockpistonextension$enumpistontype = block == ModBlocks.SCABYST_STICKY_PISTON ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT;
                 IBlockState iblockstate1 = ModBlocks.SCABYST_PISTON_HEAD.getDefaultState().withProperty(BlockScabystPistonExtension.TYPE, blockpistonextension$enumpistontype).withProperty(BlockScabystPistonExtension.FACING, iblockstate.getValue(BlockScabystPistonExtension.FACING));
                 iblockstate1 = iblockstate1.withProperty(BlockScabystPistonExtension.SHORT, Boolean.valueOf(te.getProgress(partialTicks) >= 0.5F));
                 this.renderStateModel(blockpos, iblockstate1, bufferbuilder, world, true);

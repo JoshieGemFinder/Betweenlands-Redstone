@@ -6,8 +6,8 @@ import java.util.UUID;
 import org.apache.logging.log4j.Logger;
 
 import com.joshiegemfinder.betweenlandsredstone.blocks.TileEntityChestBetweenlandsTrapped;
-import com.joshiegemfinder.betweenlandsredstone.blocks.TileEntityScabystDispenser;
-import com.joshiegemfinder.betweenlandsredstone.blocks.TileEntityScabystDropper;
+import com.joshiegemfinder.betweenlandsredstone.blocks.dispenser.TileEntityScabystDispenser;
+import com.joshiegemfinder.betweenlandsredstone.blocks.dispenser.TileEntityScabystDropper;
 import com.joshiegemfinder.betweenlandsredstone.blocks.piston.TileEntityScabystPiston;
 import com.joshiegemfinder.betweenlandsredstone.network.PlantTonicMessage;
 import com.joshiegemfinder.betweenlandsredstone.proxy.IProxy;
@@ -84,7 +84,7 @@ public class Main
 {
 	public static final String MODID = "betweenlandsredstone";
 	public static final String NAME = "Betweenlands Redstone";
-	public static final String VERSION = "1.1.3";
+	public static final String VERSION = "1.2.0";
 
 //	public static final BehaviorProjectileDispense BLArrowBehaviour = new BehaviorProjectileDispense()
 //	{
