@@ -59,11 +59,13 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import thebetweenlands.api.block.IFarmablePlant;
 import thebetweenlands.common.BetweenlandsAPI;
+import thebetweenlands.common.block.container.BlockSteepingPot;
 import thebetweenlands.common.block.farming.BlockGenericCrop;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.block.farming.BlockMiddleFruitBush;
 import thebetweenlands.common.entity.projectiles.EntityAngryPebble;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
+import thebetweenlands.common.entity.projectiles.EntitySilkyPebble;
 import thebetweenlands.common.handler.OverworldItemHandler;
 import thebetweenlands.common.item.herblore.ItemDentrothystVial;
 import thebetweenlands.common.item.misc.ItemMisc;
@@ -78,13 +80,14 @@ import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityAlembic;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.common.tile.TileEntityMortar;
+import thebetweenlands.common.tile.TileEntitySteepingPot;
 
 @Mod(modid = Main.MODID, name = Main.NAME, version = Main.VERSION, updateJSON = "https://raw.githubusercontent.com/JoshieGemFinder/Betweenlands-Redstone/main/update.json", useMetadata = true)
 public class Main
 {
 	public static final String MODID = "betweenlandsredstone";
 	public static final String NAME = "Betweenlands Redstone";
-	public static final String VERSION = "1.2.0";
+	public static final String VERSION = "1.2.1";
 
 //	public static final BehaviorProjectileDispense BLArrowBehaviour = new BehaviorProjectileDispense()
 //	{
@@ -158,12 +161,14 @@ public class Main
 		
         ConfigManager.sync(MODID, Type.INSTANCE);
         
-		BetweenlandsAPI.getInstance().registerPestleAndMortarRecipe(
-				new PestleAndMortarRecipe(
-						new ItemStack(ModItems.SCABYST_DUST, 8),
-						new ItemStack(EnumItemMisc.SCABYST.getItem(), 1, ItemMisc.EnumItemMisc.SCABYST.getID())
-				)
-		);
+        if(!BLRedstoneConfig.disableMortarRecipe) {
+			BetweenlandsAPI.getInstance().registerPestleAndMortarRecipe(
+					new PestleAndMortarRecipe(
+							new ItemStack(ModItems.SCABYST_DUST, 8),
+							new ItemStack(EnumItemMisc.SCABYST.getItem(), 1, ItemMisc.EnumItemMisc.SCABYST.getID())
+					)
+			);
+        }
 		OverworldItemHandler.TORCH_WHITELIST.put(new ResourceLocation(MODID, "scabyst_torch_whitelist"), stack -> stack.getItem() == ModItems.SCABYST_TORCH);
 		
 		OverworldItemHandler.ROTTING_WHITELIST.put(new ResourceLocation(MODID, "white_pear_block_whitelist"), stack -> stack.getItem() == ModItems.WHITE_PEAR_BLOCK);
@@ -313,7 +318,16 @@ public class Main
 				entity.setPosition(position.getX(), position.getY(), position.getZ());
 				return entity;
 			}
-			
+		});
+		
+		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.SILKY_PEBBLE, new BehaviorProjectileDispense() {
+			@Override
+			protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
+				worldIn.playSound(null, position.getX(), position.getY(), position.getZ(), SoundRegistry.SILKY_PEBBLE_THROW, SoundCategory.PLAYERS, 0.7F, 0.8F);
+				EntitySilkyPebble entity = new EntitySilkyPebble(worldIn);
+				entity.setPosition(position.getX(), position.getY(), position.getZ());
+				return entity;
+			}
 		});
 		
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.PYRAD_FLAME, new BehaviorDefaultDispenseItem() {
@@ -451,6 +465,51 @@ public class Main
 			 		world.setBlockState(fencePos, BlockRegistry.ASPECTRUS_CROP.getDefaultState());
 			 		stack.shrink(1);
 			 		return stack;
+			 	}
+				return behaviourDefaultDispenseItem.dispense(source, stack);
+			}
+		});
+		
+		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.SILK_BUNDLE, new BehaviorDefaultDispenseItem() {
+			public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
+			{
+				EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
+				World world = source.getWorld();
+			 	BlockPos steepingPotPos = source.getBlockPos().offset(enumfacing);
+			 	IBlockState steepingPot = world.getBlockState(steepingPotPos);
+			 	if(steepingPot.getBlock() instanceof BlockSteepingPot) {
+			 		TileEntity te = world.getTileEntity(steepingPotPos);
+			 		if(te != null && te instanceof TileEntitySteepingPot) {
+			 			TileEntitySteepingPot tile = (TileEntitySteepingPot)te;
+//			 			if(tile.getStackInSlot(0).isEmpty()) {
+//			 				tile.setInventorySlotContents(0, stack.copy());
+//			 				stack.shrink(1);
+//			 				return stack;
+//			 			} else {
+//			 				return stack;
+//			 			}
+			 			
+			 			//srg mappings >:(
+			 			if(tile.func_70301_a(0).isEmpty()) {
+			 				tile.func_70299_a(0, stack.copy());
+			 				stack.shrink(1);
+			 				return stack;
+			 			} else {
+			 				return stack;
+			 			}
+			 		}
+			 				
+//					if(!dirt.getValue(BlockGenericDugSoil.COMPOSTED)) {
+//						return stack;
+//					}
+//			 		for(EnumFacing dir : EnumFacing.HORIZONTALS) {
+//						if(BlockRegistry.RUBBER_TREE_PLANK_FENCE.canBeConnectedTo(world, fencePos, dir)) {
+//							return stack;
+//						}
+//					}
+//			 		world.setBlockState(fencePos, BlockRegistry.ASPECTRUS_CROP.getDefaultState());
+//			 		stack.shrink(1);
+//			 		return stack;
 			 	}
 				return behaviourDefaultDispenseItem.dispense(source, stack);
 			}

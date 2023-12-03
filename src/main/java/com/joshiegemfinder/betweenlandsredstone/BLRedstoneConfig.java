@@ -15,4 +15,11 @@ public class BLRedstoneConfig {
 	})
 	@LangKey("config.slimeBlocksOnPistons.name")
 	public static boolean slimeBlocksWorkOnScabystPistons = true;
+
+	@Comment({
+		"Disables the scabyst crushing recipe for modpack creators",
+		"Requires a game restart to take effect"
+	})
+	@LangKey("config.disableMortarRecipe.name")
+	public static boolean disableMortarRecipe = false;
 }
