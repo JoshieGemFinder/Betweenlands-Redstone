@@ -67,6 +67,7 @@ container.scabyst_dropper=Pitstone Dropper
 
 #Config Names
 config.slimeBlocksOnPistons.name=Slime Blocks stick on Mud Pistons
+config.disableMortarRecipe.name=Disable Mortar Recipe
 
 #Subtitles
 betweenlandsredstone.subtitle.sap_block.slide=Sliding down a sap block
