@@ -7,7 +7,7 @@
             "back": "betweenlandsredstone:blocks/shooter/back"
         },
         "model": "betweenlandsredstone:custom/orientable"
-    }
+    },
     "variants": {
         "facing": {
             "north": {},
