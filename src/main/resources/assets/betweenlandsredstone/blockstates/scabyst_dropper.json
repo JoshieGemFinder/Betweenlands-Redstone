@@ -15,14 +15,10 @@
             "east":  { "y": 90 },
             "west":  { "y": 270 },
             "up": {
-                "textures": {
-                    "front": "betweenlandsredstone:blocks/shooter/dropper"
-                }
+                "model": "betweenlandsredstone:custom/orientable_vertical"
             },
             "down": {
-                "textures": {
-                    "front": "betweenlandsredstone:blocks/shooter/dropper"
-                },
+                "model": "betweenlandsredstone:custom/orientable_vertical",
                 "x": 180
             }
         },

@@ -1,8 +1,0 @@
-{
-    "parent": "betweenlandsredstone:block/custom/orientable",
-    "textures": {
-        "front": "betweenlandsredstone:blocks/shooter/dispenser",
-        "side": "betweenlandsredstone:blocks/shooter/side",
-        "back": "betweenlandsredstone:blocks/shooter/back"
-    }
-}
