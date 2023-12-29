@@ -5,7 +5,7 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import com.joshiegemfinder.betweenlandsredstone.Main;
+import com.joshiegemfinder.betweenlandsredstone.BetweenlandsRedstone;
 import com.joshiegemfinder.betweenlandsredstone.ModBlocks;
 import com.joshiegemfinder.betweenlandsredstone.ModItems;
 import com.joshiegemfinder.betweenlandsredstone.util.Connector;
@@ -39,7 +39,7 @@ public class BlockScabystWire extends BlockRedstoneWire {
 		super();
 		this.setSoundType(SoundType.STONE);
 		this.setUnlocalizedName(name);
-		this.setRegistryName(new ResourceLocation(Main.MODID, name));
+		this.setRegistryName(new ResourceLocation(BetweenlandsRedstone.MODID, name));
 		ModBlocks.BLOCKS.add(this);
 		
 		this.blocksNeedingUpdate = Blocks.REDSTONE_WIRE.blocksNeedingUpdate;

@@ -2,7 +2,7 @@ package com.joshiegemfinder.betweenlandsredstone.blocks;
 
 import java.util.Random;
 
-import com.joshiegemfinder.betweenlandsredstone.Main;
+import com.joshiegemfinder.betweenlandsredstone.BetweenlandsRedstone;
 import com.joshiegemfinder.betweenlandsredstone.ModBlocks;
 import com.joshiegemfinder.betweenlandsredstone.ModItems;
 
@@ -27,7 +27,7 @@ public class BlockScabystLight extends BlockRedstoneLight {
 		this.setHardness(0.3F);
 		this.setSoundType(SoundType.GLASS);
 		this.setUnlocalizedName(name);
-		this.setRegistryName(new ResourceLocation(Main.MODID, name));
+		this.setRegistryName(new ResourceLocation(BetweenlandsRedstone.MODID, name));
 		ModBlocks.BLOCKS.add(this);
 	}
 	

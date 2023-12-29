@@ -2,7 +2,7 @@ package com.joshiegemfinder.betweenlandsredstone.util;
 
 import java.util.List;
 
-import com.joshiegemfinder.betweenlandsredstone.Main;
+import com.joshiegemfinder.betweenlandsredstone.BetweenlandsRedstone;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.SoundEvents;
@@ -41,7 +41,7 @@ public class CropHelper {
         if (!worldIn.isRemote && !worldIn.restoringBlockSnapshots) // do not drop items while restoring blockstates, prevents item dupe
         {
             List<ItemStack> drops = crop.getDrops(worldIn, pos, state, fortune); // use the old method until it gets removed, for backward compatibility
-            chance = net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(drops, worldIn, pos, state, fortune, chance, false, Main.getFakePlayer((WorldServer) worldIn));
+            chance = net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(drops, worldIn, pos, state, fortune, chance, false, BetweenlandsRedstone.getFakePlayer((WorldServer) worldIn));
 
             if(replant) {
                 boolean seedCreated = false;

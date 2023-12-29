@@ -2,7 +2,7 @@ package com.joshiegemfinder.betweenlandsredstone.blocks.dispenser;
 
 import java.util.Random;
 
-import com.joshiegemfinder.betweenlandsredstone.Main;
+import com.joshiegemfinder.betweenlandsredstone.BetweenlandsRedstone;
 import com.joshiegemfinder.betweenlandsredstone.ModBlocks;
 import com.joshiegemfinder.betweenlandsredstone.ModItems;
 import com.joshiegemfinder.betweenlandsredstone.blocks.shared.IModelInterface;
@@ -40,7 +40,7 @@ public class BlockScabystDispenser extends BlockDispenser implements IModelInter
 		this.setSoundType(SoundType.STONE);
 		
 		this.setUnlocalizedName(name);
-		this.setRegistryName(new ResourceLocation(Main.MODID, name));
+		this.setRegistryName(new ResourceLocation(BetweenlandsRedstone.MODID, name));
 		ModBlocks.BLOCKS.add(this);
 	}
 	

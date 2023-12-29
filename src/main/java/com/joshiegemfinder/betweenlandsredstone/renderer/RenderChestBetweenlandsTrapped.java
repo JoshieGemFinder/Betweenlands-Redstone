@@ -2,7 +2,7 @@ package com.joshiegemfinder.betweenlandsredstone.renderer;
 
 import java.util.Calendar;
 
-import com.joshiegemfinder.betweenlandsredstone.Main;
+import com.joshiegemfinder.betweenlandsredstone.BetweenlandsRedstone;
 import com.joshiegemfinder.betweenlandsredstone.blocks.BlockChestBetweenlandsTrapped;
 import com.joshiegemfinder.betweenlandsredstone.blocks.TileEntityChestBetweenlandsTrapped;
 
@@ -20,8 +20,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderChestBetweenlandsTrapped extends TileEntitySpecialRenderer<TileEntityChestBetweenlandsTrapped> {
-	private static final ResourceLocation TEXTURE_WEEDWOOD = new ResourceLocation(Main.MODID, "textures/tiles/weedwood_chest_trapped.png");
-	private static final ResourceLocation TEXTURE_WEEDWOOD_LARGE = new ResourceLocation(Main.MODID, "textures/tiles/weedwood_chest_trapped_large.png");
+	private static final ResourceLocation TEXTURE_WEEDWOOD = new ResourceLocation(BetweenlandsRedstone.MODID, "textures/tiles/weedwood_chest_trapped.png");
+	private static final ResourceLocation TEXTURE_WEEDWOOD_LARGE = new ResourceLocation(BetweenlandsRedstone.MODID, "textures/tiles/weedwood_chest_trapped_large.png");
 
 	private final ModelChest simpleChest = new ModelChest();
 	private final ModelChest largeChest = new ModelLargeChest();

@@ -239,7 +239,7 @@ public class BlockScabystPistonStructureHelper {
         	BlockPos pos = fromPos.offset(enumfacing);
         	IBlockState state = this.world.getBlockState(pos);
         	//we want it so if something attaches to slime blocks, it'll still attach if the config option is off
-        	boolean slimeBlock = !BLRedstoneConfig.slimeBlocksWorkOnScabystPistons && (state.getBlock() == Blocks.SLIME_BLOCK || branchBlockState.getBlock() == Blocks.SLIME_BLOCK);
+        	boolean slimeBlock = !BLRedstoneConfig.GENERAL.slimeBlocksWorkOnScabystPistons && (state.getBlock() == Blocks.SLIME_BLOCK || branchBlockState.getBlock() == Blocks.SLIME_BLOCK);
         	//sticky block check moment
         	boolean stickyBlock = branchBlockState.getBlock() instanceof BlockStickyBase || state.getBlock() instanceof BlockStickyBase;
         	if((slimeBlock || stickyBlock) && !BlockStickyBase.shouldBlocksStick(branchBlockState, state)) {

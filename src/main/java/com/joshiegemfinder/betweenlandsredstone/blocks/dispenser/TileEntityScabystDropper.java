@@ -1,5 +1,7 @@
 package com.joshiegemfinder.betweenlandsredstone.blocks.dispenser;
 
+import com.joshiegemfinder.betweenlandsredstone.BLRedstoneConfig;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -65,7 +67,9 @@ public class TileEntityScabystDropper extends TileEntityDropper implements ISync
     }
     
     protected void syncEmpty() {
-    	final boolean isEmpty = this.isEmpty();
+    	//config: have the server simply lie to the client
+    	//like this so a client can't change the config on a server where it's not intended
+    	final boolean isEmpty = this.isEmpty() || !BLRedstoneConfig.EXTRA_FEATURES.dispenserHiding;
     	if(isEmpty == this.prevEmpty) {
     		return;
     	}

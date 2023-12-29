@@ -1,4 +1,6 @@
-package com.joshiegemfinder.betweenlandsredstone;
+package com.joshiegemfinder.betweenlandsredstone.datafixers;
+
+import com.joshiegemfinder.betweenlandsredstone.BetweenlandsRedstone;
 
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,15 +16,15 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import thebetweenlands.common.lib.ModInfo;
 
-public class BLRedstoneDataFixers {
+public class DataFixerItemFrame {
 
-	private static final ResourceLocation OLD_LOCATION = new ResourceLocation(Main.MODID, "scabyst_item_frame");
+	private static final ResourceLocation OLD_LOCATION = new ResourceLocation(BetweenlandsRedstone.MODID, "scabyst_item_frame");
 	private static final String OLD_ID = OLD_LOCATION.toString();
 	private static final String NEW_ID = ModInfo.ID + ":item_frame";
 	
 	public static void registerDataFixers(CompoundDataFixer dataFixer) {
 		
-		ModFixs fixer = dataFixer.init(Main.MODID, 2);
+		ModFixs fixer = dataFixer.init(BetweenlandsRedstone.MODID, 2);
 		
 		fixer.registerFix(FixTypes.ENTITY, new IFixableData() {
 			

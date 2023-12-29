@@ -1,6 +1,6 @@
 package com.joshiegemfinder.betweenlandsredstone.items;
 
-import com.joshiegemfinder.betweenlandsredstone.Main;
+import com.joshiegemfinder.betweenlandsredstone.BetweenlandsRedstone;
 import com.joshiegemfinder.betweenlandsredstone.ModItems;
 import com.joshiegemfinder.betweenlandsredstone.blocks.shared.IModelInterface;
 
@@ -14,14 +14,14 @@ public class ItemBlockBase extends ItemBlock implements IModelInterface {
 		super(block);
 
         setUnlocalizedName(name);
-        setRegistryName(new ResourceLocation(Main.MODID, name));
+        setRegistryName(new ResourceLocation(BetweenlandsRedstone.MODID, name));
 
         ModItems.ITEMS.add(this);
 	}
 
 	@Override
 	public void registerModels() {
-		Main.proxy.registerItemRenderer(this, 0, "inventory");
+		BetweenlandsRedstone.proxy.registerItemRenderer(this, 0, "inventory");
 	}
 
 }

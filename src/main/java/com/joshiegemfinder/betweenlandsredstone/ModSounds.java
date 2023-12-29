@@ -32,7 +32,7 @@ public class ModSounds {
 	}
 	
 	private static final SoundEvent createSound(String path) {
-		ResourceLocation location = new ResourceLocation(Main.MODID, path);
+		ResourceLocation location = new ResourceLocation(BetweenlandsRedstone.MODID, path);
 		SoundEvent event = new SoundEvent(location).setRegistryName(location);
 		SOUNDS.add(event);
 		return event;

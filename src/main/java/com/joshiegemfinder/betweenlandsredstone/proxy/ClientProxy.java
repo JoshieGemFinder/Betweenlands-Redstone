@@ -2,7 +2,7 @@ package com.joshiegemfinder.betweenlandsredstone.proxy;
 
 import javax.annotation.Nullable;
 
-import com.joshiegemfinder.betweenlandsredstone.Main;
+import com.joshiegemfinder.betweenlandsredstone.BetweenlandsRedstone;
 import com.joshiegemfinder.betweenlandsredstone.ModItems;
 import com.joshiegemfinder.betweenlandsredstone.RegistryHandlerClient;
 import com.joshiegemfinder.betweenlandsredstone.blocks.TileEntityChestBetweenlandsTrapped;
@@ -35,8 +35,8 @@ public class ClientProxy implements IProxy {
 	@Override
 	public void preInit() {
 		
-		Main.NETWORK_CHANNEL.registerMessage(MinecartFacingMessage.MinecartFacingMessageHandler.class, MinecartFacingMessage.class, 0, Side.CLIENT);
-		Main.NETWORK_CHANNEL.registerMessage(PlantTonicMessage.PlantTonicMessageHandler.class, PlantTonicMessage.class, 1, Side.CLIENT);
+		BetweenlandsRedstone.NETWORK_CHANNEL.registerMessage(MinecartFacingMessage.MinecartFacingMessageHandler.class, MinecartFacingMessage.class, 0, Side.CLIENT);
+		BetweenlandsRedstone.NETWORK_CHANNEL.registerMessage(PlantTonicMessage.PlantTonicMessageHandler.class, PlantTonicMessage.class, 1, Side.CLIENT);
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityScabystPiston.class, new TileEntityScabystPistonRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChestBetweenlandsTrapped.class, new RenderChestBetweenlandsTrapped());
@@ -58,7 +58,7 @@ public class ClientProxy implements IProxy {
 
     public void addItemToRegistry(Item item, String name, @Nullable ModelRegisterer registerModel) {
     	item.setUnlocalizedName(name);
-    	item.setRegistryName(new ResourceLocation(Main.MODID, name));
+    	item.setRegistryName(new ResourceLocation(BetweenlandsRedstone.MODID, name));
 		ModItems.ITEMS.add(item);
 		
 		item.setCreativeTab(CreativeTabs.REDSTONE);
@@ -72,7 +72,7 @@ public class ClientProxy implements IProxy {
     	addItemToRegistry(item, name, new ModelRegisterer() {
 			@Override
 			public void registerModels() {
-				Main.proxy.registerItemRenderer(item, 0, "inventory");
+				BetweenlandsRedstone.proxy.registerItemRenderer(item, 0, "inventory");
 			}
 		});
 	}

@@ -11,6 +11,7 @@ import com.joshiegemfinder.betweenlandsredstone.blocks.BlockScabystLight;
 import com.joshiegemfinder.betweenlandsredstone.blocks.BlockScabystObserver;
 import com.joshiegemfinder.betweenlandsredstone.blocks.BlockScabystTorch;
 import com.joshiegemfinder.betweenlandsredstone.blocks.BlockScabystWire;
+import com.joshiegemfinder.betweenlandsredstone.blocks.BlockSyrmoriteBars;
 import com.joshiegemfinder.betweenlandsredstone.blocks.deco.BlockCutPitstone;
 import com.joshiegemfinder.betweenlandsredstone.blocks.deco.BlockPolishedPitstone;
 import com.joshiegemfinder.betweenlandsredstone.blocks.deco.BlockWhitePear;
@@ -30,6 +31,7 @@ import com.joshiegemfinder.betweenlandsredstone.blocks.tripwire.BlockScabystTrip
 import com.joshiegemfinder.betweenlandsredstone.blocks.tripwire.BlockScabystTripWireHook;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.ResourceLocation;
 
@@ -82,9 +84,11 @@ public class ModBlocks {
 	public static BlockCutPitstone CUT_PITSTONE;
 	public static BlockWhitePear WHITE_PEAR_BLOCK;
 	
+	public static BlockSyrmoriteBars SYRMORITE_BARS;
+	
 	public static Block addBlockToRegistry(Block block, String name) {
 		block.setUnlocalizedName(name);
-		block.setRegistryName(new ResourceLocation(Main.MODID, name));
+		block.setRegistryName(new ResourceLocation(BetweenlandsRedstone.MODID, name));
 		CreativeTabs tab = block.getCreativeTabToDisplayOn();
 		block.setCreativeTab(tab == null ? CreativeTabs.REDSTONE : tab);
 		ModBlocks.BLOCKS.add(block);
@@ -157,6 +161,14 @@ public class ModBlocks {
 		
 		POLISHED_PITSTONE = new BlockPolishedPitstone("polished_pitstone");
 		CUT_PITSTONE = new BlockCutPitstone("cut_pitstone");
-		WHITE_PEAR_BLOCK = new BlockWhitePear("white_pear_block");
+		
+		if(BLRedstoneConfig.EXTRA_FEATURES.registerWhitePearBlock) {
+			WHITE_PEAR_BLOCK = new BlockWhitePear("white_pear_block");
+		}
+		
+		if(BLRedstoneConfig.EXTRA_FEATURES.registerSyrmoriteBars) {
+			SYRMORITE_BARS = new BlockSyrmoriteBars(Material.IRON, true);
+			addBlockToRegistry(SYRMORITE_BARS, "syrmorite_bars");
+		}
 	}
 }

@@ -2,7 +2,7 @@ package com.joshiegemfinder.betweenlandsredstone.network;
 
 import java.util.UUID;
 
-import com.joshiegemfinder.betweenlandsredstone.Main;
+import com.joshiegemfinder.betweenlandsredstone.BetweenlandsRedstone;
 import com.joshiegemfinder.betweenlandsredstone.entity.minecart.EntityScabystMinecartFurnace;
 
 import io.netty.buffer.ByteBuf;
@@ -31,12 +31,12 @@ public class MinecartFacingMessage implements IMessage {
 //			Main.logger.info("uuid is {}", uuid);
 
 			if(facing == null) {
-				Main.logger.info("minecart message handler aborted due to null facing");
+				BetweenlandsRedstone.logger.info("minecart message handler aborted due to null facing");
 				return null;
 			}
 			
 			if(uuid == null) {
-				Main.logger.info("minecart message handler aborted due to null uuid");
+				BetweenlandsRedstone.logger.info("minecart message handler aborted due to null uuid");
 				return null;
 			}
 			

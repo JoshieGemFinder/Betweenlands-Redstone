@@ -44,7 +44,7 @@ public class BlockPolishedPitstone extends Block {
 	}
 	
 	@Override
-	public EnumPushReaction getMobilityFlag(IBlockState p_149656_1_) {
+	public EnumPushReaction getMobilityFlag(IBlockState state) {
 		return EnumPushReaction.PUSH_ONLY;
 	}
 }

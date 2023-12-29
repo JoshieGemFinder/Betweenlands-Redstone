@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.joshiegemfinder.betweenlandsredstone.Main;
+import com.joshiegemfinder.betweenlandsredstone.BetweenlandsRedstone;
 import com.joshiegemfinder.betweenlandsredstone.ModItems;
 import com.joshiegemfinder.betweenlandsredstone.blocks.shared.IModelInterface;
 
@@ -60,7 +60,7 @@ public class ItemFoodBlock extends ItemFood implements IModelInterface {
 		    	addSicknessMessageMethod.setAccessible(true);
 		    	addSicknessMessageMethod.invoke(null, player, item, sickness);
 	    	} catch(Exception e) {
-	    		Main.logger.info("Error triggering addSicknessMessage");
+	    		BetweenlandsRedstone.logger.info("Error triggering addSicknessMessage");
 	    	}
 		}
 		
@@ -170,7 +170,7 @@ public class ItemFoodBlock extends ItemFood implements IModelInterface {
 
 	@Override
 	public void registerModels() {
-		Main.proxy.registerItemRenderer(this, 0, "inventory");
+		BetweenlandsRedstone.proxy.registerItemRenderer(this, 0, "inventory");
 	}
 
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)

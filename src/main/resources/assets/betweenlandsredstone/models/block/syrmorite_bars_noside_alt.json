@@ -1,0 +1,6 @@
+{
+    "parent": "block/pane_noside_alt",
+    "textures": {
+        "pane": "betweenlandsredstone:blocks/syrmorite_bars"
+    }
+}

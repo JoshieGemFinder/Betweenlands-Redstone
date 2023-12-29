@@ -62,12 +62,14 @@ public class ModItems {
     public static Item CUT_PITSONE;
     public static Item WHITE_PEAR_BLOCK;
 
+    public static Item SYRMORITE_BARS;
+
     public static void addItemToRegistry(Item item, String name, @Nullable ModelRegisterer registerModel) {
-    	Main.proxy.addItemToRegistry(item, name, registerModel);
+    	BetweenlandsRedstone.proxy.addItemToRegistry(item, name, registerModel);
 	}
 
     public static void addItemToRegistry(Item item, String name) {
-    	Main.proxy.addItemToRegistry(item, name);
+    	BetweenlandsRedstone.proxy.addItemToRegistry(item, name);
 	}
     
     public static void init() {
@@ -114,9 +116,14 @@ public class ModItems {
     	
     	POLISHED_PITSONE = new ItemBlockBase(ModBlocks.POLISHED_PITSTONE, "polished_pitstone");
     	CUT_PITSONE = new ItemBlockBase(ModBlocks.CUT_PITSTONE, "cut_pitstone");
-    	WHITE_PEAR_BLOCK = new ItemFoodBlock(ModBlocks.WHITE_PEAR_BLOCK, "white_pear_block", 54, 5.4F, false, true, ItemRegistry.MIDDLE_FRUIT, 45);
-    	
-    	
+		
+		if(BLRedstoneConfig.EXTRA_FEATURES.registerWhitePearBlock) {
+	    	WHITE_PEAR_BLOCK = new ItemFoodBlock(ModBlocks.WHITE_PEAR_BLOCK, "white_pear_block", 54, 5.4F, false, true, ItemRegistry.MIDDLE_FRUIT, 45);
+		}
+		
+		if(BLRedstoneConfig.EXTRA_FEATURES.registerSyrmoriteBars) {
+	    	SYRMORITE_BARS = new ItemBlockBase(ModBlocks.SYRMORITE_BARS, "syrmorite_bars");
+		}
     }
     
 }

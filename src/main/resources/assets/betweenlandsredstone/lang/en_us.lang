@@ -52,6 +52,8 @@ tile.polished_pitstone.name=Polished Pitstone
 tile.cut_pitstone.name=Cut Pitstone
 tile.white_pear_block.name=Block of White Pear
 
+tile.syrmorite_bars.name=Syrmorite Bars
+
 #Entities
 entity.scabyst_item_frame.name=Weedwood Item Frame
 
@@ -66,8 +68,25 @@ container.scabyst_dispenser=Pitstone Dispenser
 container.scabyst_dropper=Pitstone Dropper
 
 #Config Names
-config.slimeBlocksOnPistons.name=Slime Blocks stick on Mud Pistons
-config.disableMortarRecipe.name=Disable Mortar Recipe
+config.betweenlandsredstone.general=General
+config.betweenlandsredstone.dispenser_behaviours=Dispenser Behaviours
+config.betweenlandsredstone.extras=Extra Features
+
+config.betweenlandsredstone.slimeBlocksOnPistons=Slime Blocks stick on Mud Pistons
+config.betweenlandsredstone.disableMortarRecipe=Disable Mortar Recipe
+
+config.betweenlandsredstone.dispenser.buckets=Betweenlands Buckets
+config.betweenlandsredstone.dispenser.vials=Dentrothyst Vials
+config.betweenlandsredstone.dispenser.infusion_buckets=Infusion Buckets
+
+config.betweenlandsredstone.extras.dispenser_hiding=Dispenser Hiding
+config.betweenlandsredstone.extras.register_syrmorite_bars=Register Syrmorite Bars
+config.betweenlandsredstone.extras.register_white_pear_block=Register White Pear Block
+config.betweenlandsredstone.extras.syrmorite_bars_allow_projectiles=Bars Allow Projectiles Through
+config.betweenlandsredstone.extras.disable_silently=Disable Silently
 
 #Subtitles
 betweenlandsredstone.subtitle.sap_block.slide=Sliding down a sap block
+
+#Tooltips
+tooltip.betweenlandsredstone.bars_allow_projectiles=Allows projectiles to pass through

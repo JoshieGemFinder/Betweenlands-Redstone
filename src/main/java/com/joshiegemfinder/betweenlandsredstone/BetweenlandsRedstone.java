@@ -1,5 +1,6 @@
 package com.joshiegemfinder.betweenlandsredstone;
 
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -9,6 +10,8 @@ import com.joshiegemfinder.betweenlandsredstone.blocks.TileEntityChestBetweenlan
 import com.joshiegemfinder.betweenlandsredstone.blocks.dispenser.TileEntityScabystDispenser;
 import com.joshiegemfinder.betweenlandsredstone.blocks.dispenser.TileEntityScabystDropper;
 import com.joshiegemfinder.betweenlandsredstone.blocks.piston.TileEntityScabystPiston;
+import com.joshiegemfinder.betweenlandsredstone.datafixers.DataFixerConfigDisabledBlocks;
+import com.joshiegemfinder.betweenlandsredstone.datafixers.DataFixerItemFrame;
 import com.joshiegemfinder.betweenlandsredstone.network.PlantTonicMessage;
 import com.joshiegemfinder.betweenlandsredstone.proxy.IProxy;
 import com.joshiegemfinder.betweenlandsredstone.util.CropHelper;
@@ -23,7 +26,10 @@ import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.IProjectile;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Bootstrap.BehaviorDispenseOptional;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -32,6 +38,7 @@ import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -42,8 +49,10 @@ import net.minecraftforge.common.config.Config.Type;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.common.util.CompoundDataFixer;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.wrappers.BlockLiquidWrapper;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
@@ -70,7 +79,7 @@ import thebetweenlands.common.handler.OverworldItemHandler;
 import thebetweenlands.common.item.herblore.ItemDentrothystVial;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
-import thebetweenlands.common.item.tools.ItemBLBucket;
+import thebetweenlands.common.item.misc.ItemOctineIngot;
 import thebetweenlands.common.item.tools.ItemBucketInfusion;
 import thebetweenlands.common.item.tools.ItemPestle;
 import thebetweenlands.common.recipe.mortar.PestleAndMortarRecipe;
@@ -82,39 +91,22 @@ import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntitySteepingPot;
 
-@Mod(modid = Main.MODID, name = Main.NAME, version = Main.VERSION, updateJSON = "https://raw.githubusercontent.com/JoshieGemFinder/Betweenlands-Redstone/main/update.json", useMetadata = true)
-public class Main
+@Mod(modid = BetweenlandsRedstone.MODID, name = BetweenlandsRedstone.NAME, version = BetweenlandsRedstone.VERSION, updateJSON = "https://raw.githubusercontent.com/JoshieGemFinder/Betweenlands-Redstone/main/update.json", useMetadata = true)
+public class BetweenlandsRedstone
 {
 	public static final String MODID = "betweenlandsredstone";
 	public static final String NAME = "Betweenlands Redstone";
-	public static final String VERSION = "1.2.2";
-
-//	public static final BehaviorProjectileDispense BLArrowBehaviour = new BehaviorProjectileDispense()
-//	{
-//		protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn)
-//		{
-//			EntityBLArrow entity = new EntityBLArrow(worldIn);
-//			Item item = stackIn.getItem();
-//			if(item instanceof ItemBLArrow) {
-//				entity.setType(((ItemBLArrow)item).getType());
-//			} else {
-//				entity.setType(EnumArrowType.DEFAULT);
-//			}
-//			entity.setPosition(position.getX(), position.getY(), position.getZ());
-//			entity.pickupStatus = EntityArrow.PickupStatus.ALLOWED;
-//			return entity;
-//		}
-//	};
+	public static final String VERSION = "1.3.0";
 	
 	public static Logger logger;
 
 	@SidedProxy(clientSide = "com.joshiegemfinder.betweenlandsredstone.proxy.ClientProxy", serverSide = "com.joshiegemfinder.betweenlandsredstone.proxy.CommonProxy")
 	public static IProxy proxy;
 	
-	public static Main instance = null;
+	public static BetweenlandsRedstone instance = null;
 	
-	public Main() {
-		Main.instance = this;
+	public BetweenlandsRedstone() {
+		BetweenlandsRedstone.instance = this;
 	}
 
 	protected static final Random RANDOM = new Random();
@@ -135,7 +127,8 @@ public class Main
 		logger = event.getModLog();
 
 		MinecraftForge.EVENT_BUS.register(this);
-		MinecraftForge.EVENT_BUS.register(BLRedstoneDataFixers.class);
+		MinecraftForge.EVENT_BUS.register(DataFixerItemFrame.class);
+		MinecraftForge.EVENT_BUS.register(DataFixerConfigDisabledBlocks.class);
 		
 		ModBlocks.init();
 		ModItems.init();
@@ -157,11 +150,11 @@ public class Main
 		TileEntityScabystDispenser.registerFixesScabyst(fixer);
 		TileEntityScabystDropper.registerFixesDropperScabyst(fixer);
 		
-		BLRedstoneDataFixers.registerDataFixers(fixer);
+		DataFixerItemFrame.registerDataFixers(fixer);
 		
         ConfigManager.sync(MODID, Type.INSTANCE);
         
-        if(!BLRedstoneConfig.disableMortarRecipe) {
+        if(!BLRedstoneConfig.GENERAL.disableMortarRecipe) {
 			BetweenlandsAPI.getInstance().registerPestleAndMortarRecipe(
 					new PestleAndMortarRecipe(
 							new ItemStack(ModItems.SCABYST_DUST, 8),
@@ -181,18 +174,153 @@ public class Main
 	
 	private static void registerDispenserBehaviours() {
 
-		// I got it included in the betweenlands
-//		// I cannot believe this is something that isn't already a part of the betweenlands
-//		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.ANGLER_TOOTH_ARROW, BLArrowBehaviour);
-//		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.POISONED_ANGLER_TOOTH_ARROW, BLArrowBehaviour);
-//		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.OCTINE_ARROW, BLArrowBehaviour);
-//		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.BASILISK_ARROW, BLArrowBehaviour);
-//		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.SLUDGE_WORM_ARROW, BLArrowBehaviour);
-//		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.SHOCK_ARROW, BLArrowBehaviour);
-//		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.CHIROMAW_BARB, BLArrowBehaviour);
+		// ============ stuff that gets shot ============
+		
+		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.ANGRY_PEBBLE, new BehaviorProjectileDispense() {
+			@Override
+			protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
+				worldIn.playSound(null, position.getX(), position.getY(), position.getZ(), SoundRegistry.SORRY, SoundCategory.PLAYERS, 0.7F, 0.8F);
+				EntityAngryPebble entity = new EntityAngryPebble(worldIn);
+				entity.setPosition(position.getX(), position.getY(), position.getZ());
+				return entity;
+			}
+		});
+		
+		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.SILKY_PEBBLE, new BehaviorProjectileDispense() {
+			@Override
+			protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
+				worldIn.playSound(null, position.getX(), position.getY(), position.getZ(), SoundRegistry.SILKY_PEBBLE_THROW, SoundCategory.PLAYERS, 0.7F, 0.8F);
+				EntitySilkyPebble entity = new EntitySilkyPebble(worldIn);
+				entity.setPosition(position.getX(), position.getY(), position.getZ());
+				return entity;
+			}
+		});
+		
+		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.PYRAD_FLAME, new BehaviorDefaultDispenseItem() {
+		    public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
+		    {
+		        World world = source.getWorld();
+		        Random rand = BetweenlandsRedstone.RANDOM;
+		        IPosition pos = BlockDispenser.getDispensePosition(source);
+		        EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
+		        Vec3d look = new Vec3d(enumfacing.getDirectionVec());
+
+		        world.playSound((EntityPlayer)null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, (rand.nextFloat() - rand.nextFloat()) * 0.2F + 1.0F);
+		        
+				for(int i = 0; i < rand.nextInt(6) + 1; i++) {
+			        EntityPyradFlame flame = this.getProjectileEntity(world, pos, look);
+			        world.spawnEntity(flame);
+				}
+		        
+				playDispenseSound(source);
+				
+		        stack.shrink(1);
+		        return stack;
+		    }
+
+		    protected EntityPyradFlame getProjectileEntity(World worldIn, IPosition position, Vec3d dir) {
+		        Random rand = BetweenlandsRedstone.RANDOM;
+				float f = 0.05F;
+		    	EntityPyradFlame flame = new EntityPyradFlame(worldIn, position.getX(), position.getY(), position.getZ(), dir.x + rand.nextGaussian() * (double)f + rand.nextGaussian() * 0.4D, dir.y + rand.nextGaussian() * 0.4D, dir.z + rand.nextGaussian() * (double)f + rand.nextGaussian() * 0.4D);
+		    	return flame;
+		    }
+
+		    protected void playDispenseSound(IBlockSource source)
+		    {
+		        source.getWorld().playEvent(1002, source.getBlockPos(), 0);
+		    }
+		});
+		
+
+		// ============ everything else ============
 		
 		final BehaviorDefaultDispenseItem behaviourDefaultDispenseItem = new BehaviorDefaultDispenseItem();
+
+		// ============ octine ingot ============
+		if(BLRedstoneConfig.DISPENSER_BEHAVIOURS.octineIngot)
+		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.OCTINE_INGOT, new BehaviorDispenseOptional()
+		{
+			public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
+			{
+				if(stack.getItem() instanceof ItemOctineIngot) { // because casting
+					World world = source.getWorld();
+					BlockPos tinderPos = source.getBlockPos().offset(source.getBlockState().getValue(BlockDispenser.FACING));
+					IBlockState tinderBlock = world.getBlockState(tinderPos);
+					ItemOctineIngot ingot = (ItemOctineIngot)stack.getItem();
+					boolean hasTinder = false;
+					boolean isBlockTinder = false;
+					if(ingot.isTinder(stack, ItemStack.EMPTY, tinderBlock)) {
+						hasTinder = true;
+						isBlockTinder = true;
+					} else { // no need to check items if the block is already confirmed tinder
+						List<EntityItem> tinder = world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(tinderPos), entity -> !entity.getItem().isEmpty() && ingot.isTinder(stack, entity.getItem(), null));
+						if(!tinder.isEmpty()) {
+							hasTinder = true;
+						}
+					}
+					
+					if(hasTinder && (isBlockTinder || tinderBlock.getMaterial().isReplaceable())) {
+						world.setBlockState(tinderPos, Blocks.FIRE.getDefaultState());
+						// only keeping SoundCategory PLAYERS so it's consistent with normal octine ingot lighting
+						world.playSound(null, tinderPos.getX(), tinderPos.getY(), tinderPos.getZ(), SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1, 1);
+						this.successful = true;
+					} else {
+						this.successful = false;
+					}
+					return stack;
+				}
+				return behaviourDefaultDispenseItem.dispense(source, stack);
+			}
+		});
 		
+
+		// ============ buckets ============
+		if(BLRedstoneConfig.DISPENSER_BEHAVIOURS.buckets) {
+			IBehaviorDispenseItem bucketFallback;
+			if(BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.containsKey(ItemRegistry.BL_BUCKET)) {
+				bucketFallback = BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.getObject(ItemRegistry.BL_BUCKET);
+			} else {
+				bucketFallback = net.minecraftforge.fluids.DispenseFluidContainer.getInstance();
+			}
+			
+			BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.BL_BUCKET, new IBehaviorDispenseItem() {
+				@Override
+				public ItemStack dispense(IBlockSource source, ItemStack stack) {
+	
+			        if (FluidUtil.getFluidContained(stack) != null) {
+						EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
+						World world = source.getWorld();
+						BlockPos fillPos = source.getBlockPos().offset(enumfacing);
+						IFluidHandler fluidHandler = FluidUtil.getFluidHandler(world, fillPos, enumfacing.getOpposite());
+						if(fluidHandler != null && !(fluidHandler instanceof BlockLiquidWrapper)) {
+							net.minecraftforge.fluids.FluidActionResult actionResult = FluidUtil.tryEmptyContainer(stack, fluidHandler, Fluid.BUCKET_VOLUME, null, true);
+							if(actionResult.isSuccess()) {
+								ItemStack drainedStack = actionResult.getResult();
+								//so we don't play the sound multiple times if this fails
+						        source.getWorld().playEvent(1000, source.getBlockPos(), 0); //playDispenseSound
+						        EnumFacing facing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING); // getWorldEventDataFrom
+						        source.getWorld().playEvent(2000, source.getBlockPos(), facing.getFrontOffsetX() + 1 + (facing.getFrontOffsetZ() + 1) * 3); // spawnDispenseParticles
+								if(stack.getCount() == 1) {
+									return drainedStack;
+								} 
+								else if (!drainedStack.isEmpty() && ((TileEntityDispenser)source.getBlockTileEntity()).addItemStack(drainedStack) < 0)
+					            {
+									behaviourDefaultDispenseItem.dispense(source, drainedStack);
+					            }
+	
+					            ItemStack stackCopy = stack.copy();
+					            stackCopy.shrink(1);
+					            return stackCopy;
+							}
+						}
+			        }
+			        
+					return bucketFallback.dispense(source, stack);
+				}
+			});
+		}
+
+		if(BLRedstoneConfig.DISPENSER_BEHAVIOURS.compost)
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(EnumItemMisc.COMPOST.getItem(),  new BehaviorDefaultDispenseItem()
 		{
 			public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
@@ -200,7 +328,7 @@ public class Main
 				if(stack.getItem() == EnumItemMisc.COMPOST.getItem() && stack.getItemDamage() == EnumItemMisc.COMPOST.getID()) {
 					EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
 					World world = source.getWorld();
-					BlockPos compostPos = source.getBlockPos().add(enumfacing.getDirectionVec());
+					BlockPos compostPos = source.getBlockPos().offset(enumfacing);
 					IBlockState state = world.getBlockState(compostPos);
 					if(state.getBlock() instanceof BlockGenericDugSoil) {
 						TileEntityDugSoil soil = BlockGenericDugSoil.getTile(world, compostPos);
@@ -215,37 +343,15 @@ public class Main
 			}
 		});
 		
-		IBehaviorDispenseItem bucketFallback = BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.getObject(ItemRegistry.BL_BUCKET);
-		
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.BL_BUCKET, new BehaviorDefaultDispenseItem() {
-			public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
-			{
-				ItemBLBucket bucket = (ItemBLBucket) stack.getItem();
-				FluidStack fluid = bucket.getFluid(stack);
-				if(fluid != null && fluid.amount > 0) {
-					EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
-					World world = source.getWorld();
-					BlockPos fillPos = source.getBlockPos().add(enumfacing.getDirectionVec());
-					TileEntity tile = world.getTileEntity(fillPos);
-					if(tile instanceof IFluidHandler) {
-						int used = ((IFluidHandler) tile).fill(fluid, true);
-						if(used > 0) {
-							ItemStack empty = bucket.getEmpty(stack);
-							return new ItemStack(empty.getItem(), stack.getCount(), empty.getItemDamage());
-						}
-					}
-				}
-				return bucketFallback.dispense(source, stack);
-			}
-		});
-		
+
+		if(BLRedstoneConfig.DISPENSER_BEHAVIOURS.pestle)
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.PESTLE, new BehaviorDefaultDispenseItem() {
 			 public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
 			 {
 				 if(stack.getItem() instanceof ItemPestle) {
 					 EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
 					 World world = source.getWorld();
-					 BlockPos mortarPos = source.getBlockPos().add(enumfacing.getDirectionVec());
+					 BlockPos mortarPos = source.getBlockPos().offset(enumfacing);
 					 if(world.getTileEntity(mortarPos) instanceof TileEntityMortar) {
 					 	TileEntityMortar mortar = (TileEntityMortar)world.getTileEntity(mortarPos);
 					 	mortar.func_70299_a(1, stack);
@@ -256,13 +362,14 @@ public class Main
 			 }
 		});
 
+		if(BLRedstoneConfig.DISPENSER_BEHAVIOURS.vials)
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.DENTROTHYST_VIAL, new BehaviorDefaultDispenseItem() {
 			public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
 			{
 				if(stack.getItem() instanceof ItemDentrothystVial && (stack.getItemDamage() == 0 || stack.getItemDamage() == 2)) {
 					EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
 					World world = source.getWorld();
-				 	BlockPos alembicPos = source.getBlockPos().add(enumfacing.getDirectionVec());
+				 	BlockPos alembicPos = source.getBlockPos().offset(enumfacing);
 				 	if(world.getTileEntity(alembicPos) instanceof TileEntityAlembic) {
 				 		TileEntityAlembic alembic = (TileEntityAlembic)world.getTileEntity(alembicPos);
 				 		if(alembic.hasFinished()) {
@@ -291,13 +398,14 @@ public class Main
 			}
 		});
 
+		if(BLRedstoneConfig.DISPENSER_BEHAVIOURS.infusionBuckets)
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.BL_BUCKET_INFUSION, new BehaviorDefaultDispenseItem() {
 			public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
 			{
 				if(stack.getItem() instanceof ItemBucketInfusion) {
 					EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
 					World world = source.getWorld();
-				 	BlockPos alembicPos = source.getBlockPos().add(enumfacing.getDirectionVec());
+				 	BlockPos alembicPos = source.getBlockPos().offset(enumfacing);
 				 	if(world.getTileEntity(alembicPos) instanceof TileEntityAlembic) {
 				 		TileEntityAlembic alembic = (TileEntityAlembic)world.getTileEntity(alembicPos);
 				 		if(!alembic.isFull()) {
@@ -309,73 +417,19 @@ public class Main
 				return behaviourDefaultDispenseItem.dispense(source, stack);
 			}
 		});
-		
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.ANGRY_PEBBLE, new BehaviorProjectileDispense() {
-			@Override
-			protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
-				worldIn.playSound(null, position.getX(), position.getY(), position.getZ(), SoundRegistry.SORRY, SoundCategory.PLAYERS, 0.7F, 0.8F);
-				EntityAngryPebble entity = new EntityAngryPebble(worldIn);
-				entity.setPosition(position.getX(), position.getY(), position.getZ());
-				return entity;
-			}
-		});
-		
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.SILKY_PEBBLE, new BehaviorProjectileDispense() {
-			@Override
-			protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
-				worldIn.playSound(null, position.getX(), position.getY(), position.getZ(), SoundRegistry.SILKY_PEBBLE_THROW, SoundCategory.PLAYERS, 0.7F, 0.8F);
-				EntitySilkyPebble entity = new EntitySilkyPebble(worldIn);
-				entity.setPosition(position.getX(), position.getY(), position.getZ());
-				return entity;
-			}
-		});
-		
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.PYRAD_FLAME, new BehaviorDefaultDispenseItem() {
-		    public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
-		    {
-		        World world = source.getWorld();
-		        Random rand = Main.RANDOM;
-		        IPosition pos = BlockDispenser.getDispensePosition(source);
-		        EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
-		        Vec3d look = new Vec3d(enumfacing.getDirectionVec());
 
-		        world.playSound((EntityPlayer)null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, (rand.nextFloat() - rand.nextFloat()) * 0.2F + 1.0F);
-		        
-				for(int i = 0; i < rand.nextInt(6) + 1; i++) {
-			        EntityPyradFlame flame = this.getProjectileEntity(world, pos, look);
-			        world.spawnEntity(flame);
-				}
-		        
-				playDispenseSound(source);
-				
-		        stack.shrink(1);
-		        return stack;
-		    }
-
-		    protected EntityPyradFlame getProjectileEntity(World worldIn, IPosition position, Vec3d dir) {
-		        Random rand = Main.RANDOM;
-				float f = 0.05F;
-		    	EntityPyradFlame flame = new EntityPyradFlame(worldIn, position.getX(), position.getY(), position.getZ(), dir.x + rand.nextGaussian() * (double)f + rand.nextGaussian() * 0.4D, dir.y + rand.nextGaussian() * 0.4D, dir.z + rand.nextGaussian() * (double)f + rand.nextGaussian() * 0.4D);
-		    	return flame;
-		    }
-
-		    protected void playDispenseSound(IBlockSource source)
-		    {
-		        source.getWorld().playEvent(1002, source.getBlockPos(), 0);
-		    }
-		});
-		
+		if(BLRedstoneConfig.DISPENSER_BEHAVIOURS.shears)
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.SYRMORITE_SHEARS, new BehaviorDefaultDispenseItem() {
 			public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
 			{
 				World world = source.getWorld();
 				EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
-				BlockPos harvestPos = source.getBlockPos().add(enumfacing.getDirectionVec());
+				BlockPos harvestPos = source.getBlockPos().offset(enumfacing);
 				IBlockState state = world.getBlockState(harvestPos);
 				if(state.getBlock() instanceof BlockGenericCrop) {
 					BlockGenericCrop crop = (BlockGenericCrop)world.getBlockState(harvestPos).getBlock();
 					if(state.getValue(BlockGenericCrop.AGE) >= 15) {
-						stack.damageItem(1, Main.getFakePlayer((WorldServer) world));
+						stack.damageItem(1, BetweenlandsRedstone.getFakePlayer((WorldServer) world));
 						int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack);
 						if(crop instanceof BlockMiddleFruitBush) {
 							CropHelper.harvestCrop(crop, world, harvestPos, state, fortune, false);
@@ -391,12 +445,13 @@ public class Main
 			}
 		});
 
+		if(BLRedstoneConfig.DISPENSER_BEHAVIOURS.plantTonic)
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.BL_BUCKET_PLANT_TONIC,  new BehaviorDefaultDispenseItem() {
 			public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
 			{
 				EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
 				World world = source.getWorld();
-				BlockPos tonicPos = source.getBlockPos().add(enumfacing.getDirectionVec());
+				BlockPos tonicPos = source.getBlockPos().offset(enumfacing);
 				IBlockState state = world.getBlockState(tonicPos);
 
 				if(state.getBlock() instanceof IPlantable || state.getBlock() instanceof IFarmablePlant) {
@@ -443,7 +498,8 @@ public class Main
 				return stack;
 			}
 		});
-		
+
+		if(BLRedstoneConfig.DISPENSER_BEHAVIOURS.aspectrusSeeds)
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.ASPECTRUS_SEEDS, new BehaviorDefaultDispenseItem() {
 			public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
 			{
@@ -469,7 +525,8 @@ public class Main
 				return behaviourDefaultDispenseItem.dispense(source, stack);
 			}
 		});
-		
+
+		if(BLRedstoneConfig.DISPENSER_BEHAVIOURS.silkBundle)
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.SILK_BUNDLE, new BehaviorDefaultDispenseItem() {
 			public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
 			{

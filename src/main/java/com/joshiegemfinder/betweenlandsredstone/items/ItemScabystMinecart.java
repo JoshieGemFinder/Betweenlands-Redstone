@@ -2,11 +2,10 @@ package com.joshiegemfinder.betweenlandsredstone.items;
 
 import java.util.List;
 
-import com.joshiegemfinder.betweenlandsredstone.Main;
+import com.joshiegemfinder.betweenlandsredstone.BetweenlandsRedstone;
 import com.joshiegemfinder.betweenlandsredstone.ModItems;
 import com.joshiegemfinder.betweenlandsredstone.blocks.shared.IModelInterface;
 import com.joshiegemfinder.betweenlandsredstone.entity.minecart.EntityScabystMinecart;
-import com.joshiegemfinder.betweenlandsredstone.entity.minecart.EntityScabystMinecart.Type;
 import com.joshiegemfinder.betweenlandsredstone.entity.minecart.RailDirectionHelper;
 
 import net.minecraft.block.BlockDispenser;
@@ -18,7 +17,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.dispenser.IBehaviorDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -161,7 +159,7 @@ public class ItemScabystMinecart extends Item implements IModelInterface {
 
 	@Override
 	public void registerModels() {
-		Main.proxy.registerItemRenderer(this, 0, "inventory");
+		BetweenlandsRedstone.proxy.registerItemRenderer(this, 0, "inventory");
 	}
 	
 	@Override

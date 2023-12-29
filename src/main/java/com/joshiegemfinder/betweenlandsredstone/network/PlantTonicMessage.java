@@ -1,6 +1,6 @@
 package com.joshiegemfinder.betweenlandsredstone.network;
 
-import com.joshiegemfinder.betweenlandsredstone.Main;
+import com.joshiegemfinder.betweenlandsredstone.BetweenlandsRedstone;
 import com.joshiegemfinder.betweenlandsredstone.util.CropHelper;
 
 import io.netty.buffer.ByteBuf;
@@ -23,7 +23,7 @@ public class PlantTonicMessage implements IMessage {
 			Minecraft mc = Minecraft.getMinecraft();
 
 			if(pos == null) {
-				Main.logger.info("Plant tonic message handler aborted due to null pos");
+				BetweenlandsRedstone.logger.info("Plant tonic message handler aborted due to null pos");
 				return null;
 			}
 			

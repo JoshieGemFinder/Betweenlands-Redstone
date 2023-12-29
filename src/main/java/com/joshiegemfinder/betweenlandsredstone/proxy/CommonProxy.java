@@ -2,7 +2,7 @@ package com.joshiegemfinder.betweenlandsredstone.proxy;
 
 import javax.annotation.Nullable;
 
-import com.joshiegemfinder.betweenlandsredstone.Main;
+import com.joshiegemfinder.betweenlandsredstone.BetweenlandsRedstone;
 import com.joshiegemfinder.betweenlandsredstone.ModItems;
 import com.joshiegemfinder.betweenlandsredstone.util.ModelRegisterer;
 
@@ -35,7 +35,7 @@ public class CommonProxy implements IProxy {
 	@Override
 	public void addItemToRegistry(Item item, String name, @Nullable ModelRegisterer registerModel) {
     	item.setUnlocalizedName(name);
-    	item.setRegistryName(new ResourceLocation(Main.MODID, name));
+    	item.setRegistryName(new ResourceLocation(BetweenlandsRedstone.MODID, name));
 		ModItems.ITEMS.add(item);
 		
 		item.setCreativeTab(CreativeTabs.REDSTONE);
@@ -44,7 +44,7 @@ public class CommonProxy implements IProxy {
 	@Override
 	public void addItemToRegistry(Item item, String name) {
     	item.setUnlocalizedName(name);
-    	item.setRegistryName(new ResourceLocation(Main.MODID, name));
+    	item.setRegistryName(new ResourceLocation(BetweenlandsRedstone.MODID, name));
 		ModItems.ITEMS.add(item);
 		
 		item.setCreativeTab(CreativeTabs.REDSTONE);

@@ -1,6 +1,6 @@
 package com.joshiegemfinder.betweenlandsredstone.entity.minecart;
 
-import com.joshiegemfinder.betweenlandsredstone.Main;
+import com.joshiegemfinder.betweenlandsredstone.BetweenlandsRedstone;
 import com.joshiegemfinder.betweenlandsredstone.network.MinecartFacingMessage;
 
 import io.netty.buffer.ByteBuf;
@@ -8,7 +8,6 @@ import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.item.EntityMinecartFurnace;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,7 +29,6 @@ import thebetweenlands.common.block.container.BlockBLFurnace;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
 
-@SuppressWarnings("deprecation")
 public class EntityScabystMinecartFurnace extends EntityScabystMinecart implements IEntityAdditionalSpawnData {
 
     private static final DataParameter<Boolean> POWERED = EntityDataManager.<Boolean>createKey(EntityScabystMinecartFurnace.class, DataSerializers.BOOLEAN);
@@ -105,7 +103,7 @@ public class EntityScabystMinecartFurnace extends EntityScabystMinecart implemen
         
     	if(isDual() && facing != null && facing != prevFacing && !world.isRemote) {
     		//Main.logger.info("sending update facing message");
-    		Main.NETWORK_CHANNEL.sendToAllTracking(new MinecartFacingMessage(facing, this.getUniqueID()), this);
+    		BetweenlandsRedstone.NETWORK_CHANNEL.sendToAllTracking(new MinecartFacingMessage(facing, this.getUniqueID()), this);
     	}
         
         
