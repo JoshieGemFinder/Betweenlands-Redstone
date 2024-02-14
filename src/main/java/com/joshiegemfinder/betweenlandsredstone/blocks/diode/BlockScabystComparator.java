@@ -47,12 +47,12 @@ public class BlockScabystComparator extends BlockRedstoneComparator implements I
     
 	//TODO Change this if making a new class
 	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
-		 return new ItemStack(this);
+		 return new ItemStack(ModItems.SCABYST_COMPARATOR);
 	}
     
 	//TODO Change this if making a new class
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-		 return new ItemStack(this);
+		 return new ItemStack(ModItems.SCABYST_COMPARATOR);
 	}
 	
 	//TODO Change this if making a new class

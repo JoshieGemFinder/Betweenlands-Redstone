@@ -64,7 +64,7 @@ public class RegistryHandlerClient {
 		Entity entity = event.getEntity();
 		EntityPlayer player = event.getEntityPlayer();
 		
-		if(stack.getItem() == ModItems.WHITE_PEAR_BLOCK) {
+		if(stack.getItem() == ModItems.WHITE_PEAR_BLOCK && BLRedstoneConfig.EXTRA_FEATURES.registerWhitePearBlock) {
 			tooltip.add("- Bet you couldn't fit that whole thing in your mouth!");
 			tooltip.add("- ...You bet?");
 			if(entity != null && entity.getEntityWorld() != null && player != null && FoodSicknessHandler.isFoodSicknessEnabled(entity.getEntityWorld()) && player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {

@@ -1,0 +1,26 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "betweenlandsredstone:petal_basket"
+	},
+	"variants": {
+		"petal_count": {
+			"0": {},
+			"1": {"submodel": "betweenlandsredstone:petal_basket_1"},
+			"2": {"submodel": "betweenlandsredstone:petal_basket_2"},
+			"3": {"submodel": "betweenlandsredstone:petal_basket_3"},
+			"4": {"submodel": "betweenlandsredstone:petal_basket_4"},
+			"5": {"submodel": "betweenlandsredstone:petal_basket_5"},
+			"6": {"submodel": "betweenlandsredstone:petal_basket_6"},
+			"7": {"submodel": "betweenlandsredstone:petal_basket_7"},
+			"8": {"submodel": "betweenlandsredstone:petal_basket_8"},
+			"9": {"submodel": "betweenlandsredstone:petal_basket_9"},
+			"10": {"submodel": "betweenlandsredstone:petal_basket_10"},
+			"11": {"submodel": "betweenlandsredstone:petal_basket_11"},
+			"12": {"submodel": "betweenlandsredstone:petal_basket_12"},
+			"13": {"submodel": "betweenlandsredstone:petal_basket_13"},
+			"14": {"submodel": "betweenlandsredstone:petal_basket_14"},
+			"15": {"model": "betweenlandsredstone:petal_basket_full"}
+		}
+	}
+}

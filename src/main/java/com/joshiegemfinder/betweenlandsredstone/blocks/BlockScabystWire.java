@@ -25,7 +25,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
@@ -193,7 +192,7 @@ public class BlockScabystWire extends BlockRedstoneWire {
         {
             return true;
         }
-        else if (block == ModBlocks.TARGET_BLOCK && side.getAxis() != Axis.Y) {
+        else if (block == ModBlocks.TARGET_BLOCK) {
         	return true;
         }
         else
@@ -211,6 +210,7 @@ public class BlockScabystWire extends BlockRedstoneWire {
 	    strength = this.getMaxCurrentStrength(worldIn, pos2, strength);
 	    this.setCanProvidePower(false);
 	    int k = worldIn.isBlockIndirectlyGettingPowered(pos1);
+//	    int k = Connector.isBlockIndirectlyGettingPowered(worldIn, pos1);
 	    this.setCanProvidePower(true);
 	
 	    if (k > 0 && k > strength - 1)
@@ -281,24 +281,6 @@ public class BlockScabystWire extends BlockRedstoneWire {
 	    return state;
 	}
     
-//    @Override
-//    protected int getMaxCurrentStrength(World worldIn, BlockPos pos, int strength)
-//    {
-//    	if (worldIn.getBlockState(pos).getBlock() == Blocks.REDSTONE_WIRE) {
-//    		return 0;
-//    	}
-//    	
-//        if (worldIn.getBlockState(pos).getBlock() != this)
-//        {
-//            return strength;
-//        }
-//        else
-//        {
-//            int i = ((Integer)worldIn.getBlockState(pos).getValue(POWER)).intValue();
-//            return i > strength ? i : strength;
-//        }
-//    }
-    
     protected static boolean canConnectUpwardsTo(IBlockAccess worldIn, BlockPos pos)
     {
         return BlockScabystWire.canConnectTo(worldIn.getBlockState(pos), null, worldIn, pos);
@@ -315,6 +297,8 @@ public class BlockScabystWire extends BlockRedstoneWire {
         else if (block == ModBlocks.SCABYST_WIRE)
         {
             return true;
+//        } else if(block == ModBlocks.TARGET_BLOCK) {
+//            return true;
         }
         else if (
         		Blocks.UNPOWERED_REPEATER.isSameDiode(blockState) ||

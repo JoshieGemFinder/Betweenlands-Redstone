@@ -1,0 +1,10 @@
+{
+  "parent": "betweenlandsredstone:block/crafter",
+  "textures": {
+    "top": "betweenlandsredstone:blocks/crafter/crafter_top_triggered",
+    "north": "betweenlandsredstone:blocks/crafter/crafter_north_triggered",
+    "south": "betweenlandsredstone:blocks/crafter/crafter_south_triggered",
+    "west": "betweenlandsredstone:blocks/crafter/crafter_west_triggered",
+    "east": "betweenlandsredstone:blocks/crafter/crafter_east_triggered"
+  }
+}

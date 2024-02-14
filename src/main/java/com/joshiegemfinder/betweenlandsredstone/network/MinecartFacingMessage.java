@@ -11,48 +11,44 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MinecartFacingMessage implements IMessage {
 
-	public static class MinecartFacingMessageHandler implements IMessageHandler<MinecartFacingMessage, IMessage> {
+	public static class MinecartFacingMessageHandler extends SidedMessageHandler<MinecartFacingMessage, IMessage> {
 
+		public MinecartFacingMessageHandler() {
+			super(Side.CLIENT);
+		}
+		
+		@SideOnly(Side.CLIENT)
 		@Override
-		public IMessage onMessage(MinecartFacingMessage message, MessageContext ctx) {
-			
+		protected IMessage handle(MinecartFacingMessage message, MessageContext ctx) {
 			EnumFacing facing = message.facing;
 			UUID uuid = message.uuid;
 			
 			Minecraft mc = Minecraft.getMinecraft();
-//			Main.logger.info("minecart message handler start");
-
-//			Main.logger.info("facing is {}", facing);
-//			Main.logger.info("uuid is {}", uuid);
 
 			if(facing == null) {
-				BetweenlandsRedstone.logger.info("minecart message handler aborted due to null facing");
+				BetweenlandsRedstone.logger.info("Minecart message handler aborted due to null facing");
 				return null;
 			}
 			
 			if(uuid == null) {
-				BetweenlandsRedstone.logger.info("minecart message handler aborted due to null uuid");
+				BetweenlandsRedstone.logger.info("Minecart message handler aborted due to null uuid");
 				return null;
 			}
 			
 			mc.addScheduledTask(() -> {
-//				Main.logger.info("minecart message main thread start");
 				World world = mc.world;
 				if(world != null && world.isRemote) {
-//					Main.logger.info("minecart message recieved in valid world and on client");
 					for(Entity entity : world.loadedEntityList) {
 						if(entity.getUniqueID().equals(uuid)) {
-//							Main.logger.info("entity found");
 							if(entity instanceof EntityScabystMinecartFurnace) {
-//								Main.logger.info("entity instanceof minecart");
 								EntityScabystMinecartFurnace minecart = (EntityScabystMinecartFurnace)entity;
 								minecart.setFacing(facing);
-//								Main.logger.info("entity facing set");
 								break;
 							}
 						}

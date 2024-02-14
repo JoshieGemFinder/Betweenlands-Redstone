@@ -10,8 +10,9 @@ public class BetweenlandsRedstoneCoreMod implements IFMLLoadingPlugin {
 
 	@Override
 	public String[] getASMTransformerClass() {
-		return null; //coremod is currently disabled, as I found a non-coremod solution
+//		return null; //coremod is currently disabled, as I found a non-coremod solution
 //		return new String[]{"com.joshiegemfinder.betweenlandsredstone.core.transformer.TransformerBlockRedstoneWire"};
+		return new String[]{"com.joshiegemfinder.betweenlandsredstone.core.transformer.TransformerTileEntityHopper"};
 	}
 
 	@Override

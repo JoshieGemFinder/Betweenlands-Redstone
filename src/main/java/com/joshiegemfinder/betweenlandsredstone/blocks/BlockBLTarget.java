@@ -104,13 +104,31 @@ public class BlockBLTarget extends Block implements IModelInterface {
 	
 	@Override
 	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-		return true;
+		return side != null;
 	}
 	
 	@Override
 	public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-		return blockState.getValue(POWER);
+		int power = blockState.getValue(POWER);
+		if(power >= 15) 
+			return 15;
+
+		for(EnumFacing facing : EnumFacing.VALUES) {
+			int power2 = blockAccess.getStrongPower(pos.offset(facing), facing);
+			if(power2 > power)
+				power = power2;
+			if(power >= 15)
+				return power;
+		}
+		
+		return power;
 	}
+	
+	@Override
+	public boolean shouldCheckWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return false;
+	}
+	
 	
 	@Override
 	protected BlockStateContainer createBlockState() {
@@ -126,7 +144,7 @@ public class BlockBLTarget extends Block implements IModelInterface {
 	public int getMetaFromState(IBlockState state) {
 		return state.getValue(POWER);
 	}
-
+	
 	@Override
 	public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return true;
@@ -134,11 +152,6 @@ public class BlockBLTarget extends Block implements IModelInterface {
 	
 	@Override
 	public boolean isNormalCube(IBlockState state) {
-		return true;
-	}
-	
-	@Override
-	public boolean isBlockNormalCube(IBlockState state) {
 		return true;
 	}
 	

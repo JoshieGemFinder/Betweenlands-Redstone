@@ -1,0 +1,67 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "minecraft:cube_all",
+        "textures": {
+            "particle": "#all",
+            "all": "betweenlandsredstone:blocks/bulb/bulb_normal"
+        }
+    },
+    "variants": {
+        "decay_state=normal,lit=false,powered=false": [{
+            "textures": { "all": "betweenlandsredstone:blocks/bulb/bulb_normal" }
+        }],
+        "decay_state=normal,lit=false,powered=true": [{
+            "textures": { "all": "betweenlandsredstone:blocks/bulb/bulb_normal_powered" }
+        }],
+        "decay_state=normal,lit=true,powered=false": [{
+            "textures": { "all": "betweenlandsredstone:blocks/bulb/bulb_normal_lit" }
+        }],
+        "decay_state=normal,lit=true,powered=true": [{
+            "textures": { "all": "betweenlandsredstone:blocks/bulb/bulb_normal_powered_lit" }
+        }],
+
+        "decay_state=sludgy,lit=false,powered=false": [{
+            "textures": { "all": "betweenlandsredstone:blocks/bulb/bulb_sludgy" }
+        }],
+        "decay_state=sludgy,lit=false,powered=true": [{
+            "textures": { "all": "betweenlandsredstone:blocks/bulb/bulb_sludgy_powered" }
+        }],
+        "decay_state=sludgy,lit=true,powered=false": [{
+            "textures": { "all": "betweenlandsredstone:blocks/bulb/bulb_sludgy_lit" }
+        }],
+        "decay_state=sludgy,lit=true,powered=true": [{
+            "textures": { "all": "betweenlandsredstone:blocks/bulb/bulb_sludgy_powered_lit" }
+        }],
+
+        "decay_state=deteriorated,lit=false,powered=false": [{
+            "textures": { "all": "betweenlandsredstone:blocks/bulb/bulb_deteriorated" }
+        }],
+        "decay_state=deteriorated,lit=false,powered=true": [{
+            "textures": { "all": "betweenlandsredstone:blocks/bulb/bulb_deteriorated_powered" }
+        }],
+        "decay_state=deteriorated,lit=true,powered=false": [{
+            "textures": { "all": "betweenlandsredstone:blocks/bulb/bulb_deteriorated_lit" }
+        }],
+        "decay_state=deteriorated,lit=true,powered=true": [{
+            "textures": { "all": "betweenlandsredstone:blocks/bulb/bulb_deteriorated_powered_lit" }
+        }],
+
+        "decay_state=decayed,lit=false,powered=false": [{
+            "textures": { "all": "betweenlandsredstone:blocks/bulb/bulb_decayed" }
+        }],
+        "decay_state=decayed,lit=false,powered=true": [{
+            "textures": { "all": "betweenlandsredstone:blocks/bulb/bulb_decayed_powered" }
+        }],
+        "decay_state=decayed,lit=true,powered=false": [{
+            "textures": { "all": "betweenlandsredstone:blocks/bulb/bulb_decayed_lit" }
+        }],
+        "decay_state=decayed,lit=true,powered=true": [{
+            "textures": { "all": "betweenlandsredstone:blocks/bulb/bulb_decayed_powered_lit" }
+        }],
+        
+        "inventory_normal": [{
+            "textures": { "all": "betweenlandsredstone:blocks/bulb/bulb_normal" }
+        }]
+    }
+}

@@ -27,7 +27,7 @@ public class ModEntities {
 		
 		SCABYST_MINECART_EMPTY = EntityEntryBuilder.create()
 				.entity(EntityScabystMinecartEmpty.class)
-				.id(new ResourceLocation(Reference.MODID, "scabyst_minecart"), id)
+				.id(new ResourceLocation(BetweenlandsRedstone.MODID, "scabyst_minecart"), id)
 				.name("scabyst_minecart")
 				.tracker(80, 3, true)
 				.build();
@@ -35,7 +35,7 @@ public class ModEntities {
 		ENTITIES.add(SCABYST_MINECART_EMPTY);
 		SCABYST_MINECART_CHEST = EntityEntryBuilder.create()
 				.entity(EntityScabystMinecartChest.class)
-				.id(new ResourceLocation(Reference.MODID, "scabyst_chest_minecart"), id)
+				.id(new ResourceLocation(BetweenlandsRedstone.MODID, "scabyst_chest_minecart"), id)
 				.name("scabyst_chest_minecart")
 				.tracker(80, 3, true)
 				.build();
@@ -43,7 +43,7 @@ public class ModEntities {
 		ENTITIES.add(SCABYST_MINECART_CHEST);
 		SCABYST_MINECART_HOPPER = EntityEntryBuilder.create()
 				.entity(EntityScabystMinecartHopper.class)
-				.id(new ResourceLocation(Reference.MODID, "scabyst_hopper_minecart"), id)
+				.id(new ResourceLocation(BetweenlandsRedstone.MODID, "scabyst_hopper_minecart"), id)
 				.name("scabyst_hopper_minecart")
 				.tracker(80, 3, true)
 				.build();
@@ -51,7 +51,7 @@ public class ModEntities {
 		ENTITIES.add(SCABYST_MINECART_HOPPER);
 		SCABYST_MINECART_FURNACE = EntityEntryBuilder.create()
 				.entity(EntityScabystMinecartFurnace.class)
-				.id(new ResourceLocation(Reference.MODID, "scabyst_furnace_minecart"), id)
+				.id(new ResourceLocation(BetweenlandsRedstone.MODID, "scabyst_furnace_minecart"), id)
 				.name("scabyst_furnace_minecart")
 				.tracker(80, 3, true)
 				.build();

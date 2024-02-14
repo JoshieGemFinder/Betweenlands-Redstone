@@ -8,15 +8,21 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PlantTonicMessage implements IMessage {
 
-	public static class PlantTonicMessageHandler implements IMessageHandler<PlantTonicMessage, IMessage> {
+	public static class PlantTonicMessageHandler extends SidedMessageHandler<PlantTonicMessage, IMessage> {
 
+		public PlantTonicMessageHandler() {
+			super(Side.CLIENT);
+		}
+
+		@SideOnly(Side.CLIENT)
 		@Override
-		public IMessage onMessage(PlantTonicMessage message, MessageContext ctx) {
+		public IMessage handle(PlantTonicMessage message, MessageContext ctx) {
 			
 			BlockPos pos = message.pos;
 			

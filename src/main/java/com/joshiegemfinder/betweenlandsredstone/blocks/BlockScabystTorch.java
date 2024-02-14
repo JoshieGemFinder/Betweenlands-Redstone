@@ -1,6 +1,8 @@
 package com.joshiegemfinder.betweenlandsredstone.blocks;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import com.joshiegemfinder.betweenlandsredstone.BetweenlandsRedstone;
@@ -11,6 +13,7 @@ import com.joshiegemfinder.betweenlandsredstone.util.ScabystColor;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRedstoneTorch;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,19 +27,38 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.ReflectionHelper.UnableToFindFieldException;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.mobs.EntityStalker;
 
+@SuppressWarnings({ "deprecation", "unchecked" })
 public class BlockScabystTorch extends BlockRedstoneTorch {
-	
+
+    private static final Map<World, List<BlockRedstoneTorch.Toggle>> toggles;
+    
+    static {
+    	Map<World, List<Toggle>> _toggles;
+    	try {
+        	Field togglesField = ReflectionHelper.findField(BlockRedstoneTorch.class, "toggles", "field_150112_b");
+    		_toggles = (Map<World, List<Toggle>>) togglesField.get(BlockRedstoneTorch.class);
+		} catch (IllegalArgumentException | IllegalAccessException | UnableToFindFieldException e) {
+			System.out.println("Error getting redstone torch toggles, using substitute map");
+			e.printStackTrace();
+			_toggles = new java.util.WeakHashMap<World, List<Toggle>>();
+		}
+    	
+    	toggles = _toggles;
+    }
+    
+    
 	private final boolean isOn;
 	
 	public BlockScabystTorch(String name, boolean isOn) {
 		//BlockTorch
 	    super(isOn);
-//	    this.setCreativeTab(null);
-//	    this.setSoundType(SoundType.WOOD);
+	    this.setSoundType(SoundType.WOOD);
 //	    //BlockRedstoneTorch
 	    this.isOn = isOn;
 	    
@@ -96,8 +118,7 @@ public class BlockScabystTorch extends BlockRedstoneTorch {
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
         boolean flag = this.shouldBeOff(worldIn, pos, state);
-        @SuppressWarnings({ "rawtypes", "unchecked" })
-		List<BlockRedstoneTorch.Toggle> list = (List)BlockRedstoneTorch.toggles.get(worldIn);
+		List<BlockRedstoneTorch.Toggle> list = (List<BlockRedstoneTorch.Toggle>)toggles.get(worldIn);
 
         while (list != null && !list.isEmpty() && worldIn.getTotalWorldTime() - (list.get(0)).time > 60L)
         {

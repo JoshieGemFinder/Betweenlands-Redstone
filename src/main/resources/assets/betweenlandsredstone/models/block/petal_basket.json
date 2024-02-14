@@ -1,0 +1,70 @@
+{
+	"parent": "minecraft:block/block",
+	"textures": {
+		"top": "betweenlandsredstone:blocks/petal_basket_top",
+		"side": "betweenlandsredstone:blocks/petal_basket_side",
+		"bottom": "betweenlandsredstone:blocks/petal_basket_bottom",
+		"side_inner": "betweenlandsredstone:blocks/petal_basket_side_inner",
+		"side_bottom": "betweenlandsredstone:blocks/petal_basket_bottom_inner",
+		"particle": "betweenlandsredstone:blocks/petal_basket_side"
+	},
+	"elements": [
+		{
+			"name": "outer_layer",
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "north"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "east"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "south"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "west"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#top"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#bottom", "cullface": "down"}
+			}
+		},
+		{
+			"name": "north_wall",
+			"from": [2, 0, 2],
+			"to": [14, 16, 3],
+			"faces": {
+				"south": {"uv": [2, 0, 14, 16], "texture": "#side_inner"},
+				"up": {"uv": [2, 2, 14, 3], "texture": "#top"}
+			}
+		},
+		{
+			"name": "south_wall",
+			"from": [2, 0, 13],
+			"to": [14, 16, 14],
+			"faces": {
+				"north": {"uv": [2, 0, 14, 16], "texture": "#side_inner"},
+				"up": {"uv": [2, 13, 14, 14], "texture": "#top"}
+			}
+		},
+		{
+			"name": "east_wall",
+			"from": [13, 0, 2],
+			"to": [14, 16, 14],
+			"faces": {
+				"west": {"uv": [2, 0, 14, 16], "texture": "#side_inner"},
+				"up": {"uv": [13, 2, 14, 14], "texture": "#top"}
+			}
+		},
+		{
+			"name": "west_wall",
+			"from": [2, 0, 2],
+			"to": [3, 16, 14],
+			"faces": {
+				"east": {"uv": [2, 0, 14, 16], "texture": "#side_inner"},
+				"up": {"uv": [2, 2, 3, 14], "texture": "#top"}
+			}
+		},
+		{
+			"name": "bottom",
+			"from": [3, 0, 3],
+			"to": [13, 1, 13],
+			"faces": {
+				"up": {"uv": [3, 3, 13, 13], "texture": "#side_bottom"}
+			}
+		}
+	]
+}

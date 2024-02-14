@@ -12,9 +12,15 @@
             "item": "betweenlandsredstone:scabyst_piston"
         },
         "S":
-        {
-            "item": "thebetweenlands:sludge_ball"
-        }
+        [
+            {
+                "item": "thebetweenlands:sludge_ball"
+            },
+            {
+                "type": "forge:ore_dict",
+                "ore": "slimeball"
+            }
+        ]
     },
     "result":
     {

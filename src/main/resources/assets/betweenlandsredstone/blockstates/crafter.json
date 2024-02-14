@@ -1,0 +1,37 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "facing": {
+            "up": {
+                "x": 270
+            },
+            "down": {
+                "x": 90
+            },
+            "north": { },
+            "south": {
+                "y": 180
+            },
+            "east": {
+                "y": 90
+            },
+            "west": {
+                "y": 270
+            }
+        },
+        "state": {
+            "normal": {
+                "model": "betweenlandsredstone:crafter"
+            },
+            "crafting": {
+                "model": "betweenlandsredstone:crafter_crafting"
+            },
+            "triggered": {
+                "model": "betweenlandsredstone:crafter_triggered"
+            },
+            "crafting_triggered": {
+                "model": "betweenlandsredstone:crafter_crafting_triggered"
+            }
+        }
+    }
+}

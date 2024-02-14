@@ -1,0 +1,38 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "TCT",
+        "TLT",
+        "#D#"
+    ],
+	"key":
+    {
+        "#":
+        {
+            "item": "betweenlandsredstone:scabyst_dust"
+        },
+        "C":
+        {
+            "item": "thebetweenlands:weedwood_workbench"
+        },
+        "L":
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemLifeCrystal"
+        },
+        "D":
+        {
+            "item": "betweenlandsredstone:scabyst_dropper"
+        },
+        "T":
+        {
+            "item": "thebetweenlands:betweenstone_tiles"
+        }
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:crafter",
+        "count": 1
+    }
+}

@@ -7,12 +7,16 @@ import java.util.UUID;
 import org.apache.logging.log4j.Logger;
 
 import com.joshiegemfinder.betweenlandsredstone.blocks.TileEntityChestBetweenlandsTrapped;
+import com.joshiegemfinder.betweenlandsredstone.blocks.TileEntityCrafter;
 import com.joshiegemfinder.betweenlandsredstone.blocks.dispenser.TileEntityScabystDispenser;
 import com.joshiegemfinder.betweenlandsredstone.blocks.dispenser.TileEntityScabystDropper;
 import com.joshiegemfinder.betweenlandsredstone.blocks.piston.TileEntityScabystPiston;
 import com.joshiegemfinder.betweenlandsredstone.datafixers.DataFixerConfigDisabledBlocks;
 import com.joshiegemfinder.betweenlandsredstone.datafixers.DataFixerItemFrame;
+import com.joshiegemfinder.betweenlandsredstone.gui.BetweenlandsRedstoneGuiHandler;
+import com.joshiegemfinder.betweenlandsredstone.network.MinecartFacingMessage;
 import com.joshiegemfinder.betweenlandsredstone.network.PlantTonicMessage;
+import com.joshiegemfinder.betweenlandsredstone.network.PlayAttenuatedSoundMessage;
 import com.joshiegemfinder.betweenlandsredstone.proxy.IProxy;
 import com.joshiegemfinder.betweenlandsredstone.util.CropHelper;
 import com.mojang.authlib.GameProfile;
@@ -66,6 +70,11 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.items.wrapper.InvWrapper;
+import net.minecraftforge.oredict.OreDictionary;
 import thebetweenlands.api.block.IFarmablePlant;
 import thebetweenlands.common.BetweenlandsAPI;
 import thebetweenlands.common.block.container.BlockSteepingPot;
@@ -76,6 +85,8 @@ import thebetweenlands.common.entity.projectiles.EntityAngryPebble;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
 import thebetweenlands.common.entity.projectiles.EntitySilkyPebble;
 import thebetweenlands.common.handler.OverworldItemHandler;
+import thebetweenlands.common.inventory.InventorySilkBundle;
+import thebetweenlands.common.inventory.container.ContainerSilkBundle;
 import thebetweenlands.common.item.herblore.ItemDentrothystVial;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -96,7 +107,9 @@ public class BetweenlandsRedstone
 {
 	public static final String MODID = "betweenlandsredstone";
 	public static final String NAME = "Betweenlands Redstone";
-	public static final String VERSION = "1.3.0";
+	public static final String VERSION = "1.4.0";
+	
+	
 	
 	public static Logger logger;
 
@@ -113,7 +126,7 @@ public class BetweenlandsRedstone
 	
 	public static final SimpleNetworkWrapper NETWORK_CHANNEL = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 	
-	private static final GameProfile FAKE_PROFILE = new GameProfile(UUID.randomUUID(), "[BetweenlandsRedstone_Sock]");
+	private static final GameProfile FAKE_PROFILE = new GameProfile(UUID.randomUUID(), "[BetweenlandsRedstone_SockPlayer]");
 	private static FakePlayer fakePlayer;
 	
 	public static FakePlayer getFakePlayer(WorldServer world) {
@@ -139,13 +152,24 @@ public class BetweenlandsRedstone
 		GameRegistry.registerTileEntity(TileEntityScabystDropper.class, new ResourceLocation(MODID, "scabyst_dropper_tileentity"));
 		//named weedwood_chest_trapped instead of weedwood_chest_trapped_tileentity because item renderer
 		GameRegistry.registerTileEntity(TileEntityChestBetweenlandsTrapped.class, new ResourceLocation(MODID, "weedwood_chest_trapped"));
+		if(BLRedstoneConfig.EXTRA_FEATURES.registerCrafter)
+			GameRegistry.registerTileEntity(TileEntityCrafter.class, new ResourceLocation(MODID, "crafter"));
 		
 		proxy.preInit();
+		
+//		if(Loader.isModLoaded("gamestages")) {
+//			new GamestagesCompatibility(this);
+//		}
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{
+
+		BetweenlandsRedstone.NETWORK_CHANNEL.registerMessage(MinecartFacingMessage.MinecartFacingMessageHandler.class, MinecartFacingMessage.class, 0, Side.CLIENT);
+		BetweenlandsRedstone.NETWORK_CHANNEL.registerMessage(PlantTonicMessage.PlantTonicMessageHandler.class, PlantTonicMessage.class, 1, Side.CLIENT);
+		BetweenlandsRedstone.NETWORK_CHANNEL.registerMessage(PlayAttenuatedSoundMessage.PlayAttenuatedSoundMessageHandler.class, PlayAttenuatedSoundMessage.class, 2, Side.CLIENT);
+		
 		CompoundDataFixer fixer = FMLCommonHandler.instance().getDataFixer();
 		TileEntityScabystDispenser.registerFixesScabyst(fixer);
 		TileEntityScabystDropper.registerFixesDropperScabyst(fixer);
@@ -166,6 +190,9 @@ public class BetweenlandsRedstone
 		
 		OverworldItemHandler.ROTTING_WHITELIST.put(new ResourceLocation(MODID, "white_pear_block_whitelist"), stack -> stack.getItem() == ModItems.WHITE_PEAR_BLOCK);
 		
+		BetweenlandsRedstoneGuiHandler guihandler = new BetweenlandsRedstoneGuiHandler();
+		NetworkRegistry.INSTANCE.registerGuiHandler(this, guihandler);
+//		guihandler.re
 		
 		registerDispenserBehaviours();
 		
@@ -527,48 +554,106 @@ public class BetweenlandsRedstone
 		});
 
 		if(BLRedstoneConfig.DISPENSER_BEHAVIOURS.silkBundle)
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.SILK_BUNDLE, new BehaviorDefaultDispenseItem() {
+			BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.SILK_BUNDLE, new BehaviorDispenseOptional() {
+				public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
+				{
+					EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
+					World world = source.getWorld();
+				 	BlockPos steepingPotPos = source.getBlockPos().offset(enumfacing);
+				 	IBlockState steepingPot = world.getBlockState(steepingPotPos);
+				 	if(steepingPot.getBlock() instanceof BlockSteepingPot) {
+				 		TileEntity te = world.getTileEntity(steepingPotPos);
+				 		if(te != null && te instanceof TileEntitySteepingPot) {
+				 			TileEntitySteepingPot tile = (TileEntitySteepingPot)te;
+//				 			if(tile.getStackInSlot(0).isEmpty()) {
+//				 				tile.setInventorySlotContents(0, stack.copy());
+//				 				stack.shrink(1);
+//		 						this.successful = true;
+//				 				return stack;
+//				 			} else {
+//		 						this.successful = false;
+//				 				return stack;
+//				 			}
+				 			
+				 			//srg mappings >:(
+				 			if(tile.func_70301_a(0).isEmpty()) {
+				 				tile.func_70299_a(0, stack.copy());
+				 				stack.shrink(1);
+				 				this.successful = true;
+				 				return stack;
+				 			} else {
+				 				this.successful = false;
+				 				return stack;
+				 			}
+				 		}
+				 	}
+
+					String name = stack.hasDisplayName() ? stack.getDisplayName() : "container.bl.silk_bundle";
+				 	InventorySilkBundle bundleInventory = new InventorySilkBundle(stack, 4, name);
+				 	
+				 	full: {
+//				 		for(int i = 0; i < bundleInventory.getSizeInventory(); ++i) {
+//				 			ItemStack bundleStack = bundleInventory.getStackInSlot(i);
+//				 			if(bundleStack.getCount() < bundleInventory.getInventoryStackLimit()) {
+				 		for(int i = 0; i < bundleInventory.func_70302_i_(); ++i) {
+				 			ItemStack bundleStack = bundleInventory.func_70301_a(i);
+				 			if(bundleStack.getCount() < bundleInventory.func_70297_j_()) {
+				 				break full;
+				 			}
+				 		}
+				 		//bag is full, return
+				 		this.successful = false;
+				 		return stack;
+				 	}
+				 	
+				 	List<EntityItem> bagItems = world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(steepingPotPos), entity -> {
+				 		ItemStack entityStack = entity.getItem();
+				 		if(entityStack.isEmpty() || thebetweenlands.util.InventoryUtils.isDisallowedInInventories(entityStack))
+				 			return false;
+				 		
+				 		for(ItemStack template : ContainerSilkBundle.acceptedItems)
+							if (template.getItem() == entityStack.getItem() && (template.getItemDamage() == entityStack.getItemDamage() || template.getItemDamage() == OreDictionary.WILDCARD_VALUE))
+								return true;
+				 		return false;
+				 	});
+				 	
+				 	if(bagItems.isEmpty()) {
+		 				this.successful = false;
+				 		return stack;
+				 	}
+				 	
+				 	IItemHandler handle = new InvWrapper(bundleInventory);
+
+	 				this.successful = false;
+	 				
+				 	for(EntityItem entityItem : bagItems) {
+				 		ItemStack bagItem = entityItem.getItem();
+				 		int initialCount = bagItem.getCount();
+				 		ItemStack resultStack = ItemHandlerHelper.insertItemStacked(handle, bagItem, false);
+				 		if(resultStack.getCount() < initialCount) {
+			 				this.successful = true;
+				 		}
+				 		entityItem.setItem(resultStack);
+				 	}
+				 	
+				 	return stack;
+//					return behaviourDefaultDispenseItem.dispense(source, stack);
+				}
+			});
+
+		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.BL_NAME_TAG, new BehaviorDefaultDispenseItem() {
 			public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
 			{
 				EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
 				World world = source.getWorld();
-			 	BlockPos steepingPotPos = source.getBlockPos().offset(enumfacing);
-			 	IBlockState steepingPot = world.getBlockState(steepingPotPos);
-			 	if(steepingPot.getBlock() instanceof BlockSteepingPot) {
-			 		TileEntity te = world.getTileEntity(steepingPotPos);
-			 		if(te != null && te instanceof TileEntitySteepingPot) {
-			 			TileEntitySteepingPot tile = (TileEntitySteepingPot)te;
-//			 			if(tile.getStackInSlot(0).isEmpty()) {
-//			 				tile.setInventorySlotContents(0, stack.copy());
-//			 				stack.shrink(1);
-//			 				return stack;
-//			 			} else {
-//			 				return stack;
-//			 			}
-			 			
-			 			//srg mappings >:(
-			 			if(tile.func_70301_a(0).isEmpty()) {
-			 				tile.func_70299_a(0, stack.copy());
-			 				stack.shrink(1);
-			 				return stack;
-			 			} else {
-			 				return stack;
-			 			}
-			 		}
-			 				
-//					if(!dirt.getValue(BlockGenericDugSoil.COMPOSTED)) {
-//						return stack;
-//					}
-//			 		for(EnumFacing dir : EnumFacing.HORIZONTALS) {
-//						if(BlockRegistry.RUBBER_TREE_PLANK_FENCE.canBeConnectedTo(world, fencePos, dir)) {
-//							return stack;
-//						}
-//					}
-//			 		world.setBlockState(fencePos, BlockRegistry.ASPECTRUS_CROP.getDefaultState());
-//			 		stack.shrink(1);
-//			 		return stack;
+			 	BlockPos itemPos = source.getBlockPos().offset(enumfacing);
+			 	List<EntityItem> items = world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(itemPos), entity -> !entity.getItem().isEmpty());
+			 	
+			 	for(EntityItem item : items) {
+			 		item.getItem().setStackDisplayName(stack.getDisplayName());
 			 	}
-				return behaviourDefaultDispenseItem.dispense(source, stack);
+			 	
+			 	return stack;
 			}
 		});
 	}
@@ -585,6 +670,11 @@ public class BetweenlandsRedstone
         if (event.getModID().equals(MODID))
         {
             ConfigManager.sync(MODID, Type.INSTANCE);
+            
+//
+//    		if(Loader.isModLoaded("gamestages")) {
+//    			GamestagesCompatibility.INSTANCE.configChanged();
+//    		}
         }
     }
 }

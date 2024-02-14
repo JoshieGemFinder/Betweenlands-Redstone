@@ -1,6 +1,7 @@
 package com.joshiegemfinder.betweenlandsredstone.handler;
 
 import com.joshiegemfinder.betweenlandsredstone.BLRedstoneConfig;
+import com.joshiegemfinder.betweenlandsredstone.BetweenlandsRedstone;
 import com.joshiegemfinder.betweenlandsredstone.blocks.BlockBLTarget;
 import com.joshiegemfinder.betweenlandsredstone.blocks.BlockSyrmoriteBars;
 
@@ -13,7 +14,7 @@ import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-@EventBusSubscriber
+@EventBusSubscriber(modid = BetweenlandsRedstone.MODID)
 public class ProjectileHandler {
 
 	@SubscribeEvent

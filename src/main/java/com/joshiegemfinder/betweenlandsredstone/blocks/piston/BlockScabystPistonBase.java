@@ -149,68 +149,28 @@ public class BlockScabystPistonBase extends BlockPistonBase {
     {
         Block block = blockStateIn.getBlock();
 
-        if(!worldIn.isRemote) {
-        	//can't push/pull guarded blocks
-	        if(LocationHandler.isProtected(worldIn, null, pos)) {
-	        	return false;
-	        }
+    	//can't push/pull guarded blocks
+        if(LocationHandler.isProtected(worldIn, null, pos)) {
+        	return false;
         }
         
-        if (block == Blocks.OBSIDIAN)
+        if(
+    		worldIn.getWorldBorder().contains(pos) &&
+    		!(pos.getY() >= 0 && (pushDir != EnumFacing.DOWN || pos.getY() != 0)) &&
+    		!(pos.getY() <= worldIn.getHeight() - 1 && (pushDir != EnumFacing.UP || pos.getY() != worldIn.getHeight() - 1))
+		)
         {
-            return false;
-        }
-        else if (!worldIn.getWorldBorder().contains(pos))
-        {
-            return false;
-        }
-        else if (pos.getY() >= 0 && (pushDir != EnumFacing.DOWN || pos.getY() != 0))
-        {
-            if (pos.getY() <= worldIn.getHeight() - 1 && (pushDir != EnumFacing.UP || pos.getY() != worldIn.getHeight() - 1))
+            if (block == ModBlocks.SCABYST_PISTON || block == ModBlocks.SCABYST_STICKY_PISTON)
             {
-                if (block == ModBlocks.SCABYST_PISTON || block == ModBlocks.SCABYST_STICKY_PISTON)
+            	if (((Boolean)blockStateIn.getValue(EXTENDED)).booleanValue())
                 {
-                	if (((Boolean)blockStateIn.getValue(EXTENDED)).booleanValue())
-                    {
-                        return false;
-                    }
+                    return false;
                 }
-                else if (block == Blocks.PISTON || block == Blocks.STICKY_PISTON)
-                {
-                	if (((Boolean)blockStateIn.getValue(BlockPistonBase.EXTENDED)).booleanValue())
-                    {
-                        return false;
-                    }
-                }
-                else {
-                    if (blockStateIn.getBlockHardness(worldIn, pos) == -1.0F)
-                    {
-                        return false;
-                    }
+            }
+        }
 
-                    switch (blockStateIn.getMobilityFlag())
-                    {
-                        case BLOCK:
-                            return false;
-                        case DESTROY:
-                            return destroyBlocks;
-                        case PUSH_ONLY:
-                            return pushDir == blockFace;
-                        default:
-                        	break;
-                    }
-                }
-                return !block.hasTileEntity(blockStateIn);
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return false;
-        }
+        // for compat
+        return BlockPistonBase.canPush(blockStateIn, worldIn, pos, pushDir, destroyBlocks, blockFace);
     }
 
     //necessary

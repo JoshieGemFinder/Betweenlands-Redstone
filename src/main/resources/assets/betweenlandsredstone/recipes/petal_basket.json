@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "S S",
+        "S S",
+        "STS"
+    ],
+	"key":
+    {
+        "S":
+        {
+            "item": "thebetweenlands:thatch_slab"
+        },
+        "T":
+        {
+            "item": "thebetweenlands:items_misc",
+            "data": 6
+        }
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:petal_basket",
+        "count": 1
+    }
+}

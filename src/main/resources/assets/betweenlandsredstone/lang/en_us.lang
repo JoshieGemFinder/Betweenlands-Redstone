@@ -54,6 +54,16 @@ tile.white_pear_block.name=Block of White Pear
 
 tile.syrmorite_bars.name=Syrmorite Bars
 
+tile.scabyst_bulb.name=Scabyst Bulb
+tile.scabyst_bulb.normal.name=Scabyst Bulb
+tile.scabyst_bulb.sludgy.name=Sludgy Scabyst Bulb
+tile.scabyst_bulb.deteriorated.name=Deteriorated Scabyst Bulb
+tile.scabyst_bulb.decayed.name=Decayed Scabyst Bulb
+
+tile.crafter.name=Crafter
+
+tile.petal_basket.name=Petal Basket
+
 #Entities
 entity.scabyst_item_frame.name=Weedwood Item Frame
 
@@ -71,9 +81,12 @@ container.scabyst_dropper=Pitstone Dropper
 config.betweenlandsredstone.general=General
 config.betweenlandsredstone.dispenser_behaviours=Dispenser Behaviours
 config.betweenlandsredstone.extras=Extra Features
+config.betweenlandsredstone.rendering=Rendering
+config.betweenlandsredstone.compatibility=Compatibility
 
 config.betweenlandsredstone.slimeBlocksOnPistons=Slime Blocks stick on Mud Pistons
 config.betweenlandsredstone.disableMortarRecipe=Disable Mortar Recipe
+config.betweenlandsredstone.crafter_stages=Crafter Stages
 
 config.betweenlandsredstone.dispenser.buckets=Betweenlands Buckets
 config.betweenlandsredstone.dispenser.vials=Dentrothyst Vials
@@ -83,10 +96,24 @@ config.betweenlandsredstone.extras.dispenser_hiding=Dispenser Hiding
 config.betweenlandsredstone.extras.register_syrmorite_bars=Register Syrmorite Bars
 config.betweenlandsredstone.extras.register_white_pear_block=Register White Pear Block
 config.betweenlandsredstone.extras.syrmorite_bars_allow_projectiles=Bars Allow Projectiles Through
+config.betweenlandsredstone.extras.register_crafter=Register Crafter
+config.betweenlandsredstone.extras.register_petal_basket=Register Petal Basket
 config.betweenlandsredstone.extras.disable_silently=Disable Silently
+
+config.betweenlandsredstone.rendering.pretty_crafter_textures=Pretty Crafter GUI
 
 #Subtitles
 betweenlandsredstone.subtitle.sap_block.slide=Sliding down a sap block
 
+betweenlandsredstone.subtitle.scabyst_bulb.smear=Scabyst Bulb is smeared
+betweenlandsredstone.subtitle.scabyst_bulb.scrape=Axe scrapes
+betweenlandsredstone.subtitle.scabyst_bulb.turn_on=Scabyst Bulb turns on
+betweenlandsredstone.subtitle.scabyst_bulb.turn_off=Scabyst Bulb turns off
+
+betweenlandsredstone.subtitle.crafter.craft=Crafter crafts
+betweenlandsredstone.subtitle.crafter.fail=Crafter fails crafting
+
 #Tooltips
 tooltip.betweenlandsredstone.bars_allow_projectiles=Allows projectiles to pass through
+tooltip.betweenlandsredstone.petal_basket.0=Holds up to 15 petals.
+tooltip.betweenlandsredstone.petal_basket.1=Can be pushed by pistons.

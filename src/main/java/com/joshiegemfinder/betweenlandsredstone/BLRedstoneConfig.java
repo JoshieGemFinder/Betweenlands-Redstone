@@ -10,6 +10,19 @@ import net.minecraftforge.common.config.Config.RequiresWorldRestart;
 @Config(modid = BetweenlandsRedstone.MODID, category = "")
 public class BLRedstoneConfig {
 	
+	@Name("rendering")
+	@LangKey("config.betweenlandsredstone.rendering")
+	public static final Rendering RENDERING = new Rendering();
+
+	public static class Rendering {
+		@Name("pretty_crafter_textures")
+		@LangKey("config.betweenlandsredstone.rendering.pretty_crafter_textures")
+		@Comment({
+			"Whether or not to use the pretty crafter GUI textures"
+		})
+		public boolean prettyCrafterTextures = true;
+	}
+	
 	@Name("general")
 	@LangKey("config.betweenlandsredstone.general")
 	public static final General GENERAL = new General();
@@ -80,6 +93,31 @@ public class BLRedstoneConfig {
 	}
 	
 
+	@Name("compatibility")
+	@LangKey("config.betweenlandsredstone.compatibility")
+	public static final Compatibility COMPATIBILITY = new Compatibility();
+	
+	public static class Compatibility {
+		
+		@Name("crafter_bypasses_recipe_stages")
+		@LangKey("config.betweenlandsredstone.crafter_bypasses_recipe_stages")
+		@Comment({
+			"Whether or not the crafter will attempt to bypass the \"Recipe Stages\" mod",
+			"This being enabled will invalidate the Crafter Stages option, as it will bypass all stages",
+			"Be aware when this config changes, currently loaded crafters will need to be updated to comply"
+		})
+		public boolean crafterBypassesStages = true;
+		
+
+		@Name("crafter_stages")
+		@LangKey("config.betweenlandsredstone.crafter_stages")
+		@Comment({
+			"What gamestages the crafter will use when searching for recipes",
+			"Be aware when this config changes, currently loaded crafters will need to be updated to comply"
+		})
+		public String[] crafterStages = {};
+	}
+	
 	
 	@Name("extras")
 	@LangKey("config.betweenlandsredstone.extras")
@@ -125,5 +163,27 @@ public class BLRedstoneConfig {
 			"Disabling this may cause warnings in game logs"
 		})
 		public boolean registerWhitePearBlock = true;
+
+
+		@RequiresMcRestart
+		@Name("register_crafter")
+		@LangKey("config.betweenlandsredstone.extras.register_crafter")
+		@Comment({
+			"Whether or not the crafter will be registered",
+			"May be useful for modpacks where the crafter could otherwise break progression",
+			"NOTE: There are options in Compatibility for better gamestage control over the crafter",
+			"Disabling this may cause warnings in game logs"
+		})
+		public boolean registerCrafter = true;
+
+		@RequiresMcRestart
+		@Name("register_petal_basket")
+		@LangKey("config.betweenlandsredstone.extras.register_petal_basket")
+		@Comment({
+			"Whether or not the petal basket will be registered",
+			"Note the petal basket does serve an actual functional purpose: having a comparator output, hopper interaction and being movable by pistons",
+			"Disabling this may cause warnings in game logs"
+		})
+		public boolean registerPetalBasket = true;
 	}
 }

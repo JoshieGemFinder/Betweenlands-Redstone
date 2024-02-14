@@ -3,64 +3,115 @@
 		"category": "block",
 		"subtitle": "subtitles.block.generic.break",
 		"sounds": [ 
-			"betweenlandsredstone:break1",
-			"betweenlandsredstone:break2",
-			"betweenlandsredstone:break3",
-			"betweenlandsredstone:break4",
-			"betweenlandsredstone:break5"
+			"betweenlandsredstone:sap/break1",
+			"betweenlandsredstone:sap/break2",
+			"betweenlandsredstone:sap/break3",
+			"betweenlandsredstone:sap/break4",
+			"betweenlandsredstone:sap/break5"
 		]
 	},
 	"block.sap_block.fall": {
 		"category": "block",
 		"sounds": [ 
-			"betweenlandsredstone:step1",
-			"betweenlandsredstone:step2",
-			"betweenlandsredstone:step3",
-			"betweenlandsredstone:step4",
-			"betweenlandsredstone:step5"
+			"betweenlandsredstone:sap/step1",
+			"betweenlandsredstone:sap/step2",
+			"betweenlandsredstone:sap/step3",
+			"betweenlandsredstone:sap/step4",
+			"betweenlandsredstone:sap/step5"
 		]
 	},
 	"block.sap_block.hit": {
 		"category": "block",
 		"subtitle": "subtitles.block.generic.hit",
 		"sounds": [ 
-			"betweenlandsredstone:step1",
-			"betweenlandsredstone:step2",
-			"betweenlandsredstone:step3",
-			"betweenlandsredstone:step4",
-			"betweenlandsredstone:step5"
+			"betweenlandsredstone:sap/step1",
+			"betweenlandsredstone:sap/step2",
+			"betweenlandsredstone:sap/step3",
+			"betweenlandsredstone:sap/step4",
+			"betweenlandsredstone:sap/step5"
 		]
 	},
 	"block.sap_block.place": {
 		"category": "block",
 		"subtitle": "subtitles.block.generic.place",
 		"sounds": [ 
-			"betweenlandsredstone:break1",
-			"betweenlandsredstone:break2",
-			"betweenlandsredstone:break3",
-			"betweenlandsredstone:break4",
-			"betweenlandsredstone:break5"
+			"betweenlandsredstone:sap/break1",
+			"betweenlandsredstone:sap/break2",
+			"betweenlandsredstone:sap/break3",
+			"betweenlandsredstone:sap/break4",
+			"betweenlandsredstone:sap/break5"
 		]
 	},
 	"block.sap_block.step": {
 		"category": "block",
 		"subtitle": "subtitles.block.generic.footsteps",
 		"sounds": [ 
-			"betweenlandsredstone:step1",
-			"betweenlandsredstone:step2",
-			"betweenlandsredstone:step3",
-			"betweenlandsredstone:step4",
-			"betweenlandsredstone:step5"
+			"betweenlandsredstone:sap/step1",
+			"betweenlandsredstone:sap/step2",
+			"betweenlandsredstone:sap/step3",
+			"betweenlandsredstone:sap/step4",
+			"betweenlandsredstone:sap/step5"
 		]
 	},
 	"block.sap_block.slide": {
 		"category": "block",
 		"subtitle": "betweenlandsredstone.subtitle.sap_block.slide",
 		"sounds": [ 
-			"betweenlandsredstone:slide1",
-			"betweenlandsredstone:slide2",
-			"betweenlandsredstone:slide3",
-			"betweenlandsredstone:slide4"
+			"betweenlandsredstone:sap/slide1",
+			"betweenlandsredstone:sap/slide2",
+			"betweenlandsredstone:sap/slide3",
+			"betweenlandsredstone:sap/slide4"
+		]
+	},
+    
+    
+	"block.scabyst_bulb.smear": {
+		"category": "block",
+		"subtitle": "betweenlandsredstone.subtitle.scabyst_bulb.smear",
+        "__comment": "Reusing this sound because it just fits",
+		"sounds": [ 
+			"betweenlandsredstone:sap/slide1",
+			"betweenlandsredstone:sap/slide2",
+			"betweenlandsredstone:sap/slide3",
+			"betweenlandsredstone:sap/slide4"
+		]
+	},
+	"block.scabyst_bulb.scrape": {
+		"category": "block",
+		"subtitle": "betweenlandsredstone.subtitle.scabyst_bulb.scrape",
+		"sounds": [ 
+			"betweenlandsredstone:bulb/scrape"
+		]
+	},
+	"block.scabyst_bulb.turn_on": {
+		"category": "block",
+		"subtitle": "betweenlandsredstone.subtitle.scabyst_bulb.turn_on",
+		"sounds": [ 
+			"betweenlandsredstone:bulb/turn_on"
+		]
+	},
+	"block.scabyst_bulb.turn_off": {
+		"category": "block",
+		"subtitle": "betweenlandsredstone.subtitle.scabyst_bulb.turn_off",
+		"sounds": [ 
+			"betweenlandsredstone:bulb/turn_off"
+		]
+	},
+    
+    
+    
+	"block.crafter.craft": {
+		"category": "block",
+		"subtitle": "betweenlandsredstone.subtitle.crafter.craft",
+		"sounds": [ 
+			"betweenlandsredstone:crafter/craft"
+		]
+	},
+	"block.crafter.fail": {
+		"category": "block",
+		"subtitle": "betweenlandsredstone.subtitle.crafter.fail",
+		"sounds": [ 
+			"betweenlandsredstone:crafter/fail"
 		]
 	}
 }

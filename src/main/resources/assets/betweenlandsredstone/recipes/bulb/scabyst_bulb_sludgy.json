@@ -1,0 +1,32 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        " M ",
+        "MEM",
+        " S "
+    ],
+	"key":
+    {
+        "S":
+        {
+            "item": "betweenlandsredstone:scabyst_dust"
+        },
+        "M": 
+        {
+            "item": "thebetweenlands:mud_bricks_carved",
+            "data": 10
+        },
+        "E": 
+        {
+            "item": "thebetweenlands:items_misc",
+            "data": 45
+        }
+    },
+    "result":
+    {
+        "item": "betweenlandsredstone:scabyst_bulb",
+        "data": 1,
+        "count": 4
+    }
+}

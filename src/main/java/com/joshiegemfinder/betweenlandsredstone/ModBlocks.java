@@ -5,20 +5,23 @@ import java.util.List;
 
 import com.joshiegemfinder.betweenlandsredstone.blocks.BlockBLTarget;
 import com.joshiegemfinder.betweenlandsredstone.blocks.BlockChestBetweenlandsTrapped;
+import com.joshiegemfinder.betweenlandsredstone.blocks.BlockCrafter;
 import com.joshiegemfinder.betweenlandsredstone.blocks.BlockRiftDetector;
 import com.joshiegemfinder.betweenlandsredstone.blocks.BlockScabyst;
+import com.joshiegemfinder.betweenlandsredstone.blocks.BlockScabystBulb;
 import com.joshiegemfinder.betweenlandsredstone.blocks.BlockScabystLight;
 import com.joshiegemfinder.betweenlandsredstone.blocks.BlockScabystObserver;
 import com.joshiegemfinder.betweenlandsredstone.blocks.BlockScabystTorch;
 import com.joshiegemfinder.betweenlandsredstone.blocks.BlockScabystWire;
 import com.joshiegemfinder.betweenlandsredstone.blocks.BlockSyrmoriteBars;
-import com.joshiegemfinder.betweenlandsredstone.blocks.deco.BlockCutPitstone;
-import com.joshiegemfinder.betweenlandsredstone.blocks.deco.BlockPolishedPitstone;
-import com.joshiegemfinder.betweenlandsredstone.blocks.deco.BlockWhitePear;
 import com.joshiegemfinder.betweenlandsredstone.blocks.diode.BlockScabystComparator;
 import com.joshiegemfinder.betweenlandsredstone.blocks.diode.BlockScabystRepeater;
 import com.joshiegemfinder.betweenlandsredstone.blocks.dispenser.BlockScabystDispenser;
 import com.joshiegemfinder.betweenlandsredstone.blocks.dispenser.BlockScabystDropper;
+import com.joshiegemfinder.betweenlandsredstone.blocks.extra.BlockCutPitstone;
+import com.joshiegemfinder.betweenlandsredstone.blocks.extra.BlockPetalBasket;
+import com.joshiegemfinder.betweenlandsredstone.blocks.extra.BlockPolishedPitstone;
+import com.joshiegemfinder.betweenlandsredstone.blocks.extra.BlockWhitePear;
 import com.joshiegemfinder.betweenlandsredstone.blocks.piston.BlockScabystPistonBase;
 import com.joshiegemfinder.betweenlandsredstone.blocks.piston.BlockScabystPistonExtension;
 import com.joshiegemfinder.betweenlandsredstone.blocks.piston.BlockScabystPistonMoving;
@@ -85,6 +88,11 @@ public class ModBlocks {
 	public static BlockWhitePear WHITE_PEAR_BLOCK;
 	
 	public static BlockSyrmoriteBars SYRMORITE_BARS;
+
+	public static BlockScabystBulb SCABYST_BULB;
+	public static BlockCrafter CRAFTER;
+
+	public static BlockPetalBasket PETAL_BASKET;
 	
 	public static Block addBlockToRegistry(Block block, String name) {
 		block.setUnlocalizedName(name);
@@ -162,6 +170,11 @@ public class ModBlocks {
 		POLISHED_PITSTONE = new BlockPolishedPitstone("polished_pitstone");
 		CUT_PITSTONE = new BlockCutPitstone("cut_pitstone");
 		
+		
+		SCABYST_BULB = new BlockScabystBulb(Material.IRON);
+		addBlockToRegistry(SCABYST_BULB, "scabyst_bulb");
+		
+		
 		if(BLRedstoneConfig.EXTRA_FEATURES.registerWhitePearBlock) {
 			WHITE_PEAR_BLOCK = new BlockWhitePear("white_pear_block");
 		}
@@ -169,6 +182,16 @@ public class ModBlocks {
 		if(BLRedstoneConfig.EXTRA_FEATURES.registerSyrmoriteBars) {
 			SYRMORITE_BARS = new BlockSyrmoriteBars(Material.IRON, true);
 			addBlockToRegistry(SYRMORITE_BARS, "syrmorite_bars");
+		}
+
+		if(BLRedstoneConfig.EXTRA_FEATURES.registerCrafter) {
+			CRAFTER = new BlockCrafter(Material.ROCK);
+			addBlockToRegistry(CRAFTER, "crafter");
+		}
+
+		if(BLRedstoneConfig.EXTRA_FEATURES.registerPetalBasket) {
+			PETAL_BASKET = new BlockPetalBasket(Material.CLOTH);
+			addBlockToRegistry(PETAL_BASKET, "petal_basket");
 		}
 	}
 }

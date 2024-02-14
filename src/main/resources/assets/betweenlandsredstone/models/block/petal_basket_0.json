@@ -1,0 +1,6 @@
+{
+	"parent": "betweenlandsredstone:block/block",
+	"textures": {
+		"petals": "betweenlandsredstone:blocks/petal_basket_petals"
+	}
+}

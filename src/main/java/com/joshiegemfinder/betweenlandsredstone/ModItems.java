@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import com.joshiegemfinder.betweenlandsredstone.entity.minecart.EntityScabystMinecart;
 import com.joshiegemfinder.betweenlandsredstone.items.ItemBlockBase;
 import com.joshiegemfinder.betweenlandsredstone.items.ItemFoodBlock;
+import com.joshiegemfinder.betweenlandsredstone.items.ItemScabystBulb;
 import com.joshiegemfinder.betweenlandsredstone.items.ItemScabystDust;
 import com.joshiegemfinder.betweenlandsredstone.items.ItemScabystMinecart;
 import com.joshiegemfinder.betweenlandsredstone.util.ModelRegisterer;
@@ -15,6 +16,7 @@ import com.joshiegemfinder.betweenlandsredstone.util.ModelRegisterer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlockSpecial;
+import net.minecraftforge.oredict.OreDictionary;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ModItems {
@@ -63,6 +65,11 @@ public class ModItems {
     public static Item WHITE_PEAR_BLOCK;
 
     public static Item SYRMORITE_BARS;
+
+    public static Item SCABYST_BULB;
+    public static Item CRAFTER;
+
+    public static Item PETAL_BASKET;
 
     public static void addItemToRegistry(Item item, String name, @Nullable ModelRegisterer registerModel) {
     	BetweenlandsRedstone.proxy.addItemToRegistry(item, name, registerModel);
@@ -124,6 +131,21 @@ public class ModItems {
 		if(BLRedstoneConfig.EXTRA_FEATURES.registerSyrmoriteBars) {
 	    	SYRMORITE_BARS = new ItemBlockBase(ModBlocks.SYRMORITE_BARS, "syrmorite_bars");
 		}
+
+		SCABYST_BULB = new ItemScabystBulb(ModBlocks.SCABYST_BULB, "scabyst_bulb");
+		CRAFTER = new ItemBlockBase(ModBlocks.CRAFTER, "crafter");
+		
+		PETAL_BASKET = new ItemBlockBase(ModBlocks.PETAL_BASKET, "petal_basket");
     }
     
+    public static void registerOreDict() {
+    	//adding dustRedstone causes the vanilla redstone block recipe to take precedence over this modded one
+//    	OreDictionary.registerOre("dustRedstone", SCABYST_DUST);
+//    	OreDictionary.registerOre("blockRedstone", SCABYST_BLOCK);
+
+    	OreDictionary.registerOre("blockSlime", SCABYST_SLIME_1);
+
+    	OreDictionary.registerOre("chest", CHEST_TRAPPED);
+    	OreDictionary.registerOre("chestTrapped", CHEST_TRAPPED);
+    }
 }

@@ -65,17 +65,17 @@ public class BlockScabystRepeater extends BlockRedstoneRepeater {
         EnumFacing enumfacing = (EnumFacing)poweredState.getValue(FACING);
         return ModBlocks.UNPOWERED_SCABYST_REPEATER.getDefaultState().withProperty(FACING, enumfacing).withProperty(DELAY, integer).withProperty(LOCKED, obool);
     }
-
+  	
   	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
   		return ModItems.SCABYST_REPEATER;
   	}
   	
 	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
-		 return new ItemStack(this);
+		 return new ItemStack(ModItems.SCABYST_REPEATER);
 	}
 	
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-		 return new ItemStack(this);
+		 return new ItemStack(ModItems.SCABYST_REPEATER);
 	}
 	
 	@Override

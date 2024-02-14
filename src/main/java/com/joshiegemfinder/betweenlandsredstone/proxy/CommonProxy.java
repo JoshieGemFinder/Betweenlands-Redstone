@@ -9,13 +9,16 @@ import com.joshiegemfinder.betweenlandsredstone.util.ModelRegisterer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 
 public class CommonProxy implements IProxy {
 
 	@Override
-	public void registerItemRenderer(Item item, int meta, String id) {
-		
-	}
+	public void registerItemRenderer(Item item, int meta, ResourceLocation location, String id) {}
+	
+	@Override
+	public void registerItemRenderer(Item item, int meta, String id) {}
 
 	@Override
 	public void preInit() {
@@ -49,5 +52,8 @@ public class CommonProxy implements IProxy {
 		
 		item.setCreativeTab(CreativeTabs.REDSTONE);
 	}
+
+	@Override
+	public void playAttenuatedSound(float xPosF, float yPosF, float zPosF, SoundEvent soundEvent, SoundCategory category, float volume, float pitch, float attenuationDistance) {}
 	
 }

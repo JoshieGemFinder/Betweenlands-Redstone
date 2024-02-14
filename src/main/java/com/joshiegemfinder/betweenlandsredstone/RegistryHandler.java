@@ -21,6 +21,7 @@ public class RegistryHandler {
     public static void onItemRegister(RegistryEvent.Register<Item> event) {
     	BetweenlandsRedstone.logger.info("Registering Items!");
     	event.getRegistry().registerAll(ModItems.ITEMS.toArray(new Item[0]));
+    	ModItems.registerOreDict();
     }
     
     @SubscribeEvent
