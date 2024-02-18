@@ -313,32 +313,38 @@ public class BetweenlandsRedstone
 			BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.BL_BUCKET, new IBehaviorDispenseItem() {
 				@Override
 				public ItemStack dispense(IBlockSource source, ItemStack stack) {
-	
-			        if (FluidUtil.getFluidContained(stack) != null) {
-						EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
-						World world = source.getWorld();
-						BlockPos fillPos = source.getBlockPos().offset(enumfacing);
-						IFluidHandler fluidHandler = FluidUtil.getFluidHandler(world, fillPos, enumfacing.getOpposite());
-						if(fluidHandler != null && !(fluidHandler instanceof BlockLiquidWrapper)) {
-							net.minecraftforge.fluids.FluidActionResult actionResult = FluidUtil.tryEmptyContainer(stack, fluidHandler, Fluid.BUCKET_VOLUME, null, true);
-							if(actionResult.isSuccess()) {
-								ItemStack drainedStack = actionResult.getResult();
-								//so we don't play the sound multiple times if this fails
-						        source.getWorld().playEvent(1000, source.getBlockPos(), 0); //playDispenseSound
-						        EnumFacing facing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING); // getWorldEventDataFrom
-						        source.getWorld().playEvent(2000, source.getBlockPos(), facing.getFrontOffsetX() + 1 + (facing.getFrontOffsetZ() + 1) * 3); // spawnDispenseParticles
-								if(stack.getCount() == 1) {
-									return drainedStack;
-								} 
-								else if (!drainedStack.isEmpty() && ((TileEntityDispenser)source.getBlockTileEntity()).addItemStack(drainedStack) < 0)
-					            {
-									behaviourDefaultDispenseItem.dispense(source, drainedStack);
-					            }
-	
-					            ItemStack stackCopy = stack.copy();
-					            stackCopy.shrink(1);
-					            return stackCopy;
-							}
+
+					EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
+					World world = source.getWorld();
+					BlockPos fillPos = source.getBlockPos().offset(enumfacing);
+					IFluidHandler fluidHandler = FluidUtil.getFluidHandler(world, fillPos, enumfacing.getOpposite());
+
+					if(fluidHandler != null && !(fluidHandler instanceof BlockLiquidWrapper)) {
+						net.minecraftforge.fluids.FluidActionResult actionResult;
+						if (FluidUtil.getFluidContained(stack) != null) {
+							actionResult = FluidUtil.tryEmptyContainer(stack, fluidHandler, Fluid.BUCKET_VOLUME, null, true);
+						} else {
+							actionResult = FluidUtil.tryFillContainer(stack, fluidHandler, Fluid.BUCKET_VOLUME, null, true);
+						}
+						
+						
+						if(actionResult.isSuccess()) {
+							ItemStack modifiedStack = actionResult.getResult();
+							//so we don't play the sound multiple times if this fails
+					        source.getWorld().playEvent(1000, source.getBlockPos(), 0); //playDispenseSound
+					        EnumFacing facing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING); // getWorldEventDataFrom
+					        source.getWorld().playEvent(2000, source.getBlockPos(), facing.getFrontOffsetX() + 1 + (facing.getFrontOffsetZ() + 1) * 3); // spawnDispenseParticles
+							if(stack.getCount() == 1) {
+								return modifiedStack;
+							} 
+							else if (!modifiedStack.isEmpty() && ((TileEntityDispenser)source.getBlockTileEntity()).addItemStack(modifiedStack) < 0)
+				            {
+								behaviourDefaultDispenseItem.dispense(source, modifiedStack);
+				            }
+
+				            ItemStack stackCopy = stack.copy();
+				            stackCopy.shrink(1);
+				            return stackCopy;
 						}
 			        }
 			        
@@ -652,6 +658,7 @@ public class BetweenlandsRedstone
 			 	for(EntityItem item : items) {
 			 		item.getItem().setStackDisplayName(stack.getDisplayName());
 			 	}
+			 	
 			 	
 			 	return stack;
 			}

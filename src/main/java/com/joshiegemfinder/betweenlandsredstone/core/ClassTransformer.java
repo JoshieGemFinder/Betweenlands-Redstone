@@ -43,7 +43,7 @@ public abstract class ClassTransformer implements IClassTransformer {
 		classReader.accept(classNode, 0);
 		final boolean successful = this.transformClass(classNode, name, transformedName, classBytes);
 		
-		System.out.println("Transform successful? " + String.valueOf(successful));
+//		System.out.println("Transform successful? " + String.valueOf(successful));
 		if(!successful) {
 			return classBytes;
 		}
