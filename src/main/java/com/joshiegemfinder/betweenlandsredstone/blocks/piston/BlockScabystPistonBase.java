@@ -156,8 +156,8 @@ public class BlockScabystPistonBase extends BlockPistonBase {
         
         if(
     		worldIn.getWorldBorder().contains(pos) &&
-    		!(pos.getY() >= 0 && (pushDir != EnumFacing.DOWN || pos.getY() != 0)) &&
-    		!(pos.getY() <= worldIn.getHeight() - 1 && (pushDir != EnumFacing.UP || pos.getY() != worldIn.getHeight() - 1))
+    		(pos.getY() >= 0 && (pushDir != EnumFacing.DOWN || pos.getY() != 0)) &&
+    		(pos.getY() <= worldIn.getHeight() - 1 && (pushDir != EnumFacing.UP || pos.getY() != worldIn.getHeight() - 1))
 		)
         {
             if (block == ModBlocks.SCABYST_PISTON || block == ModBlocks.SCABYST_STICKY_PISTON)
@@ -166,6 +166,7 @@ public class BlockScabystPistonBase extends BlockPistonBase {
                 {
                     return false;
                 }
+            	return !block.hasTileEntity(blockStateIn);
             }
         }
 
