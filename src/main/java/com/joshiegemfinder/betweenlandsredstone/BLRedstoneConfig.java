@@ -116,6 +116,15 @@ public class BLRedstoneConfig {
 			"Be aware when this config changes, currently loaded crafters will need to be updated to comply"
 		})
 		public String[] crafterStages = {};
+
+		@Name("crafter_uses_player_stages")
+		@LangKey("config.betweenlandsredstone.crafter_uses_player_stages")
+		@Comment({
+			"Whether or not the crafter will attempt to use player gamestages",
+			"Every time a player opens the Crafter's inventory, all of their gamestages will be copied to the crafter. It will not keep up-to-date if players get/lose stages without them opening it.",
+			"If crafterBypassesStages is on, this will be mostly ignored"
+		})
+		public boolean crafterUsesPlayerStages = false;
 	}
 	
 	

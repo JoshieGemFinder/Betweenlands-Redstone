@@ -1,16 +1,14 @@
 package com.joshiegemfinder.betweenlandsredstone.blocks;
 
-import java.lang.reflect.Field;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.PriorityQueue;
+import java.util.Set;
 
-import com.joshiegemfinder.betweenlandsredstone.BLRedstoneConfig;
-import com.joshiegemfinder.betweenlandsredstone.BetweenlandsRedstone;
-import com.joshiegemfinder.betweenlandsredstone.ModSounds;
+import com.joshiegemfinder.betweenlandsredstone.compat.GameStagesCompat;
 import com.joshiegemfinder.betweenlandsredstone.gui.ContainerCrafter;
 import com.joshiegemfinder.betweenlandsredstone.gui.InventoryCrafter;
 import com.joshiegemfinder.betweenlandsredstone.gui.InventoryCrafterResult;
-import com.joshiegemfinder.betweenlandsredstone.network.PlayAttenuatedSoundMessage;
 import com.joshiegemfinder.betweenlandsredstone.util.InventoryUtils;
 
 import net.minecraft.block.BlockDirectional;
@@ -23,20 +21,22 @@ import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -115,7 +115,7 @@ public class TileEntityCrafter extends TileEntity implements ISidedInventory, ne
 				}
 				
 				int amountToInsert = maxAvailableSpace - secondAvailableSpace;
-				BetweenlandsRedstone.logger.info("max: {} ({}, {}) second: {} ({}, {}) diff: {}", maxAvailableSpaceSlot, maxAvailableSpace, maxSlot, secondAvailableSpaceSlot, secondAvailableSpace, secondMaxSlot, amountToInsert);
+//				BetweenlandsRedstone.logger.info("max: {} ({}, {}) second: {} ({}, {}) diff: {}", maxAvailableSpaceSlot, maxAvailableSpace, maxSlot, secondAvailableSpaceSlot, secondAvailableSpace, secondMaxSlot, amountToInsert);
 				if(amountToInsert == 0) {
 					amountToInsert = 1;
 				}
@@ -126,7 +126,7 @@ public class TileEntityCrafter extends TileEntity implements ISidedInventory, ne
 				if(stack.getCount() <= amountToInsert) {
 					amountToInsert = stack.getCount();
 				}
-				BetweenlandsRedstone.logger.info("adjusted count: {}", amountToInsert);
+//				BetweenlandsRedstone.logger.info("adjusted count: {}", amountToInsert);
 
 				if(stackExisting.isEmpty()) {
 					stackExisting = ItemHandlerHelper.copyStackWithSize(stack, amountToInsert);
@@ -206,6 +206,8 @@ public class TileEntityCrafter extends TileEntity implements ISidedInventory, ne
     private boolean hasRecipe = false;
     private IRecipe currentRecipe = null;
 
+    // Gamestages compat
+    public Set<String> crafterStages = new HashSet<String>();
     
 	public TileEntityCrafter() {
 		this.craftMatrix = new InventoryCrafter(this);
@@ -235,63 +237,13 @@ public class TileEntityCrafter extends TileEntity implements ISidedInventory, ne
 			this.world.updateComparatorOutputLevel(pos, this.blockType);
 		}
 	}
-
-	private static Field recipeField = null;
-	private static Field tierField = null;
 	
-	protected boolean canBypass(IRecipe recipe) {
-		if(BLRedstoneConfig.COMPATIBILITY.crafterBypassesStages)
-			return true;
-		
-		if(!recipe.getClass().getTypeName().equals("com.blamejared.recipestages.recipes.RecipeStage"))
-			return false;
-		
-		try {
-			if(tierField == null) {
-					tierField = recipe.getClass().getDeclaredField("tier");
-			}
-			tierField.setAccessible(true);
-			
-			String tier = (String) tierField.get(recipe);
-	
-			for(int i = 0; i < BLRedstoneConfig.COMPATIBILITY.crafterStages.length; ++i) {
-				if(tier.equalsIgnoreCase(BLRedstoneConfig.COMPATIBILITY.crafterStages[i])) {
-					return true;
-				}
-			}
-		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-			// no-op
-		}
-		return false;
-	}
-	
-	protected IRecipe tryToBypassRecipeStagesIfInstalledAndAlsoConfigOptionIsEnabled(IRecipe recipe) {
-		if(!(BLRedstoneConfig.COMPATIBILITY.crafterBypassesStages || BLRedstoneConfig.COMPATIBILITY.crafterStages.length > 0) || !Loader.isModLoaded("recipestages")) {
-			return null;
+	protected IRecipe getRecipeBypass(IRecipe recipe) {
+		if(Loader.isModLoaded("gamestages")) {
+			return GameStagesCompat.getCrafterRecipeBypass(recipe, this);
 		}
 		
-		if(recipe.getClass().getTypeName().equals("com.blamejared.recipestages.recipes.RecipeStage")) {
-			try {
-				if(recipeField == null) {
-						recipeField = recipe.getClass().getDeclaredField("recipe");
-				}
-				recipeField.setAccessible(true);
-				do {
-					if(canBypass(recipe)) {
-						recipe = (IRecipe) recipeField.get(recipe);
-					} else {
-						return null;
-					}
-				}
-				while(recipe.getClass().getTypeName().equals("com.blamejared.recipestages.recipes.RecipeStage"));
-				
-				return recipe;
-			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException  e) {
-				return null;
-			}
-		}
-		
-		return null;
+		return recipe;
 	}
 	
 	public void onCraftMatrixChanged() {
@@ -307,7 +259,7 @@ public class TileEntityCrafter extends TileEntity implements ISidedInventory, ne
 		if(recipe != null) {
 			ItemStack craftingStack = recipe.getCraftingResult(this.craftMatrix);
 			if(craftingStack.isEmpty()) {
-				IRecipe potentialRecipe = this.tryToBypassRecipeStagesIfInstalledAndAlsoConfigOptionIsEnabled(recipe);
+				IRecipe potentialRecipe = this.getRecipeBypass(recipe);
 				if(potentialRecipe != null) {
 					recipe = potentialRecipe;
 					craftingStack = potentialRecipe.getCraftingResult(this.craftMatrix);
@@ -332,18 +284,20 @@ public class TileEntityCrafter extends TileEntity implements ISidedInventory, ne
 	
 	public void tryToCraft() {
 		if(!this.hasRecipe) {
-			BetweenlandsRedstone.NETWORK_CHANNEL.sendToAllAround(new PlayAttenuatedSoundMessage(pos, ModSounds.BLOCK_CRAFTER_FAIL, SoundCategory.BLOCKS, 1.0F, 1.0F, 3), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 6));
+//			BetweenlandsRedstone.NETWORK_CHANNEL.sendToAllAround(new PlayAttenuatedSoundMessage(pos, ModSounds.BLOCK_CRAFTER_FAIL, SoundCategory.BLOCKS, 1.0F, 1.0F, 3), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 6));
+			this.world.addBlockEvent(this.pos, this.getBlockType(), 51, 0);
 		} else if(!this.isCrafting || this.craftingTicksRemaining <= 2) {
-			BetweenlandsRedstone.NETWORK_CHANNEL.sendToAllAround(new PlayAttenuatedSoundMessage(pos, ModSounds.BLOCK_CRAFTER_SUCCEED, SoundCategory.BLOCKS, 1.0F, 1.0F, 5), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
-
+//			BetweenlandsRedstone.NETWORK_CHANNEL.sendToAllAround(new PlayAttenuatedSoundMessage(pos, ModSounds.BLOCK_CRAFTER_SUCCEED, SoundCategory.BLOCKS, 1.0F, 1.0F, 5), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+			this.world.addBlockEvent(this.pos, this.getBlockType(), 51, 1);
+			
 			EnumFacing dispenseFacing = world.getBlockState(pos).getValue(BlockDirectional.FACING);
 			
-//			boolean playEjectParticles = false
+			boolean playEjectParticles = false;
 			
-//			if(
-				InventoryUtils.ejectItem(this.world, this.pos, dispenseFacing, this.resultStack, DISPENSE_SPEED);
-//			)
-//				playEjectParticles = true;
+			if(
+				InventoryUtils.ejectItem(this.world, this.pos, dispenseFacing, this.resultStack, DISPENSE_SPEED)
+			)
+				playEjectParticles = true;
 
 			NonNullList<ItemStack> updatedMatrix = this.currentRecipe.getRemainingItems(this.craftMatrix);
 			for(int i = 0; i < 9; ++i) { // treats it like it was only done once, will return ItemStack.EMPTY if one of the items was used up
@@ -356,10 +310,10 @@ public class TileEntityCrafter extends TileEntity implements ISidedInventory, ne
 					if(currentStackInSlot.isEmpty()) {
 						slots.set(i, resultStackInSlot);
 					} else if(!resultStackInSlot.isEmpty()) {
-//						boolean ejected = 
+						boolean ejected = 
 								InventoryUtils.ejectItem(this.world, this.pos, dispenseFacing, resultStackInSlot, DISPENSE_SPEED);
-//						if(ejected)
-//							playEjectParticles = true;
+						if(ejected)
+							playEjectParticles = true;
 					}
 				}
 			}
@@ -371,11 +325,10 @@ public class TileEntityCrafter extends TileEntity implements ISidedInventory, ne
 			this.craftingTicksRemaining = 6;
 			this.world.setBlockState(pos, newState, 3);
 			
-			// TODO particles will wait till after the beta
-			// since we don't have particle code from the snapshots
-//			if(playEjectParticles && !world.isRemote) {
+			if(playEjectParticles && !world.isRemote) {
+				this.world.addBlockEvent(pos, this.getBlockType(), 9002, 0);
 //                this.world.getMinecraftServer().getPlayerList().sendToAllNearExcept((EntityPlayer)null, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), 64.0D, this.world.provider.getDimension(), new SPacketBlockAction(pos, this.getBlockType(), 9002, 0));
-//			}
+			}
 			
 			this.onCraftMatrixChanged();
 			this.markDirty();
@@ -414,6 +367,14 @@ public class TileEntityCrafter extends TileEntity implements ISidedInventory, ne
 		
 		compound.setByte("craftingTicksRemaining", (byte) this.craftingTicksRemaining);
 		compound.setBoolean("triggered", this.triggered);
+		
+		if(crafterStages.size() > 0) {
+			NBTTagList list = new NBTTagList();
+			for(String str : crafterStages) {
+				list.appendTag(new NBTTagString(str));
+			}
+			compound.setTag("CrafterStages", list);
+		}
 		
 		return compound;
 	}
@@ -456,6 +417,16 @@ public class TileEntityCrafter extends TileEntity implements ISidedInventory, ne
 
 		tag.setBoolean("triggered", triggered);
 		tag.setBoolean("isCrafting", isCrafting);
+		
+		if(tag.hasKey("CrafterStages", NBT.TAG_LIST)) {
+			crafterStages.clear();
+			NBTTagList list = tag.getTagList("CrafterStages", NBT.TAG_STRING);
+			for(NBTBase stage : list) {
+				if(stage != null && stage instanceof NBTTagString) {
+					crafterStages.add(((NBTTagString)stage).getString());
+				}
+			}
+		}
 		
 		return tag;
 	}
@@ -598,8 +569,9 @@ public class TileEntityCrafter extends TileEntity implements ISidedInventory, ne
 
 	@Override
 	public void openInventory(EntityPlayer player) {
-		// TODO Auto-generated method stub
-		
+		if(Loader.isModLoaded("gamestages")) {
+			GameStagesCompat.addCrafterStages(this, player);
+		}
 	}
 
 	@Override

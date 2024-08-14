@@ -61,8 +61,9 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2859'
 
+	// TODO Change to using cursemaven or something
     compile files('libs/TheBetweenlands-3.9.6-universal.jar')
-    // compile files('libs/GameStages-1.12.2-2.0.123.jar')
+    compile files('libs/GameStages-1.12.2-2.0.123.jar')
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"

@@ -3,15 +3,15 @@ package com.joshiegemfinder.betweenlandsredstone.blocks;
 import java.util.Random;
 
 import com.joshiegemfinder.betweenlandsredstone.BetweenlandsRedstone;
+import com.joshiegemfinder.betweenlandsredstone.ModSounds;
 import com.joshiegemfinder.betweenlandsredstone.blocks.shared.IModelInterface;
+import com.joshiegemfinder.betweenlandsredstone.compat.GameStagesCompat;
 import com.joshiegemfinder.betweenlandsredstone.gui.BetweenlandsRedstoneGuiHandler;
-import com.joshiegemfinder.betweenlandsredstone.util.ParticleHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockDispenser;
-import net.minecraft.block.BlockSourceImpl;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -19,23 +19,28 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumFacing.Axis;
+import net.minecraft.util.EnumFacing.AxisDirection;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -49,6 +54,9 @@ public class BlockCrafter extends BlockContainer implements IModelInterface {
 		super(material);
 
 		this.setSoundType(SoundType.STONE);
+		
+		this.setHardness(1.5f);
+		this.setResistance(3.5f);
 		
 		this.setDefaultState(this.getDefaultState().withProperty(FACING, EnumFacing.NORTH).withProperty(TRIGGERED, false).withProperty(CRAFTING, false));
 	}
@@ -67,6 +75,13 @@ public class BlockCrafter extends BlockContainer implements IModelInterface {
 		
         playerIn.openGui(BetweenlandsRedstone.instance, BetweenlandsRedstoneGuiHandler.GUI_CRAFTER_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
 
+		if(Loader.isModLoaded("gamestages") || Loader.isModLoaded("recipestages")) {
+			TileEntity entity = worldIn.getTileEntity(pos);
+			if(entity != null && entity instanceof TileEntityCrafter && playerIn != null && playerIn instanceof EntityPlayer) {
+				GameStagesCompat.addCrafterStages((TileEntityCrafter)entity, (EntityPlayer)playerIn);
+			}
+		}
+		
         return true;
 	}
 	
@@ -106,6 +121,19 @@ public class BlockCrafter extends BlockContainer implements IModelInterface {
 		if(te instanceof TileEntityCrafter) {
 			TileEntityCrafter entity = (TileEntityCrafter)te;
 			entity.setTriggered(isTriggered);
+		}
+	}
+	
+	@Override
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
+			ItemStack stack) {
+		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+		
+		if(Loader.isModLoaded("gamestages") || Loader.isModLoaded("recipestages")) {
+			TileEntity entity = worldIn.getTileEntity(pos);
+			if(entity != null && entity instanceof TileEntityCrafter && placer != null && placer instanceof EntityPlayer) {
+				GameStagesCompat.addCrafterStages((TileEntityCrafter)entity, (EntityPlayer)placer);
+			}
 		}
 	}
 	
@@ -215,38 +243,96 @@ public class BlockCrafter extends BlockContainer implements IModelInterface {
     }
     
     @Override
-    public boolean eventReceived(IBlockState state, World world, BlockPos pos, int id,
-    		int param) {
+    public boolean eventReceived(IBlockState state, World world, BlockPos pos, int id, int param) {
     	if(id == 9002) {
 	    	EnumFacing facing = world.getBlockState(pos).getValue(FACING);
-			IPosition dispensePosition = BlockDispenser.getDispensePosition(new BlockSourceImpl(world, pos));
-			
-	        double x = dispensePosition.getX();
-	        double y = dispensePosition.getY();
-	        double z = dispensePosition.getZ();
-	        
-	        if (facing.getAxis() == EnumFacing.Axis.Y)
-	        {
-	            y = y - 0.125D;
-	        }
-	        else
-	        {
-	            y = y - 0.15625D;
-	        }
-	        
-			for(int i = 0; i < 20; ++i) {
-		        double speedFactor = world.rand.nextDouble() * 0.02D + 0.04D;
-		        double xSpeed = (double)facing.getFrontOffsetX() * speedFactor;
-		        double ySpeed = ((double)facing.getFrontOffsetY() + 0.1D) * speedFactor;
-		        double zSpeed = (double)facing.getFrontOffsetZ() * speedFactor;
-		        xSpeed += world.rand.nextGaussian() * 0.004D * (double)TileEntityCrafter.DISPENSE_SPEED;
-		        ySpeed += world.rand.nextGaussian() * 0.004D * (double)TileEntityCrafter.DISPENSE_SPEED;
-		        zSpeed += world.rand.nextGaussian() * 0.004D * (double)TileEntityCrafter.DISPENSE_SPEED;
-		        
-		        ParticleHelper.spawnFlexibleParticle(world, EnumParticleTypes.CLOUD, x, y, z, xSpeed, ySpeed, zSpeed, 30, 0.01F);
-//				world.spawnParticle(EnumParticleTypes.CLOUD, x, y, z, motionX, motionY, motionZ, 0);
-			}
+    		shootParticles(facing, world, pos);
+    		return true;
+    	}
+    	else if(id == 51) {
+    		if(!world.isRemote) return true;
+    		boolean successful = (param != 0);
+    		SoundEvent soundEvent = successful ? ModSounds.BLOCK_CRAFTER_SUCCEED : ModSounds.BLOCK_CRAFTER_FAIL;
+    		float distance = successful ? 5.0f : 3.0f;
+    		BetweenlandsRedstone.proxy.playAttenuatedSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, soundEvent, SoundCategory.BLOCKS, 1.0F, 1.0F, distance);
+    		return true;
     	}
 		return super.eventReceived(state, world, pos, id, param);
     }
+    
+
+	protected void shootParticles(EnumFacing facing, World world, BlockPos pos) {
+		if(!world.isRemote) return; // No particles on the server
+		
+//		IPosition dispensePosition = BlockDispenser.getDispensePosition(new BlockSourceImpl(world, pos));
+//		
+//        double x = dispensePosition.getX();
+//        double y = dispensePosition.getY();
+//        double z = dispensePosition.getZ();
+//        
+//        if (facing.getAxis() == EnumFacing.Axis.Y)
+//        {
+//            y = y - 0.125D;
+//        }
+//        else
+//        {
+//            y = y - 0.15625D;
+//        }
+//        
+//		for(int i = 0; i < 20; ++i) {
+//	        double speedFactor = world.rand.nextDouble() * 0.02D + 0.04D;
+//	        double xSpeed = (double)facing.getFrontOffsetX() * speedFactor;
+//	        double ySpeed = ((double)facing.getFrontOffsetY() + 0.1D) * speedFactor;
+//	        double zSpeed = (double)facing.getFrontOffsetZ() * speedFactor;
+//	        xSpeed += world.rand.nextGaussian() * 0.004D * (double)TileEntityCrafter.DISPENSE_SPEED;
+//	        ySpeed += world.rand.nextGaussian() * 0.004D * (double)TileEntityCrafter.DISPENSE_SPEED;
+//	        zSpeed += world.rand.nextGaussian() * 0.004D * (double)TileEntityCrafter.DISPENSE_SPEED;
+//	        
+//	        ParticleHelper.spawnFlexibleParticle(world, EnumParticleTypes.CLOUD, x, y, z, xSpeed, ySpeed, zSpeed, 30, 0.01F);
+////			world.spawnParticle(EnumParticleTypes.CLOUD, x, y, z, motionX, motionY, motionZ, 0);
+//		}
+
+		final double offsetX = facing.getFrontOffsetX();
+		final double offsetY = facing.getFrontOffsetY();
+		final double offsetZ = facing.getFrontOffsetZ();
+		
+        double x = (double)pos.getX() + 0.5d + offsetX * 0.6d;
+        double y = (double)pos.getY() + 0.5d + offsetY * 0.6d;
+        double z = (double)pos.getZ() + 0.5d + offsetZ * 0.6d;
+        // line particles up with mouth
+        if(facing.getAxis() != Axis.Y) {
+        	y -= 0.25;
+        } else if(facing.getAxisDirection() == AxisDirection.NEGATIVE) {
+        	z += 0.25;
+        } else {
+        	z -= 0.25;
+        }
+        
+//        Random random = BlockCrafter.RANDOM;
+        Random random = world.rand; // This is how vanilla 1.21 does it, surprisingly
+        
+		for(int i = 0; i < 10; ++i) {
+	        double speedFactor = random.nextDouble() * 0.2D + 0.01D;
+	        // When axis-aligned like this, I think the second part just cancels out.
+	        double particleX = x + offsetX * 0.01d + (random.nextDouble() - 0.5) * offsetZ * 0.5;
+	        double particleY = y + offsetY * 0.01d + (random.nextDouble() - 0.5) * offsetY * 0.5; // not on this one though
+	        double particleZ = z + offsetZ * 0.01d + (random.nextDouble() - 0.5) * offsetX * 0.5;
+	        double xSpeed = (offsetX * speedFactor) + random.nextGaussian() * 0.01;
+	        double ySpeed = (offsetY * speedFactor) + random.nextGaussian() * 0.01;
+	        double zSpeed = (offsetZ * speedFactor) + random.nextGaussian() * 0.01;
+//	        double xSpeed = (double)facing.getFrontOffsetX() * speedFactor;
+//	        double ySpeed = ((double)facing.getFrontOffsetY() + 0.1D) * speedFactor;
+//	        double zSpeed = (double)facing.getFrontOffsetZ() * speedFactor;
+//	        xSpeed += world.rand.nextGaussian() * 0.004D * (double)TileEntityCrafter.DISPENSE_SPEED;
+//	        ySpeed += world.rand.nextGaussian() * 0.004D * (double)TileEntityCrafter.DISPENSE_SPEED;
+//	        zSpeed += world.rand.nextGaussian() * 0.004D * (double)TileEntityCrafter.DISPENSE_SPEED;
+	        
+//	        ParticleHelper.spawnFlexibleParticle(world, EnumParticleTypes.CLOUD, x, y, z, xSpeed, ySpeed, zSpeed, 30, 0.01F);
+//			world.spawnParticle(EnumParticleTypes.CLOUD, x, y, z, motionX, motionY, motionZ, 0);
+
+	        // CLOUD is WHITE_SMOKE?
+//	        ParticleHelper.spawnFlexibleParticle(world, EnumParticleTypes.CLOUD, particleX, particleY, particleZ, xSpeed, ySpeed, zSpeed, 30, 0.01F);
+	        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, particleX, particleY, particleZ, xSpeed, ySpeed, zSpeed);
+		}
+	}
 }
