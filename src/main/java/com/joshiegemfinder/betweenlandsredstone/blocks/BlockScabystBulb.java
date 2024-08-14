@@ -5,7 +5,6 @@ import java.util.Random;
 import com.joshiegemfinder.betweenlandsredstone.BetweenlandsRedstone;
 import com.joshiegemfinder.betweenlandsredstone.ModItems;
 import com.joshiegemfinder.betweenlandsredstone.ModSounds;
-import com.joshiegemfinder.betweenlandsredstone.network.PlayAttenuatedSoundMessage;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -29,7 +28,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import thebetweenlands.common.entity.mobs.EntityStalker;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -84,6 +82,9 @@ public class BlockScabystBulb extends Block {
 		super(materialIn);
 		
 //		this.setSoundType(ModSounds.BULB);
+
+		this.setHardness(3.0f);
+		this.setResistance(6.0f);
 		
 		this.setDefaultState(this.getDefaultState().withProperty(LIT, false).withProperty(POWERED, false).withProperty(DECAY_STATE, DecayState.NORMAL));
 	}
@@ -140,9 +141,12 @@ public class BlockScabystBulb extends Block {
 		return super.getLightValue(state, world, pos);
 	}
 	
-	public void playToggleSound(World worldIn, BlockPos pos, SoundEvent sound) {
+	public void playToggleSound(World worldIn, BlockPos pos, boolean isLit) {
+//		if(!worldIn.isRemote)
+//			BetweenlandsRedstone.NETWORK_CHANNEL.sendToAllAround(new PlayAttenuatedSoundMessage(pos, sound, SoundCategory.BLOCKS, 1.0F, 1.0F, 6), new TargetPoint(worldIn.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 12));
 		if(!worldIn.isRemote)
-			BetweenlandsRedstone.NETWORK_CHANNEL.sendToAllAround(new PlayAttenuatedSoundMessage(pos, sound, SoundCategory.BLOCKS, 1.0F, 1.0F, 6), new TargetPoint(worldIn.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 12));
+			worldIn.addBlockEvent(pos, this, 51, isLit ? 1 : 0);
+//			worldIn.addBlockEvent(pos, this, 51, sound == ModSounds.BLOCK_BULB_TURN_ON ? 1 : 0);
 	}
 	
 	@Override
@@ -150,7 +154,7 @@ public class BlockScabystBulb extends Block {
 		super.onBlockAdded(worldIn, pos, state);
 		
 		if(state.getValue(LIT)) {
-			playToggleSound(worldIn, pos, ModSounds.BLOCK_BULB_TURN_ON);
+			playToggleSound(worldIn, pos, true);
 		}
 	}
 	
@@ -166,7 +170,8 @@ public class BlockScabystBulb extends Block {
 				newState = newState.withProperty(LIT, isLit);
 				
 				if(!worldIn.isRemote) {
-					playToggleSound(worldIn, pos, isLit ? ModSounds.BLOCK_BULB_TURN_ON : ModSounds.BLOCK_BULB_TURN_OFF);
+//					playToggleSound(worldIn, pos, isLit ? ModSounds.BLOCK_BULB_TURN_ON : ModSounds.BLOCK_BULB_TURN_OFF);
+					playToggleSound(worldIn, pos, isLit);
 				}
 			}
 			
@@ -233,5 +238,20 @@ public class BlockScabystBulb extends Block {
         items.add(new ItemStack(this, 1, 1));
         items.add(new ItemStack(this, 1, 2));
         items.add(new ItemStack(this, 1, 3));
+    }
+    
+    @SuppressWarnings("deprecation")
+	@Override
+    public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int id, int param) {
+    	if(id == 51) {
+    		if(!worldIn.isRemote) {
+    			return true;
+    		}
+    		boolean isLit = (param != 0);
+    		SoundEvent soundEvent = isLit ? ModSounds.BLOCK_BULB_TURN_ON : ModSounds.BLOCK_BULB_TURN_OFF;
+    		BetweenlandsRedstone.proxy.playAttenuatedSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, soundEvent, SoundCategory.BLOCKS, 1.0F, 1.0F, 6);
+    		return true;
+    	}
+    	return super.eventReceived(state, worldIn, pos, id, param);
     }
 }
