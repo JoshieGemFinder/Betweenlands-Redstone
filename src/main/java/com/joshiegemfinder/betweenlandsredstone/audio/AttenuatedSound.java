@@ -21,11 +21,11 @@ public class AttenuatedSound extends PositionedSound implements net.minecraft.cl
 	public AttenuatedSound(float xPosF, float yPosF, float zPosF, SoundEvent soundEvent, SoundCategory category, float volume, float pitch, float attenuationDistance) {
 		super(soundEvent, category);
 
-		this.attenuationType = AttenuationType.NONE;
+		this.attenuationType = AttenuationType.LINEAR;
 		this.xPosF = xPosF;
 		this.yPosF = yPosF;
 		this.zPosF = zPosF;
-		this.volume = volume;
+		this.volume = volume * this.getVolumeMultiplier();
 		this.pitch = pitch;
 		
 		this.originalVolume = volume;
@@ -48,7 +48,7 @@ public class AttenuatedSound extends PositionedSound implements net.minecraft.cl
 
 		Entity view = Minecraft.getMinecraft().getRenderViewEntity();
 		
-		if(view == null || view.getDistance(this.xPosF, this.yPosF, this.zPosF) > this.attenuationDistance) {
+		if(view == null || view.getDistanceSq(this.xPosF, this.yPosF, this.zPosF) > this.attenuationDistance * this.attenuationDistance) {
 			this.repeat = false;
 			this.donePlaying = true;
 			this.volume = 0;
@@ -65,6 +65,6 @@ public class AttenuatedSound extends PositionedSound implements net.minecraft.cl
 	
 	@Override
 	public float getVolume() {
-		return this.volume;
+		return this.originalVolume * this.sound.getVolume() * this.getVolumeMultiplier();
 	}
 }

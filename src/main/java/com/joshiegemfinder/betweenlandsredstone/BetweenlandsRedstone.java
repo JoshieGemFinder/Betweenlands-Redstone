@@ -16,7 +16,6 @@ import com.joshiegemfinder.betweenlandsredstone.datafixers.DataFixerItemFrame;
 import com.joshiegemfinder.betweenlandsredstone.gui.BetweenlandsRedstoneGuiHandler;
 import com.joshiegemfinder.betweenlandsredstone.network.MinecartFacingMessage;
 import com.joshiegemfinder.betweenlandsredstone.network.PlantTonicMessage;
-import com.joshiegemfinder.betweenlandsredstone.network.PlayAttenuatedSoundMessage;
 import com.joshiegemfinder.betweenlandsredstone.proxy.IProxy;
 import com.joshiegemfinder.betweenlandsredstone.util.CropHelper;
 import com.mojang.authlib.GameProfile;
@@ -168,7 +167,6 @@ public class BetweenlandsRedstone
 
 		BetweenlandsRedstone.NETWORK_CHANNEL.registerMessage(MinecartFacingMessage.MinecartFacingMessageHandler.class, MinecartFacingMessage.class, 0, Side.CLIENT);
 		BetweenlandsRedstone.NETWORK_CHANNEL.registerMessage(PlantTonicMessage.PlantTonicMessageHandler.class, PlantTonicMessage.class, 1, Side.CLIENT);
-		BetweenlandsRedstone.NETWORK_CHANNEL.registerMessage(PlayAttenuatedSoundMessage.PlayAttenuatedSoundMessageHandler.class, PlayAttenuatedSoundMessage.class, 2, Side.CLIENT);
 		
 		CompoundDataFixer fixer = FMLCommonHandler.instance().getDataFixer();
 		TileEntityScabystDispenser.registerFixesScabyst(fixer);
@@ -188,7 +186,7 @@ public class BetweenlandsRedstone
         }
 		OverworldItemHandler.TORCH_WHITELIST.put(new ResourceLocation(MODID, "scabyst_torch_whitelist"), stack -> stack.getItem() == ModItems.SCABYST_TORCH);
 		
-		OverworldItemHandler.ROTTING_WHITELIST.put(new ResourceLocation(MODID, "white_pear_block_whitelist"), stack -> stack.getItem() == ModItems.WHITE_PEAR_BLOCK);
+		OverworldItemHandler.ROTTING_WHITELIST.put(new ResourceLocation(MODID, "white_pear_block_whitelist"), stack -> BLRedstoneConfig.EXTRA_FEATURES.registerWhitePearBlock && (stack.getItem() == ModItems.WHITE_PEAR_BLOCK));
 		
 		BetweenlandsRedstoneGuiHandler guihandler = new BetweenlandsRedstoneGuiHandler();
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, guihandler);
@@ -658,7 +656,6 @@ public class BetweenlandsRedstone
 			 	for(EntityItem item : items) {
 			 		item.getItem().setStackDisplayName(stack.getDisplayName());
 			 	}
-			 	
 			 	
 			 	return stack;
 			}
