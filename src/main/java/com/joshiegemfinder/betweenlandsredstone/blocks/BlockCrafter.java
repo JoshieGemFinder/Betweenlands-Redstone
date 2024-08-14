@@ -244,7 +244,7 @@ public class BlockCrafter extends BlockContainer implements IModelInterface {
     
     @Override
     public boolean eventReceived(IBlockState state, World world, BlockPos pos, int id, int param) {
-    	if(id == 9002) {
+    	if(id == 92) {
 	    	EnumFacing facing = world.getBlockState(pos).getValue(FACING);
     		shootParticles(facing, world, pos);
     		return true;

@@ -326,8 +326,8 @@ public class TileEntityCrafter extends TileEntity implements ISidedInventory, ne
 			this.world.setBlockState(pos, newState, 3);
 			
 			if(playEjectParticles && !world.isRemote) {
-				this.world.addBlockEvent(pos, this.getBlockType(), 9002, 0);
-//                this.world.getMinecraftServer().getPlayerList().sendToAllNearExcept((EntityPlayer)null, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), 64.0D, this.world.provider.getDimension(), new SPacketBlockAction(pos, this.getBlockType(), 9002, 0));
+				this.world.addBlockEvent(pos, this.getBlockType(), 92, 0);
+//                this.world.getMinecraftServer().getPlayerList().sendToAllNearExcept((EntityPlayer)null, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), 64.0D, this.world.provider.getDimension(), new SPacketBlockAction(pos, this.getBlockType(), 92, 0));
 			}
 			
 			this.onCraftMatrixChanged();
