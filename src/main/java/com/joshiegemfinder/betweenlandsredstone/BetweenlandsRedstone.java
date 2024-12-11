@@ -385,7 +385,7 @@ public class BetweenlandsRedstone
 					 BlockPos mortarPos = source.getBlockPos().offset(enumfacing);
 					 if(world.getTileEntity(mortarPos) instanceof TileEntityMortar) {
 					 	TileEntityMortar mortar = (TileEntityMortar)world.getTileEntity(mortarPos);
-					 	mortar.func_70299_a(1, stack);
+					 	mortar.setInventorySlotContents(1, stack);
 					 	return ItemStack.EMPTY;
 					 }
 				 }
@@ -579,9 +579,8 @@ public class BetweenlandsRedstone
 //				 				return stack;
 //				 			}
 				 			
-				 			//srg mappings >:(
-				 			if(tile.func_70301_a(0).isEmpty()) {
-				 				tile.func_70299_a(0, stack.copy());
+				 			if(tile.getStackInSlot(0).isEmpty()) {
+				 				tile.setInventorySlotContents(0, stack.copy());
 				 				stack.shrink(1);
 				 				this.successful = true;
 				 				return stack;
@@ -596,12 +595,9 @@ public class BetweenlandsRedstone
 				 	InventorySilkBundle bundleInventory = new InventorySilkBundle(stack, 4, name);
 				 	
 				 	full: {
-//				 		for(int i = 0; i < bundleInventory.getSizeInventory(); ++i) {
-//				 			ItemStack bundleStack = bundleInventory.getStackInSlot(i);
-//				 			if(bundleStack.getCount() < bundleInventory.getInventoryStackLimit()) {
-				 		for(int i = 0; i < bundleInventory.func_70302_i_(); ++i) {
-				 			ItemStack bundleStack = bundleInventory.func_70301_a(i);
-				 			if(bundleStack.getCount() < bundleInventory.func_70297_j_()) {
+				 		for(int i = 0; i < bundleInventory.getSizeInventory(); ++i) {
+				 			ItemStack bundleStack = bundleInventory.getStackInSlot(i);
+				 			if(bundleStack.getCount() < bundleInventory.getInventoryStackLimit()) {
 				 				break full;
 				 			}
 				 		}
